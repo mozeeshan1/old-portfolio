@@ -8,7 +8,7 @@ export default function NavBar() {
   return (
     <div id="nav-bar">
       <a id="logo" href="/">
-        <h1>Very Big Name Here</h1>
+        <h1>Big Name Here</h1>
       </a>
       <div id="menu">
         <a href="#">
