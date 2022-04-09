@@ -6,12 +6,16 @@ import anime from "animejs/lib/anime.es.js";
 export default function NavBar() {
   const [dark, setDark] = useStickyState(false, "dark");
   useEffect(() => {
-    if (dark === true) {
-      darkModeAnimation.play();
-    } else {
-      lightModeAnimation.play();
-    }
-  }, [dark]);
+    //if (dark === true) {
+    //  darkModeAnimation.play();
+    //} else {
+    //  lightModeAnimation.play();
+    //}
+    console.log("in use effect");
+    document
+      .getElementById("dark-mode")
+      .addEventListener("click", changeBackground);
+  }, []);
 
   return (
     <div id="nav-bar">
@@ -31,7 +35,6 @@ export default function NavBar() {
       </div>
       <button id="dark-mode" onClick={() => setDark(!dark)}>
         {dark ? <DarkMode fontSize="large" /> : <LightMode fontSize="large" />}
-        <div id="background"></div>
       </button>
     </div>
   );
@@ -46,6 +49,25 @@ function useStickyState(defaultValue, key) {
     localStorage.setItem(key, JSON.stringify(value));
   }, [key, value]);
   return [value, setValue];
+}
+
+function changeBackground(event) {
+  const button = event.currentTarget;
+  const circle = document.createElement("div");
+  const diameter = Math.max(button.clientWidth, button.clientHeight);
+  const radius = diameter / 2;
+  circle.style.width = circle.style.height = `${diameter}px`;
+  circle.style.left = `${
+    event.clientX - (document.body.offsetLeft + radius)
+  }px`;
+  circle.style.top = `${event.clientY - (document.body.offsetTop + radius)}px`;
+  circle.classList.add("ripple");
+  const ripple = document.body.getElementsByClassName("ripple")[0];
+
+  if (ripple) {
+    ripple.remove();
+  }
+  document.body.appendChild(circle);
 }
 
 var darkModeAnimation = anime.timeline({
