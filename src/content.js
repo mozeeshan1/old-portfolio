@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { LightMode, DarkMode } from "@mui/icons-material";
 import "./content.css";
+import anime from "animejs/lib/anime.es.js";
 
 export default function NavBar() {
   const [dark, setDark] = useStickyState(false, "dark");
+  useEffect(() => {
+    if (dark === true) {
+      darkModeAnimation.play();
+    } else {
+      lightModeAnimation.play();
+    }
+  }, [dark]);
 
   return (
     <div id="nav-bar">
@@ -22,7 +30,8 @@ export default function NavBar() {
         </a>
       </div>
       <button id="dark-mode" onClick={() => setDark(!dark)}>
-        {dark ? <DarkMode color="primary" /> : <LightMode color="primary" />}
+        {dark ? <DarkMode fontSize="large" /> : <LightMode fontSize="large" />}
+        <div id="background"></div>
       </button>
     </div>
   );
@@ -38,3 +47,46 @@ function useStickyState(defaultValue, key) {
   }, [key, value]);
   return [value, setValue];
 }
+
+var darkModeAnimation = anime.timeline({
+  easing: "easeInOutSine",
+  duration: 1000,
+  autoplay: false,
+});
+darkModeAnimation
+  .add(
+    {
+      targets: "#dark-mode",
+      duration: 500,
+      rotate: 360,
+    },
+    0
+  )
+  .add(
+    {
+      targets: "body",
+      backgroundColor: ["#FFFFFF", "#000000"],
+    },
+    0
+  );
+var lightModeAnimation = anime.timeline({
+  easing: "easeInOutSine",
+  autoplay: false,
+  duration: 1000,
+});
+lightModeAnimation
+  .add(
+    {
+      targets: "#dark-mode",
+      duration: 500,
+      rotate: 360,
+    },
+    0
+  )
+  .add(
+    {
+      targets: "body",
+      backgroundColor: ["#000000", "#FFFFFF"],
+    },
+    0
+  );
