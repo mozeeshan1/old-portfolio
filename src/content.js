@@ -5,17 +5,7 @@ import anime from "animejs/lib/anime.es.js";
 
 export default function NavBar() {
   const [dark, setDark] = useStickyState(false, "dark");
-  useEffect(() => {
-    //if (dark === true) {
-    //  darkModeAnimation.play();
-    //} else {
-    //  lightModeAnimation.play();
-    //}
-    console.log("in use effect");
-    document
-      .getElementById("dark-mode")
-      .addEventListener("click", changeBackground);
-  }, []);
+  const [darkButton, setDarkButton] = useState(false);
 
   return (
     <div id="nav-bar">
@@ -33,7 +23,18 @@ export default function NavBar() {
           <li>Projects</li>
         </a>
       </div>
-      <button id="dark-mode" onClick={() => setDark(!dark)}>
+      <button
+        id="dark-mode"
+        disabled={darkButton}
+        onClick={(e) => {
+          setDark(!dark);
+          changeBackground(e, dark);
+          setDarkButton(true);
+          setTimeout(() => {
+            setDarkButton(false);
+          }, 1000);
+        }}
+      >
         {dark ? <DarkMode fontSize="large" /> : <LightMode fontSize="large" />}
       </button>
     </div>
@@ -51,64 +52,35 @@ function useStickyState(defaultValue, key) {
   return [value, setValue];
 }
 
-function changeBackground(event) {
+function changeBackground(event, dark) {
   const button = event.currentTarget;
   const circle = document.createElement("div");
   const diameter = Math.max(button.clientWidth, button.clientHeight);
   const radius = diameter / 2;
+  const scale = Math.max(
+    Math.max(document.body.clientHeight, document.body.clientWidth) / diameter,
+    175
+  );
   circle.style.width = circle.style.height = `${diameter}px`;
-  circle.style.left = `${
-    event.clientX - (document.body.offsetLeft + radius)
-  }px`;
-  circle.style.top = `${event.clientY - (document.body.offsetTop + radius)}px`;
+  circle.style.left = `${button.offsetLeft - document.body.offsetLeft}px`;
+  //event.clientY
+  circle.style.top = `${button.offsetTop - document.body.offsetTop}px`;
   circle.classList.add("ripple");
-  const ripple = document.body.getElementsByClassName("ripple")[0];
-
-  if (ripple) {
-    ripple.remove();
+  console.log(scale);
+  circle.style.setProperty("--mode-scale", scale);
+  const ripples = document.body.getElementsByClassName("ripple");
+  if (dark) {
+    circle.style.backgroundColor = "black";
+  } else {
+    circle.style.backgroundColor = "white";
+  }
+  if (ripples.length > 2) {
+    ripples[0].remove();
   }
   document.body.appendChild(circle);
+  setTimeout(() => {
+    dark
+      ? (document.body.style.backgroundColor = "black")
+      : (document.body.style.backgroundColor = "white");
+  }, 1900);
 }
-
-var darkModeAnimation = anime.timeline({
-  easing: "easeInOutSine",
-  duration: 1000,
-  autoplay: false,
-});
-darkModeAnimation
-  .add(
-    {
-      targets: "#dark-mode",
-      duration: 500,
-      rotate: 360,
-    },
-    0
-  )
-  .add(
-    {
-      targets: "body",
-      backgroundColor: ["#FFFFFF", "#000000"],
-    },
-    0
-  );
-var lightModeAnimation = anime.timeline({
-  easing: "easeInOutSine",
-  autoplay: false,
-  duration: 1000,
-});
-lightModeAnimation
-  .add(
-    {
-      targets: "#dark-mode",
-      duration: 500,
-      rotate: 360,
-    },
-    0
-  )
-  .add(
-    {
-      targets: "body",
-      backgroundColor: ["#000000", "#FFFFFF"],
-    },
-    0
-  );
