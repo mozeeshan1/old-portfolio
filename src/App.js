@@ -1,16 +1,28 @@
 import "./App.css";
-import NavBar from "./content";
+import {DesktopNavBar,MobileNavBar} from "./content";
 import React from "react";
 
-export default class App extends React.Component {
+export class DesktopApp extends React.Component {
   componentDidMount(){
 
   }
   render() {
     return (
       <React.Fragment>
-        <NavBar/>
+        <DesktopNavBar/>
       </React.Fragment>
     );
+  }
+}
+
+
+export class MobileApp extends React.Component {
+  
+  render() {
+    return (
+      <React.Fragment>
+        <MobileNavBar/>
+      </React.Fragment>
+    )
   }
 }

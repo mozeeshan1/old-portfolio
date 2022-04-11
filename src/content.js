@@ -6,7 +6,7 @@ import anime from "animejs/lib/anime.es.js";
 export const textBlack = "#121212";
 export const textWhite = "#FFFFFF";
 
-export default function NavBar() {
+export function DesktopNavBar() {
   const [dark, setDark] = useStickyState(false, "dark");
   const [darkButton, setDarkButton] = useState(false);
 
@@ -26,6 +26,33 @@ export default function NavBar() {
           <li>Projects</li>
         </a>
       </div>
+      <button
+        id="dark-mode"
+        disabled={darkButton}
+        onClick={(e) => {
+          setDark(!dark);
+          changeBackground(e, dark);
+          setDarkButton(true);
+          setTimeout(() => {
+            setDarkButton(false);
+          }, 1000);
+        }}
+      >
+        <div id="mode-contents">{dark ? <icons.DarkIcon id="dark-icon" /> : <icons.LightIcon id="light-icon" />}</div>
+      </button>
+    </div>
+  );
+}
+
+export function MobileNavBar() {
+  const [dark, setDark] = useStickyState(false, "dark");
+  const [darkButton, setDarkButton] = useState(false);
+
+  return (
+    <div id="nav-bar">
+      <a id="logo" href="/">
+        <h1>Small name</h1>
+      </a>
       <button
         id="dark-mode"
         disabled={darkButton}

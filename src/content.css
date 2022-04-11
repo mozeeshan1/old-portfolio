@@ -14,7 +14,7 @@
 }
 #logo {
   text-decoration: none;
-  grid-column: 1/3;
+  grid-column: 1/5;
   color: inherit;
 }
 #menu {
@@ -32,6 +32,7 @@
   background-color: transparent;
   position: relative;
   top: 35%;
+  grid-column:8;
 }
 #mode-contents {
   width: fit-content;

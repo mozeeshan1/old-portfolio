@@ -1,16 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./App";
+import { DesktopApp, MobileApp } from "./App";
 import { textBlack, textWhite } from "./content";
 
 class Index extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { preloader: false, dark: localStorage.getItem("dark") };
-    //HERE FOR PRELOADER. PRELOADER WORKS ONLY NEED TO MAKE DARK/LIGHT MODE BEFORE PRELOADER GOES AWAY
+    this.state = { preloader: false, dark: localStorage.getItem("dark"), desktop: window.matchMedia("(min-width: 768px)").matches };
   }
   componentDidMount() {
+    window.matchMedia("(min-width: 768px)").addEventListener("change", (e) => this.setState({ desktop: e.matches }));
     console.log(this.state.dark);
     if (this.state.dark === "true") {
       document.body.style.backgroundColor = textBlack;
@@ -24,16 +24,14 @@ class Index extends React.Component {
     }, 2500);
   }
   render() {
-    return <React.Fragment>{this.state.preloader ? <App /> : <div id="preloader">PRELOADER HERE</div>}</React.Fragment>;
+    return <React.Fragment>{!this.state.preloader ? <div id="preloader">PRELOADER HERE</div>: this.state.desktop?<DesktopApp />:<MobileApp />}</React.Fragment> 
   }
 }
 
 const container = document.getElementById("root");
 
-// Create a root.
 const root = ReactDOM.createRoot(container);
 
-// Initial render
 root.render(<Index />);
 
 // If you want to start measuring performance in your app, pass a function
