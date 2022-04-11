@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { LightMode, DarkMode } from "@mui/icons-material";
+import * as icons from "./icons";
 import "./content.css";
 import anime from "animejs/lib/anime.es.js";
+
+export const textBlack = "#121212";
+export const textWhite = "#FFFFFF";
 
 export default function NavBar() {
   const [dark, setDark] = useStickyState(false, "dark");
@@ -35,7 +38,7 @@ export default function NavBar() {
           }, 1000);
         }}
       >
-        {dark ? <DarkMode fontSize="large" /> : <LightMode fontSize="large" />}
+        <div id="mode-contents">{dark ? <icons.DarkIcon id="dark-icon" /> : <icons.LightIcon id="light-icon" />}</div>
       </button>
     </div>
   );
@@ -57,30 +60,33 @@ function changeBackground(event, dark) {
   const circle = document.createElement("div");
   const diameter = Math.max(button.clientWidth, button.clientHeight);
   const radius = diameter / 2;
-  const scale = Math.max(
-    Math.max(document.body.clientHeight, document.body.clientWidth) / diameter,
-    175
-  );
+  const scale = Math.max(Math.max(document.body.clientHeight, document.body.clientWidth) / diameter, 175);
   circle.style.width = circle.style.height = `${diameter}px`;
   circle.style.left = `${button.offsetLeft - document.body.offsetLeft}px`;
   //event.clientY
   circle.style.top = `${button.offsetTop - document.body.offsetTop}px`;
   circle.classList.add("ripple");
-  console.log(scale);
   circle.style.setProperty("--mode-scale", scale);
   const ripples = document.body.getElementsByClassName("ripple");
   if (dark) {
-    circle.style.backgroundColor = "black";
+    circle.style.backgroundColor = textWhite;
   } else {
-    circle.style.backgroundColor = "white";
+    circle.style.backgroundColor = textBlack;
   }
   if (ripples.length > 2) {
     ripples[0].remove();
   }
   document.body.appendChild(circle);
+  let bodyColor;
   setTimeout(() => {
-    dark
-      ? (document.body.style.backgroundColor = "black")
-      : (document.body.style.backgroundColor = "white");
+    if (dark) {
+      bodyColor = [{ color: textBlack }];
+    } else {
+      bodyColor = [{ color: textWhite }];
+    }
+    document.body.animate(bodyColor, { duration: 500, fill: "forwards", easing: "ease-in-out" });
+  }, 500);
+  setTimeout(() => {
+    dark ? (document.body.style.backgroundColor = textWhite) : (document.body.style.backgroundColor = textBlack);
   }, 1900);
 }

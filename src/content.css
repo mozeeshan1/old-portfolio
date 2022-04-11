@@ -1,5 +1,6 @@
 :root {
   --mode-scale: 0;
+  --text-color: white;
 }
 
 #nav-bar {
@@ -8,35 +9,37 @@
   display: grid;
   grid: auto/ repeat(8, 1fr);
   justify-content: center;
-  color: white;
-  mix-blend-mode: difference;
   z-index: 10;
   position: fixed;
 }
 #logo {
   text-decoration: none;
   grid-column: 1/3;
-  color: white;
-  mix-blend-mode: difference;
+  color: inherit;
 }
 #menu {
   list-style: none;
   grid-column: 5/8;
-  mix-blend-mode: difference;
 }
 #menu a {
-  color: white;
   text-decoration: none;
+  color: inherit;
 }
 #dark-mode {
   width: fit-content;
   height: fit-content;
   border: none;
   background-color: transparent;
-  mix-blend-mode: difference;
-  color: white;
   position: relative;
   top: 35%;
+}
+#mode-contents {
+  width: fit-content;
+  height: fit-content;
+}
+#dark-icon,
+#light-icon {
+  font-size: 36px;
 }
 div.ripple {
   position: fixed;
