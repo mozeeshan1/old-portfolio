@@ -42,6 +42,13 @@
 #light-icon {
   font-size: 36px;
 }
+
+#hamburger-button{
+  background: transparent;
+  border: none;
+  grid-column: 8;
+}
+
 div.ripple {
   position: fixed;
   border-radius: 50%;

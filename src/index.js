@@ -11,7 +11,6 @@ class Index extends React.Component {
   }
   componentDidMount() {
     window.matchMedia("(min-width: 768px)").addEventListener("change", (e) => this.setState({ desktop: e.matches }));
-    console.log(this.state.dark);
     if (this.state.dark === "true") {
       document.body.style.backgroundColor = textBlack;
       document.body.style.color = textWhite;
