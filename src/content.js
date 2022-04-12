@@ -3,6 +3,13 @@ import * as icons from "./icons";
 import "./content.css";
 import anime from "animejs/lib/anime.es.js";
 
+
+
+
+//CHANGING THE COLOR OF HAMBURGER ICON. I MADE IT INHERIT I THINK (CHECK ICONS.JS) but figure out how to undo it
+
+
+
 export const textBlack = "#121212";
 export const textWhite = "#FFFFFF";
 
@@ -47,37 +54,42 @@ export function DesktopNavBar() {
 export function MobileNavBar() {
   const [dark, setDark] = useStickyState(false, "dark");
   const [darkButton, setDarkButton] = useState(false);
+  const [menu, setMenu] = useState(false);
   const [menuButton, setMenuButton] = useState(false);
   const testanim = useRef(null);
 
   const hamburgerClick = () => {
-    console.log("in ham click");
-    if (!menuButton) {
+    // console.log("in ham click");
+    // console.log(testanim.current.began);
+    // console.log(testanim.current.completed);
+    console.log(menu);
+    if (!menu && !testanim.current.began && !testanim.current.completed) {
       testanim.current.play();
       console.log(" ham animation playing");
     } else {
-      testanim.current.pause();
-      console.log("ham animation paused");
+      testanim.current.reverse();
+      testanim.current.play();
+      console.log("ham animation reversed");
     }
-    setMenuButton(!menuButton);
+    console.log(menu);
+    // console.log(testanim.current.began);
+    // console.log(testanim.current.completed);
+    console.log(" ");
   };
   useEffect(() => {
     testanim.current = anime({
-      targets: "#dark-mode",
-      easing: "easeInOutSine",
-      duration: 1000,
+      targets: "#hamburger-icon",
+      easing: "easeOutSine",
+      duration: 500,
       autoplay: false,
-      background:  "#FF00FF",
-      translateY: 500,
-      direction:"alternate",
-      loop: true,
-      begin: function (anim) {
-        console.log("test anim started " + testanim.began);
-        console.log("targets " + testanim.targets);
+      d: {
+        value: ["M3 0 30 0 30 4 0 4 0 0ZM12 12H30V16H0V12ZM1 24 30 24 30 28 0 28 0 24Z", "M3 0L28 25L25 28L0 3L3 0Z M12 12H16V16H12V12Z M0 25L25 0L28 3L3 28L0 25Z"],
       },
-      complete: function (anim) {
-        console.log("test anim completed " + testanim.completed);
-      },
+      loop: false,
+      // complete: function (anim) {
+      //   setMenuButton(false);
+      //   setMenu(!menu);
+      // },
     });
   }, []);
 
@@ -86,8 +98,19 @@ export function MobileNavBar() {
       <a id="logo" href="/">
         <h1>Small name</h1>
       </a>
-      <button id="hamburger-button" onClick={hamburgerClick}>
-        <icons.HamburgerIcon id="hamburger-icon" />
+      <button
+        id="hamburger-button"
+        disabled={menuButton}
+        onClick={() => {
+          setMenuButton(true);
+          hamburgerClick();
+          testanim.current.complete = () => {
+            setMenuButton(false);
+            setMenu(!menu);
+          };
+        }}
+      >
+        <icons.HamburgerIcon />
       </button>
       <button
         id="dark-mode"
@@ -163,6 +186,7 @@ function changeBackground(event, dark) {
       bodyColor = [{ color: textWhite }];
     }
     document.body.animate(bodyColor, { duration: 500, fill: "forwards", easing: "ease-in-out" });
+    document.body.querySelector("#hamburger-button").style.fill="#FF0000";
   }, 500);
   setTimeout(() => {
     dark ? (document.body.style.backgroundColor = textWhite) : (document.body.style.backgroundColor = textBlack);

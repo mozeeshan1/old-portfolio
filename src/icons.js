@@ -22,7 +22,7 @@ export const DarkIcon = () => {
 export const HamburgerIcon = () => {
   return (
     <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M6 36H42V32H6V36ZM6 26H42V22H6V26ZM6 12V16H42V12H6Z" fill="black" />
+      <path id="hamburger-icon" d="M6 36H42V32H6V36ZM6 26H42V22H6V26ZM6 12V16H42V12H6Z" fill="inherit" />
     </svg>
   );
 };
@@ -30,7 +30,43 @@ export const HamburgerIcon = () => {
 export const HamburgerCloseIcon = () => {
   return (
     <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M38 12.82L35.18 10L24 21.18L12.82 10L10 12.82L21.18 24L10 35.18L12.82 38L24 26.82L35.18 38L38 35.18L26.82 24L38 12.82Z" fill="black" />
+      <path d="M38 12.82L35.18 10L24 21.18L12.82 10L10 12.82L21.18 24L10 35.18L12.82 38L24 26.82L35.18 38L38 35.18L26.82 24L38 12.82Z" fill="inherit" />
     </svg>
   );
 };
+
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M6 36H42V32H6V36ZM6 26H42V22H6V26ZM6 12V16H42V12H6Z" fill="black" />
+</svg>;
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 38L37 13L34 10L9 35L12 38ZM20.5 26H25.5V22H20.5V26ZM12 10L9 13L34 38L37 35L12 10Z" fill="black" />
+</svg>;
+
+
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 38L37 13L34 10L9 35L12 38ZM20.5 26H25.5V22H20.5V26ZM12 10L9 13L34 38L37 35L12 10Z" fill="black" />
+</svg>;
+<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M3 28L28 3L25 0L0 25L3 28ZM11.5 16H16.5V12H11.5V16ZM3 0L0 3L25 28L28 25L3 0Z" fill="black" />
+</svg>;
+
+
+
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M6 36H42V32H6V36ZM6 26H42V22H6V26ZM6 12V16H42V12H6Z" fill="black" />
+</svg>;
+<svg width="36" height="24" viewBox="0 0 36 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 24H36V20H0V24ZM0 14H36V10H0V14ZM0 0V4H36V0H0Z" fill="black" />
+</svg>;
+
+
+<svg width="36" height="24" viewBox="0 0 36 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 0H36V4H0V0Z M0 10H36V14H0V10Z M0 20H36V24H0V20Z" fill="black" />
+  <path d="" fill="black" />
+  <path d="" fill="black" />
+</svg>;
+<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="" fill="black" />
+  <path d="M3 0L28 25L25 28L0 3L3 0Z M12 12H16V16H12V12Z M0 25L25 0L28 3L3 28L0 25Z" fill="black" />
+  <path d="" fill="black" />
+</svg>;
