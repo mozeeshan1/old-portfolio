@@ -48,6 +48,7 @@ export function MobileNavBar() {
   const [menu, setMenu] = useState(false);
   const [menuButton, setMenuButton] = useState(false);
   const hamburgerAnimation = useRef(null);
+  const mobileMenuAnimation = useRef(null);
 
   const hamburgerClick = () => {
     setMenu(!menu);
@@ -57,41 +58,35 @@ export function MobileNavBar() {
       hamburgerAnimation.current.reverse();
       hamburgerAnimation.current.play();
     }
+    if(menu){
+      mobileMenuAnimation.current.play()
+    }
+    console.log(menu);
   };
   useEffect(() => {
-    hamburgerAnimation.current = anime
-      .timeline({
-        easing: "easeOutSine",
-        duration: 500,
-        autoplay: false,
-        loop: false,
-      })
-      .add(
-        {
-          targets: "#hamburger-icon",
-          d: {
-            value: ["M3 0 30 0 30 4 0 4 0 0ZM12 12H30V16H0V12ZM1 24 30 24 30 28 0 28 0 24Z", "M3 0L28 25L25 28L0 3L3 0Z M12 12H16V16H12V12Z M0 25L25 0L28 3L3 28L0 25Z"],
-          },
-          duration: 500,
-        },
-        0
-      )
-      .add(
-        {
-          targets: "#mobile-menu",
-          background: ["#FF0000", "00FF00"],
-          opacity: [0, 1],
-          translateX: [50, 0],
-          duration: 350,
-        },
-        0
-      )
-      .add({
-        targets: "#mobile-menu-list,#mobile-menu #mobile-dark-mode",
-        opacity: [0, 1],
-        easing: "easeInOutSine",
-        duration: 250,
-      });
+    hamburgerAnimation.current = anime({
+      targets: "#hamburger-icon",
+      d: {
+        value: ["M3 0 30 0 30 4 0 4 0 0ZM12 12H30V16H0V12ZM1 24 30 24 30 28 0 28 0 24Z", "M3 0L28 25L25 28L0 3L3 0Z M12 12H16V16H12V12Z M0 25L25 0L28 3L3 28L0 25Z"],
+      },
+      easing: "easeOutSine",
+      duration: 500,
+      autoplay: false,
+      loop: false,
+    });
+    mobileMenuAnimation.current = anime({
+      targets: "#mobile-menu",
+      background: ["#FF0000", "00FF00"],
+      opacity: [0, 1],
+      translateX: [50, 0],
+      autoplay: false,
+      duration: 500,
+    });
+    let i = 0;
+    document.querySelector("#hamburger-button").addEventListener("click", () => {
+      console.log("CLICKED HAMBURGER BUTTON " + i);
+      i++;
+    });
     //document.body.style.overflow = "hidden";
   }, []);
 
@@ -138,33 +133,29 @@ function MobileMenu({ setMenuBut }) {
   }, [dark]);
   return (
     <div id="mobile-menu">
-      <div id="mobile-menu-list">
-        <a href="#">
-          <li>Home</li>
-        </a>
-        <a href="#">
-          <li>About</li>
-        </a>
-        <a href="#">
-          <li>Projects</li>
-        </a>
-      </div>
-      <div id="mobile-dark-div">
-        <button
-          id="mobile-dark-mode"
-          disabled={darkButton}
-          onClick={(e) => {
-            setDark(!dark);
-            changeBackground(e, dark, false);
-            setDarkButton(true);
-            setTimeout(() => {
-              setDarkButton(false);
-            }, 1000);
-          }}
-        >
-          <div id="mode-contents">{dark ? <icons.DarkIcon id="dark-icon" /> : <icons.LightIcon id="light-icon" />}</div>
-        </button>
-      </div>
+      <a href="#">
+        <li>Home</li>
+      </a>
+      <a href="#">
+        <li>About</li>
+      </a>
+      <a href="#">
+        <li>Projects</li>
+      </a>
+      <button
+        id="mobile-dark-mode"
+        disabled={darkButton}
+        onClick={(e) => {
+          setDark(!dark);
+          changeBackground(e, dark, false);
+          setDarkButton(true);
+          setTimeout(() => {
+            setDarkButton(false);
+          }, 1000);
+        }}
+      >
+        <div id="mode-contents">{dark ? <icons.DarkIcon id="dark-icon" /> : <icons.LightIcon id="light-icon" />}</div>
+      </button>
     </div>
   );
 }

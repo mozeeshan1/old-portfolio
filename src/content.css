@@ -8,8 +8,8 @@
   display: grid;
   grid: auto/ repeat(8, 1fr);
   justify-content: center;
-  z-index: 10;
   position: fixed;
+  color: inherit;
 }
 #logo {
   text-decoration: none;
@@ -46,6 +46,7 @@
   background: transparent;
   border: none;
   grid-column: 8;
+  z-index: 15;
 }
 
 div.ripple {
@@ -67,4 +68,48 @@ div.ripple {
   100% {
     transform: rotate(360deg);
   }
+}
+
+#mobile-menu {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  text-align: center;
+  color: inherit;
+  background: white;  
+  opacity: 0;
+  display:grid;
+  grid:1fr auto/auto;
+  justify-content: center;
+}
+#mobile-menu a {
+  text-decoration: none;
+  list-style: none;
+  color: inherit;
+  width:100%;
+}
+#mobile-menu-list{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 2rem;
+  width:50vw;
+  font-size: 4rem;
+}
+#mobile-dark-div{
+  display:flex;
+  justify-content: center;
+}
+#mobile-menu #mobile-dark-mode{
+  margin-bottom: 35%;
+  top:0;
+}
+#mobile-dark-mode {
+  width: fit-content;
+  height: fit-content;
+  border: none;
+  background-color: transparent;
+  position: relative;
+  top: 35%;
 }
