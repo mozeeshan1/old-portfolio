@@ -3,13 +3,6 @@ import * as icons from "./icons";
 import "./content.css";
 import anime from "animejs/lib/anime.es.js";
 
-
-
-
-//CHANGING THE COLOR OF HAMBURGER ICON. I MADE IT INHERIT I THINK (CHECK ICONS.JS) but figure out how to undo it
-
-
-
 export const textBlack = "#121212";
 export const textWhite = "#FFFFFF";
 
@@ -56,28 +49,19 @@ export function MobileNavBar() {
   const [darkButton, setDarkButton] = useState(false);
   const [menu, setMenu] = useState(false);
   const [menuButton, setMenuButton] = useState(false);
-  const testanim = useRef(null);
+  const hamburgerAnimation = useRef(null);
 
   const hamburgerClick = () => {
-    // console.log("in ham click");
-    // console.log(testanim.current.began);
-    // console.log(testanim.current.completed);
     console.log(menu);
-    if (!menu && !testanim.current.began && !testanim.current.completed) {
-      testanim.current.play();
-      console.log(" ham animation playing");
+    if (!menu && !hamburgerAnimation.current.began && !hamburgerAnimation.current.completed) {
+      hamburgerAnimation.current.play();
     } else {
-      testanim.current.reverse();
-      testanim.current.play();
-      console.log("ham animation reversed");
+      hamburgerAnimation.current.reverse();
+      hamburgerAnimation.current.play();
     }
-    console.log(menu);
-    // console.log(testanim.current.began);
-    // console.log(testanim.current.completed);
-    console.log(" ");
   };
   useEffect(() => {
-    testanim.current = anime({
+    hamburgerAnimation.current = anime({
       targets: "#hamburger-icon",
       easing: "easeOutSine",
       duration: 500,
@@ -86,15 +70,11 @@ export function MobileNavBar() {
         value: ["M3 0 30 0 30 4 0 4 0 0ZM12 12H30V16H0V12ZM1 24 30 24 30 28 0 28 0 24Z", "M3 0L28 25L25 28L0 3L3 0Z M12 12H16V16H12V12Z M0 25L25 0L28 3L3 28L0 25Z"],
       },
       loop: false,
-      // complete: function (anim) {
-      //   setMenuButton(false);
-      //   setMenu(!menu);
-      // },
     });
   }, []);
 
   return (
-    <div id="nav-bar" className="test-anime">
+    <div id="nav-bar">
       <a id="logo" href="/">
         <h1>Small name</h1>
       </a>
@@ -104,7 +84,7 @@ export function MobileNavBar() {
         onClick={() => {
           setMenuButton(true);
           hamburgerClick();
-          testanim.current.complete = () => {
+          hamburgerAnimation.current.complete = () => {
             setMenuButton(false);
             setMenu(!menu);
           };
@@ -129,21 +109,6 @@ export function MobileNavBar() {
     </div>
   );
 }
-
-var hamburgerAnimation = anime.timeline({
-  easing: "easeOutExpo",
-  duration: 750,
-  autoplay: false,
-});
-
-hamburgerAnimation.add({
-  targets: "#logo",
-  rotate: "1turn",
-  autoplay: false,
-  loop: true,
-  color: "#000000",
-  duration: 750,
-});
 
 function useStickyState(defaultValue, key) {
   const [value, setValue] = React.useState(() => {
@@ -179,14 +144,17 @@ function changeBackground(event, dark) {
   }
   document.body.appendChild(circle);
   let bodyColor;
+  let svgColor;
   setTimeout(() => {
     if (dark) {
       bodyColor = [{ color: textBlack }];
+      svgColor = [{ fill: textBlack }];
     } else {
       bodyColor = [{ color: textWhite }];
+      svgColor = [{ fill: textWhite }];
     }
     document.body.animate(bodyColor, { duration: 500, fill: "forwards", easing: "ease-in-out" });
-    document.body.querySelector("#hamburger-button").style.fill="#FF0000";
+    document.body.querySelector("#hamburger-button path").animate(svgColor, { duration: 500, fill: "forwards", easing: "ease-in-out" });
   }, 500);
   setTimeout(() => {
     dark ? (document.body.style.backgroundColor = textWhite) : (document.body.style.backgroundColor = textBlack);

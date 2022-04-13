@@ -17,10 +17,5 @@ code {
 
 #root{
   width:100%;
-  height: 50vh;
-}
-
-#preloader{
-  mix-blend-mode: difference;
-  color: white;
+  height: 500vh;
 }

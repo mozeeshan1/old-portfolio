@@ -7,7 +7,7 @@ import { textBlack, textWhite } from "./content";
 class Index extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { preloader: false, dark: localStorage.getItem("dark"), desktop: window.matchMedia("(min-width: 768px)").matches };
+    this.state = { dark: localStorage.getItem("dark"), desktop: window.matchMedia("(min-width: 768px)").matches };
   }
   componentDidMount() {
     window.matchMedia("(min-width: 768px)").addEventListener("change", (e) => this.setState({ desktop: e.matches }));
@@ -18,12 +18,9 @@ class Index extends React.Component {
       document.body.style.backgroundColor = textWhite;
       document.body.style.color = textBlack;
     }
-    setTimeout(() => {
-      this.setState({ preloader: true });
-    }, 2500);
   }
   render() {
-    return <React.Fragment>{!this.state.preloader ? <div id="preloader">PRELOADER HERE</div>: this.state.desktop?<DesktopApp />:<MobileApp />}</React.Fragment> 
+    return <React.Fragment>{this.state.desktop ? <DesktopApp /> : <MobileApp />}</React.Fragment>;
   }
 }
 
