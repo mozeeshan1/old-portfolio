@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import * as icons from "./icons";
 import "./content.css";
 import anime from "animejs/lib/anime.es.js";
+import { Link } from "react-router-dom";
 
 export const textBlack = "#121212";
 export const textWhite = "#FFFFFF";
@@ -12,22 +13,14 @@ export function DesktopNavBar() {
 
   return (
     <div id="desktop-nav-bar">
-      <a id="logo" href="/">
-        <h1>Big Name Here</h1>
-      </a>
-      <div id="menu">
-        <a href="#">
-          <li>Home</li>
-        </a>
-        <a href="#">
-          <li>About</li>
-        </a>
-        <a href="#">
-          <li>Projects</li>
-        </a>
+      <Link id ="logo" to="/"><h1>Big Name Here</h1></Link>
+      <div id="desktop-menu">
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+        <Link to="/projects">Projects</Link>
       </div>
       <button
-        id="dark-mode"
+        id="desktop-dark-mode"
         disabled={darkButton}
         onClick={(e) => {
           setDark(!dark);
@@ -47,7 +40,15 @@ export function DesktopNavBar() {
 export function DesktopHomeBody() {
   return (
     <div id="desktop-home-body">
-      <h1>text here</h1>
+      <h1>Desktop text here</h1>
+    </div>
+  );
+}
+
+export function DesktopAboutBody() {
+  return (
+    <div id="desktop-about-body">
+      <h1>About Desktop text here</h1>
     </div>
   );
 }
@@ -70,7 +71,9 @@ export function MobileNavBar() {
       document.querySelector("#mobile-menu").style.display = "grid";
     } else {
       document.querySelector("#root").style.setProperty("--root-height", "auto");
-      setTimeout(()=>{document.querySelector("#mobile-menu").style.display = "none";},600);
+      setTimeout(() => {
+        document.querySelector("#mobile-menu").style.display = "none";
+      }, 600);
     }
   };
   useEffect(() => {
@@ -84,10 +87,15 @@ export function MobileNavBar() {
       .add(
         {
           targets: "#hamburger-icon",
-          d: {
-            value: ["M3 0 30 0 30 4 0 4 0 0ZM12 12H30V16H0V12ZM1 24 30 24 30 28 0 28 0 24Z", "M3 0L28 25L25 28L0 3L3 0Z M12 12H16V16H12V12Z M0 25L25 0L28 3L3 28L0 25Z"],
-          },
-          duration: 500,
+          d: [
+            {
+              value: "M2 5 12 5 12 11 2 11Q-2 8 2 5M12 5 24 5 24 11 12 11M24 5 36 5 36 11 24 11M36 5 46 5Q50 8 46 11L36 11M2 21 12 21 12 27 2 27Q-2 24 2 21M12 21 24 21 24 27 12 27M24 21 36 21 36 27 24 27M36 21 46 21Q50 24 46 27L36 27M2 37 12 37 12 43 2 43Q-2 40 2 37M12 37 24 37 24 43 12 43M24 37 36 37 36 43 24 43M36 37 46 37Q50 40 46 43L36 43",
+              //value: ["M3 0 30 0 30 4 0 4 0 0ZM12 12H30V16H0V12ZM1 24 30 24 30 28 0 28 0 24Z", "M3 0L28 25L25 28L0 3L3 0Z M12 12H16V16H12V12Z M0 25L25 0L28 3L3 28L0 25Z"],
+            },
+            { value: "M2 5 12 5 12 11 2 11Q-2 8 2 5M12 5 12 5 12 11 12 11M36 5 36 5 36 11 36 11M36 5 46 5Q50 8 46 11L36 11M12 21 12 21 12 27 12 27Q12 24 12 21M12 21 24 21 24 27 12 27M24 21 36 21 36 27 24 27M36 21 36 21Q36 24 36 27L36 27M2 37 12 37 12 43 2 43Q-2 40 2 37M12 37 12 37 12 43 12 43M36 37 36 37 36 43 36 43M36 37 46 37Q50 40 46 43L36 43" },
+            { value: "M6 8 26 23 22 27 2 12Q2 8 6 8M12 5 12 5 12 11 12 11M36 5 36 5 36 11 36 11M33 15 43 8Q47 8 47 12L37 19M12 21 12 21 12 27 12 27Q12 24 12 21M12 31 24 22 28 26 16 35M24 22 33 15 37 19 28 26M36 21 36 21Q36 24 36 27L36 27M1 39 12 31 16 35 5 43Q1 44 1 39M12 37 12 37 12 43 12 43M36 37 36 37 36 43 36 43M26 23 46 38Q47 42 43 43L22 27" },
+          ],
+          duration: 600,
         },
         0
       )
@@ -111,9 +119,9 @@ export function MobileNavBar() {
 
   return (
     <div id="mobile-nav-bar">
-      <a id="logo" href="/">
-        <h1>Small name</h1>
-      </a>
+      <Link id="logo" to="/">
+        <h1>Small Name</h1>
+      </Link>
       <button
         id="hamburger-button"
         disabled={menuButton}
@@ -153,15 +161,11 @@ function MobileMenu({ setMenuBut }) {
   return (
     <div id="mobile-menu">
       <div id="mobile-menu-list">
-        <a href="#">
-          <li>Home</li>
-        </a>
-        <a href="#">
-          <li>About</li>
-        </a>
-        <a href="#">
-          <li>Projects</li>
-        </a>
+        <Link to="/">Home</Link>
+        <Link onClick={window.location.reload} to="/about">
+          About
+        </Link>
+        <Link to="/projects">Projects</Link>
       </div>
       <div id="mobile-dark-div">
         <button
@@ -190,6 +194,15 @@ export function MobileHomeBody() {
     </div>
   );
 }
+
+export function MobileAboutBody() {
+  return (
+    <div id="mobile-about-body">
+      <h1>About Mobile text here</h1>
+    </div>
+  );
+}
+
 function useStickyState(defaultValue, key) {
   const [value, setValue] = React.useState(() => {
     const stickyValue = localStorage.getItem(key);

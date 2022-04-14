@@ -2,6 +2,7 @@ import "./App.css";
 import * as Content from "./content";
 import React from "react";
 import { textBlack, textWhite } from "./content";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 export class DesktopApp extends React.Component {
   constructor(props) {
@@ -32,11 +33,14 @@ export class DesktopApp extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <BrowserRouter>
         {!this.state.preloader && <div id="preloader">PRELOADER HERE</div>}
         <Content.DesktopNavBar />
-        <Content.DesktopHomeBody/>
-      </React.Fragment>
+        <Routes> 
+          <Route path="/" element={<Content.DesktopHomeBody />} />
+          <Route path="/about" element={<Content.DesktopAboutBody />} />
+        </Routes>
+      </BrowserRouter>
     );
   }
 }
@@ -71,11 +75,14 @@ export class MobileApp extends React.Component {
   }
   render() {
     return (
-      <React.Fragment>
+      <BrowserRouter>
         {!this.state.preloader && <div id="preloader">PRELOADER HERE</div>}
         <Content.MobileNavBar />
-        <Content.MobileHomeBody/>
-      </React.Fragment>
+        <Routes>
+          <Route path="/" element={<Content.MobileHomeBody />} />
+          <Route path="/about" element={<Content.MobileAboutBody />} />
+        </Routes>
+      </BrowserRouter>
     );
   }
 }

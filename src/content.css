@@ -15,10 +15,11 @@
 }
 #mobile-nav-bar {
   width: 100%;
-  height: 8vh;
+  height: 10vh;
   display: grid;
-  grid: auto/ repeat(8, 1fr);
+  grid: auto/ repeat(2, 1fr);
   justify-content: center;
+  align-items: center;
   position: fixed;
   color: inherit;
   overflow:hidden;
@@ -27,23 +28,34 @@
   text-decoration: none;
   grid-column: 1/5;
   color: inherit;
+  height:10vh;
+  width: fit-content;
 }
-#menu {
-  list-style: none;
-  grid-column: 5/8;
+#logo h1{
+  height: 100%;
+  width: fit-content;
 }
-#menu a {
+#desktop-menu {
+  grid-column: 6/8;
+  display: flex;
+  align-items: center;
+  gap:10%;
+  color: inherit;
+  text-align: center;
+}
+#desktop-menu a {
   text-decoration: none;
   color: inherit;
+  width:fit-content;
 }
-#dark-mode {
+#desktop-dark-mode {
   width: fit-content;
   height: fit-content;
   border: none;
   background-color: transparent;
   position: relative;
-  top: 35%;
   grid-column: 8;
+  margin:auto;
 }
 #mode-contents {
   width: fit-content;
@@ -59,6 +71,8 @@
   border: none;
   grid-column: 8;
   z-index: 15;
+  display:flex;
+  margin-right:1em;
 }
 
 div.ripple {
@@ -95,6 +109,7 @@ div.ripple {
   justify-content: center;
   z-index: 9;
   display: none;
+  top:0;
 }
 #mobile-menu a {
   text-decoration: none;
@@ -141,6 +156,22 @@ div.ripple {
   height:500vh;
   width:100%;
   position: relative;
+  top:10vh;
+  z-index: -1;
+}
+
+#desktop-about-body{
+  height:500vh;
+  width:100%;
+  position: relative;
   top:8vh;
+  z-index: -1;
+}
+
+#mobile-about-body{
+  height:500vh;
+  width:100%;
+  position: relative;
+  top:10vh;
   z-index: -1;
 }

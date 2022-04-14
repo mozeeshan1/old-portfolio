@@ -22,7 +22,11 @@ export const DarkIcon = () => {
 export const HamburgerIcon = () => {
   return (
     <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path id="hamburger-icon" d="M6 36H42V32H6V36ZM6 26H42V22H6V26ZM6 12V16H42V12H6Z" fill="inherit" />
+      <path id="hamburger-icon" d="M2 5 12 5 12 11 2 11Q-2 8 2 5M12 5 24 5 24 11 12 11M24 5 36 5 36 11 24 11M36 5 46 5Q50 8 46 11L36 11M2 21 12 21 12 27 2 27Q-2 24 2 21M12 21 24 21 24 27 12 27M24 21 36 21 36 27 24 27M36 21 46 21Q50 24 46 27L36 27M2 37 12 37 12 43 2 43Q-2 40 2 37M12 37 24 37 24 43 12 43M24 37 36 37 36 43 24 43M36 37 46 37Q50 40 46 43L36 43" fill="inherit" />
     </svg>
   );
 };
+<svg width="42" height="39" viewBox="0 0 42 39" fill="none" xmlns="http://www.w3.org/2000/svg"> 
+  <path d="M4.5 1.5L23 18L19 22L0 6C0 3.33333 1.83333 1.5 4.5 1.5ZM28.5 9L36.5 1.5C39 0 42 1 41.5 4.5L32.5 13.5L28.5 9ZM9 16V22C9 20 9 18 9 16ZM9 26.5L21 16.5L25 21L13.5 31L9 26.5ZM21 16.5L27.5 10L32 14L25 21L21 16.5ZM33 16C33 18 33 20 33 22V16ZM0.5 34L8 27.5L12.5 32L5.5 38C2.83333 38.6667 1.5 37.5 0.5 34ZM23 18L41.5 34C41.5 36.5 39.5 39 36 37.5L19 22" fill="black" />
+</svg>;
+
