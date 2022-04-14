@@ -1,5 +1,5 @@
 import "./App.css";
-import { DesktopNavBar, MobileNavBar } from "./content";
+import * as Content from "./content";
 import React from "react";
 import { textBlack, textWhite } from "./content";
 
@@ -34,7 +34,8 @@ export class DesktopApp extends React.Component {
     return (
       <React.Fragment>
         {!this.state.preloader && <div id="preloader">PRELOADER HERE</div>}
-        <DesktopNavBar />
+        <Content.DesktopNavBar />
+        <Content.DesktopHomeBody/>
       </React.Fragment>
     );
   }
@@ -72,7 +73,8 @@ export class MobileApp extends React.Component {
     return (
       <React.Fragment>
         {!this.state.preloader && <div id="preloader">PRELOADER HERE</div>}
-        <MobileNavBar />
+        <Content.MobileNavBar />
+        <Content.MobileHomeBody/>
       </React.Fragment>
     );
   }

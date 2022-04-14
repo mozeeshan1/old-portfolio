@@ -14,9 +14,11 @@ class Index extends React.Component {
     if (this.state.dark === "true") {
       document.body.style.backgroundColor = textBlack;
       document.body.style.color = textWhite;
+      document.querySelector("#desktop-nav-bar, #mobile-nav-bar").style.backgroundColor = textBlack;
     } else {
       document.body.style.backgroundColor = textWhite;
       document.body.style.color = textBlack;
+      document.querySelector("#desktop-nav-bar,#mobile-nav-bar").style.backgroundColor = textWhite;
     }
   }
   render() {

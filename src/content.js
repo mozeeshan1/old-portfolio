@@ -11,7 +11,7 @@ export function DesktopNavBar() {
   const [darkButton, setDarkButton] = useState(false);
 
   return (
-    <div id="nav-bar">
+    <div id="desktop-nav-bar">
       <a id="logo" href="/">
         <h1>Big Name Here</h1>
       </a>
@@ -44,6 +44,14 @@ export function DesktopNavBar() {
   );
 }
 
+export function DesktopHomeBody() {
+  return (
+    <div id="desktop-home-body">
+      <h1>text here</h1>
+    </div>
+  );
+}
+
 export function MobileNavBar() {
   const [menu, setMenu] = useState(false);
   const [menuButton, setMenuButton] = useState(false);
@@ -57,12 +65,19 @@ export function MobileNavBar() {
       hamburgerAnimation.current.reverse();
       hamburgerAnimation.current.play();
     }
+    if (!menu) {
+      document.querySelector("#root").style.setProperty("--root-height", `${window.innerHeight}px`);
+      document.querySelector("#mobile-menu").style.display = "grid";
+    } else {
+      document.querySelector("#root").style.setProperty("--root-height", "auto");
+      setTimeout(()=>{document.querySelector("#mobile-menu").style.display = "none";},600);
+    }
   };
   useEffect(() => {
     hamburgerAnimation.current = anime
       .timeline({
         easing: "easeOutSine",
-        duration: 500,
+        duration: 600,
         autoplay: false,
         loop: false,
       })
@@ -92,11 +107,10 @@ export function MobileNavBar() {
         easing: "easeInOutSine",
         duration: 250,
       });
-    //document.body.style.overflow = "hidden";
   }, []);
 
   return (
-    <div id="nav-bar">
+    <div id="mobile-nav-bar">
       <a id="logo" href="/">
         <h1>Small name</h1>
       </a>
@@ -168,6 +182,14 @@ function MobileMenu({ setMenuBut }) {
     </div>
   );
 }
+
+export function MobileHomeBody() {
+  return (
+    <div id="mobile-home-body">
+      <h1>mobile text here</h1>
+    </div>
+  );
+}
 function useStickyState(defaultValue, key) {
   const [value, setValue] = React.useState(() => {
     const stickyValue = localStorage.getItem(key);
@@ -200,7 +222,9 @@ function changeBackground(event, dark, desktop) {
     ripples[0].remove();
   }
   if (desktop) {
+    var clone = circle.cloneNode(true);
     document.body.appendChild(circle);
+    document.querySelector("#desktop-nav-bar").appendChild(clone);
   } else {
     document.querySelector("#mobile-menu").appendChild(circle);
   }
@@ -227,5 +251,6 @@ function changeBackground(event, dark, desktop) {
   }
   setTimeout(() => {
     dark ? (document.body.style.backgroundColor = textWhite) : (document.body.style.backgroundColor = textBlack);
+    dark ? (document.querySelector("#desktop-nav-bar, #mobile-nav-bar").style.backgroundColor = textWhite) : (document.querySelector("#desktop-nav-bar,#mobile-nav-bar").style.backgroundColor = textBlack);
   }, bgTimer);
 }
