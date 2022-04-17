@@ -15,7 +15,7 @@ export class DesktopApp extends React.Component {
     setTimeout(() => {
       document.body.style.overflowY = "visible";
       this.setState({ preloader: true });
-    }, 2500);
+    }, 5000);
     if (window.history.scrollRestoration) {
       window.history.scrollRestoration = "manual";
     } else {
@@ -34,9 +34,9 @@ export class DesktopApp extends React.Component {
   render() {
     return (
       <BrowserRouter>
-        {!this.state.preloader && <div id="preloader">PRELOADER HERE</div>}
+        {!this.state.preloader && <Content.Preloader id="preloader"/>}
         <Content.DesktopNavBar />
-        <Routes> 
+        <Routes>
           <Route path="/" element={<Content.DesktopHomeBody />} />
           <Route path="/about" element={<Content.DesktopAboutBody />} />
         </Routes>
@@ -56,7 +56,7 @@ export class MobileApp extends React.Component {
     setTimeout(() => {
       document.body.style.overflowY = "visible";
       this.setState({ preloader: true });
-    }, 2500);
+    }, 5000);
     if (window.history.scrollRestoration) {
       window.history.scrollRestoration = "manual";
     } else {
@@ -76,7 +76,7 @@ export class MobileApp extends React.Component {
   render() {
     return (
       <BrowserRouter>
-        {!this.state.preloader && <div id="preloader">PRELOADER HERE</div>}
+        {!this.state.preloader && <Content.Preloader id="preloader" />}
         <Content.MobileNavBar />
         <Routes>
           <Route path="/" element={<Content.MobileHomeBody />} />

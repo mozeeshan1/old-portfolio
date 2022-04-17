@@ -26,7 +26,12 @@ export const HamburgerIcon = () => {
     </svg>
   );
 };
-<svg width="42" height="39" viewBox="0 0 42 39" fill="none" xmlns="http://www.w3.org/2000/svg"> 
-  <path d="M4.5 1.5L23 18L19 22L0 6C0 3.33333 1.83333 1.5 4.5 1.5ZM28.5 9L36.5 1.5C39 0 42 1 41.5 4.5L32.5 13.5L28.5 9ZM9 16V22C9 20 9 18 9 16ZM9 26.5L21 16.5L25 21L13.5 31L9 26.5ZM21 16.5L27.5 10L32 14L25 21L21 16.5ZM33 16C33 18 33 20 33 22V16ZM0.5 34L8 27.5L12.5 32L5.5 38C2.83333 38.6667 1.5 37.5 0.5 34ZM23 18L41.5 34C41.5 36.5 39.5 39 36 37.5L19 22" fill="black" />
-</svg>;
 
+export const Circle =(props)=>{
+  return (
+    <svg id={props.id} width="128" height="128" viewBox="-5 -5 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 30A1 1 0 0060 30 1 1 0 000 30Z" fill="white" />
+      {/* <circle cx="24" cy="24" r="24" fill="white" /> */}
+    </svg>
+  );
+}

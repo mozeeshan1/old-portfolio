@@ -12,6 +12,7 @@
   color: inherit;
   overflow:hidden;
   clip: rect(auto, auto, auto, auto);
+  z-index: 15;
 }
 #mobile-nav-bar {
   width: 100%;
@@ -147,31 +148,62 @@ div.ripple {
 #desktop-home-body{
   height:500vh;
   width:100%;
-  position: relative;
-  top:8vh;
-  z-index: -1;
+  position: absolute;
+  /* z-index: -1; */
+  color: inherit;
+  background-color: transparent;
 }
-
+#desktop-home-body h1{
+  margin-top: 8vh;
+}
+#blackhole-div{
+  position: absolute;
+  top: 0;
+  width:100vw;
+  height:100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#blackhole-home{
+  mix-blend-mode: difference;
+}
+#blackhole-outline{
+  position: absolute;
+}
+#blackhole-outline path{
+  fill: none;
+  stroke: inherit;
+  stroke-width: 2px;
+}
+#blackhole-fill{
+  position: absolute;
+  transform: scale(0);
+}
 #mobile-home-body{
   height:500vh;
   width:100%;
-  position: relative;
-  top:10vh;
+  position: absolute;
   z-index: -1;
 }
-
+#mobile-home-body h1{
+  margin-top:10vh;
+}
 #desktop-about-body{
   height:500vh;
   width:100%;
-  position: relative;
-  top:8vh;
+  position: absolute;
   z-index: -1;
 }
-
+#desktop-about-body h1{
+  margin-top: 8vh;
+}
 #mobile-about-body{
   height:500vh;
   width:100%;
-  position: relative;
-  top:10vh;
+  position: absolute;
   z-index: -1;
+}
+#mobile-about-body h1{
+  margin-top: 10vh;
 }

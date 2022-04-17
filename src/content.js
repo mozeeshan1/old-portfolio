@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import * as icons from "./icons";
+import * as VectorGraphics from "./svgs";
 import "./content.css";
 import anime from "animejs/lib/anime.es.js";
 import { Link } from "react-router-dom";
@@ -7,17 +7,87 @@ import { Link } from "react-router-dom";
 export const textBlack = "#121212";
 export const textWhite = "#FFFFFF";
 
+export function Preloader(props) {
+  const blackholeStartAnimation = useRef(null);
+
+  useEffect(() => {
+    blackholeStartAnimation.current = anime
+      .timeline({
+        easing: "easeInOutQuad",
+        loop: false,
+        autoplay: true,
+      })
+      .add(
+        {
+          targets: "#blackhole-outline path",
+          strokeDashoffset: [anime.setDashoffset, 0],
+          duration: 1000,
+        },
+        1000
+      )
+      .add({
+        targets: "#blackhole-fill",
+        scale: [0, Math.random()],
+        duration: 1000,
+      })
+      .add({
+        targets: "#blackhole-fill",
+        scale: 1,
+        duration: 750,
+      })
+      .add({
+        targets: "#preloader",
+        opacity: 0,
+      });
+  }, []);
+  return (
+    <div id={props.id}>
+      <VectorGraphics.Circle id="blackhole-outline" />
+      <VectorGraphics.Circle id="blackhole-fill" />
+    </div>
+  );
+}
+
 export function DesktopNavBar() {
   const [dark, setDark] = useStickyState(false, "dark");
   const [darkButton, setDarkButton] = useState(false);
 
   return (
     <div id="desktop-nav-bar">
-      <Link id ="logo" to="/"><h1>Big Name Here</h1></Link>
+      <Link
+        id="logo"
+        to="/"
+        onClick={() => {
+          window.scrollTo(0, 0);
+        }}
+      >
+        <h1>Big Name Here</h1>
+      </Link>
       <div id="desktop-menu">
-        <Link to="/">Home</Link>
-        <Link to="/about">About</Link>
-        <Link to="/projects">Projects</Link>
+        <Link
+          to="/"
+          onClick={() => {
+            window.scrollTo(0, 0);
+          }}
+        >
+          Home
+        </Link>
+        <Link
+          to="/about"
+          onClick={() => {
+            window.scrollTo(0, 0);
+          }}
+        >
+          About
+        </Link>
+        <Link
+          to="/projects"
+          onClick={() => {
+            window.scrollTo(0, 0);
+          }}
+        >
+          Projects
+        </Link>
       </div>
       <button
         id="desktop-dark-mode"
@@ -31,7 +101,7 @@ export function DesktopNavBar() {
           }, 1000);
         }}
       >
-        <div id="mode-contents">{dark ? <icons.DarkIcon id="dark-icon" /> : <icons.LightIcon id="light-icon" />}</div>
+        <div id="mode-contents">{dark ? <VectorGraphics.DarkIcon id="dark-icon" /> : <VectorGraphics.LightIcon id="light-icon" />}</div>
       </button>
     </div>
   );
@@ -41,6 +111,9 @@ export function DesktopHomeBody() {
   return (
     <div id="desktop-home-body">
       <h1>Desktop text here</h1>
+      <div id="blackhole-div">
+        <VectorGraphics.Circle id="blackhole-home" />
+      </div>
     </div>
   );
 }
@@ -119,7 +192,13 @@ export function MobileNavBar() {
 
   return (
     <div id="mobile-nav-bar">
-      <Link id="logo" to="/">
+      <Link
+        id="logo"
+        to="/"
+        onClick={() => {
+          window.scrollTo(0, 0);
+        }}
+      >
         <h1>Small Name</h1>
       </Link>
       <button
@@ -133,7 +212,7 @@ export function MobileNavBar() {
           };
         }}
       >
-        <icons.HamburgerIcon />
+        <VectorGraphics.HamburgerIcon />
       </button>
       <MobileMenu setMenuBut={setMenuButton} />
     </div>
@@ -161,11 +240,15 @@ function MobileMenu({ setMenuBut }) {
   return (
     <div id="mobile-menu">
       <div id="mobile-menu-list">
-        <Link to="/">Home</Link>
-        <Link onClick={window.location.reload} to="/about">
+        <Link to="/" onClick={window.location.reload}>
+          Home
+        </Link>
+        <Link to="/about" onClick={window.location.reload}>
           About
         </Link>
-        <Link to="/projects">Projects</Link>
+        <Link to="/projects" onClick={window.location.reload}>
+          Projects
+        </Link>
       </div>
       <div id="mobile-dark-div">
         <button
@@ -180,7 +263,7 @@ function MobileMenu({ setMenuBut }) {
             }, 1000);
           }}
         >
-          <div id="mode-contents">{dark ? <icons.DarkIcon id="dark-icon" /> : <icons.LightIcon id="light-icon" />}</div>
+          <div id="mode-contents">{dark ? <VectorGraphics.DarkIcon id="dark-icon" /> : <VectorGraphics.LightIcon id="light-icon" />}</div>
         </button>
       </div>
     </div>
@@ -191,6 +274,9 @@ export function MobileHomeBody() {
   return (
     <div id="mobile-home-body">
       <h1>mobile text here</h1>
+      <div id="blackhole-div">
+        <VectorGraphics.Circle id="blackhole-home" />
+      </div>
     </div>
   );
 }
@@ -237,7 +323,7 @@ function changeBackground(event, dark, desktop) {
   if (desktop) {
     var clone = circle.cloneNode(true);
     document.body.appendChild(circle);
-    document.querySelector("#desktop-nav-bar").appendChild(clone);
+    // document.querySelector("#desktop-nav-bar").appendChild(clone);
   } else {
     document.querySelector("#mobile-menu").appendChild(circle);
   }
@@ -264,6 +350,6 @@ function changeBackground(event, dark, desktop) {
   }
   setTimeout(() => {
     dark ? (document.body.style.backgroundColor = textWhite) : (document.body.style.backgroundColor = textBlack);
-    dark ? (document.querySelector("#desktop-nav-bar, #mobile-nav-bar").style.backgroundColor = textWhite) : (document.querySelector("#desktop-nav-bar,#mobile-nav-bar").style.backgroundColor = textBlack);
+    // dark ? (document.querySelector("#desktop-nav-bar, #mobile-nav-bar").style.backgroundColor = textWhite) : (document.querySelector("#desktop-nav-bar,#mobile-nav-bar").style.backgroundColor = textBlack);
   }, bgTimer);
 }

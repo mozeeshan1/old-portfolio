@@ -14,11 +14,17 @@ class Index extends React.Component {
     if (this.state.dark === "true") {
       document.body.style.backgroundColor = textBlack;
       document.body.style.color = textWhite;
-      document.querySelector("#desktop-nav-bar, #mobile-nav-bar").style.backgroundColor = textBlack;
+      document.querySelector("#blackhole-fill path").style.fill = textWhite;
+      document.querySelector("#blackhole-outline path").style.stroke = textWhite;
+      // document.querySelector("#blackhole-home path").style.stroke = textWhite;
+      // document.querySelector("#blackhole-home path").style.fill = textWhite;
     } else {
       document.body.style.backgroundColor = textWhite;
       document.body.style.color = textBlack;
-      document.querySelector("#desktop-nav-bar,#mobile-nav-bar").style.backgroundColor = textWhite;
+      document.querySelector("#blackhole-fill path").style.fill = textBlack;
+      document.querySelector("#blackhole-outline path").style.stroke = textBlack;
+      // document.querySelector("#blackhole-home path").style.stroke = textBlack;
+      // document.querySelector("#blackhole-home path").style.fill = textBlack;
     }
   }
   render() {
