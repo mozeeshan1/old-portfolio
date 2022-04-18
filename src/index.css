@@ -1,5 +1,5 @@
 :root {
-  --root-height:auto;
+  --body-height:auto;
 }
 body {
   margin: 0;
@@ -10,6 +10,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color:red;
   overflow-x: hidden;
+  height:var(--body-height);
   color:greenyellow;
 }
 
@@ -20,7 +21,7 @@ code {
 
 #root{
   width:100%;
-  height:var(--root-height);
+  height:100%;
   overflow: hidden;
 }
 

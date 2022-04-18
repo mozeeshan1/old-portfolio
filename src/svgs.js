@@ -29,7 +29,7 @@ export const HamburgerIcon = () => {
 
 export const Circle =(props)=>{
   return (
-    <svg id={props.id} width="128" height="128" viewBox="-5 -5 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg id={props.id} className="blackhole" width="256" height="256" viewBox="-5 -5 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 30A1 1 0 0060 30 1 1 0 000 30Z" fill="white" />
       {/* <circle cx="24" cy="24" r="24" fill="white" /> */}
     </svg>

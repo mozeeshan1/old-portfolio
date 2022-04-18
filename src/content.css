@@ -1,5 +1,7 @@
 :root {
   --mode-scale: 0;
+  --blackhole-color: white;
+  --blackhole-color-2: black;
 }
 
 #desktop-nav-bar {
@@ -10,7 +12,7 @@
   justify-content: center;
   position: fixed;
   color: inherit;
-  overflow:hidden;
+  overflow: hidden;
   clip: rect(auto, auto, auto, auto);
   z-index: 15;
 }
@@ -23,16 +25,17 @@
   align-items: center;
   position: fixed;
   color: inherit;
-  overflow:hidden;
+  overflow: hidden;
+  z-index: 15;
 }
 #logo {
   text-decoration: none;
   grid-column: 1/5;
   color: inherit;
-  height:10vh;
+  height: 10vh;
   width: fit-content;
 }
-#logo h1{
+#logo h1 {
   height: 100%;
   width: fit-content;
 }
@@ -40,14 +43,14 @@
   grid-column: 6/8;
   display: flex;
   align-items: center;
-  gap:10%;
+  gap: 10%;
   color: inherit;
   text-align: center;
 }
 #desktop-menu a {
   text-decoration: none;
   color: inherit;
-  width:fit-content;
+  width: fit-content;
 }
 #desktop-dark-mode {
   width: fit-content;
@@ -56,7 +59,7 @@
   background-color: transparent;
   position: relative;
   grid-column: 8;
-  margin:auto;
+  margin: auto;
 }
 #mode-contents {
   width: fit-content;
@@ -71,9 +74,9 @@
   background: transparent;
   border: none;
   grid-column: 8;
-  z-index: 15;
-  display:flex;
-  margin-right:1em;
+  z-index: 20;
+  display: flex;
+  margin-right: 1em;
 }
 
 div.ripple {
@@ -103,37 +106,37 @@ div.ripple {
   height: 100%;
   text-align: center;
   color: inherit;
-  background: white;  
+  background: white;
   opacity: 0;
-  display:grid;
-  grid:1fr auto/auto;
+  display: grid;
+  grid: 1fr auto/auto;
   justify-content: center;
   z-index: 9;
   display: none;
-  top:0;
+  top: 0;
 }
 #mobile-menu a {
   text-decoration: none;
   list-style: none;
   color: inherit;
-  width:100%;
+  width: 100%;
 }
-#mobile-menu-list{
-  display:flex;
+#mobile-menu-list {
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   row-gap: 2rem;
-  width:50vw;
+  width: 50vw;
   font-size: 3rem;
 }
-#mobile-dark-div{
-  display:flex;
+#mobile-dark-div {
+  display: flex;
   justify-content: center;
 }
-#mobile-menu #mobile-dark-mode{
+#mobile-menu #mobile-dark-mode {
   margin-bottom: 70%;
-  top:0;
+  top: 0;
 }
 #mobile-dark-mode {
   width: fit-content;
@@ -144,66 +147,91 @@ div.ripple {
   top: 35%;
 }
 
-
-#desktop-home-body{
-  height:500vh;
-  width:100%;
+#desktop-home-body {
+  height: 500vh;
+  width: 100%;
   position: absolute;
   /* z-index: -1; */
   color: inherit;
   background-color: transparent;
 }
-#desktop-home-body h1{
+#desktop-home-body h1 {
   margin-top: 8vh;
 }
-#blackhole-div{
+#mobile-home-body {
+  height: 500vh;
+  width: 100%;
+  position: absolute;
+}
+#mobile-home-body h1 {
+  margin-top: 10vh;
+}
+#blackhole-div {
   position: absolute;
   top: 0;
-  width:100vw;
-  height:100vh;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-#blackhole-home{
-  mix-blend-mode: difference;
-}
-#blackhole-outline{
+#blackhole-outline {
   position: absolute;
 }
-#blackhole-outline path{
+#blackhole-outline path {
   fill: none;
-  stroke: inherit;
-  stroke-width: 2px;
+  stroke: var(--blackhole-color);
+  stroke-width: 1px;
 }
-#blackhole-fill{
+#blackhole-fill {
   position: absolute;
   transform: scale(0);
 }
-#mobile-home-body{
-  height:500vh;
-  width:100%;
+#blackhole-fill path {
+  fill: var(--blackhole-color);
+}
+#blackhole-fill-2 {
+  position: absolute;
+  transform: scale(0);
+}
+#blackhole-fill-2 path {
+  fill: var(--blackhole-color-2);
+  stroke: var(--blackhole-color-2);
+  stroke-width: 1.1px;
+}
+#blackhole-home {
+  mix-blend-mode: difference;
+  filter: drop-shadow(0px 0px 10px white);
+}
+#blackhole-home path {
+  fill: black;
+  stroke: black;
+}
+.blackhole {
+  width: 20vw;
+  height: 20vh;
+}
+@media (max-width: 768px) {
+  .blackhole {
+    width: 50vw;
+    height: 50vw;
+  }
+}
+#desktop-about-body {
+  height: 500vh;
+  width: 100%;
   position: absolute;
   z-index: -1;
 }
-#mobile-home-body h1{
-  margin-top:10vh;
-}
-#desktop-about-body{
-  height:500vh;
-  width:100%;
-  position: absolute;
-  z-index: -1;
-}
-#desktop-about-body h1{
+#desktop-about-body h1 {
   margin-top: 8vh;
 }
-#mobile-about-body{
-  height:500vh;
-  width:100%;
+#mobile-about-body {
+  height: 500vh;
+  width: 100%;
   position: absolute;
   z-index: -1;
 }
-#mobile-about-body h1{
+#mobile-about-body h1 {
   margin-top: 10vh;
 }

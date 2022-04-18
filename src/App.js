@@ -7,7 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 export class DesktopApp extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { preloader: false, dark: localStorage.getItem("dark") };
+    this.state = { preloader: false};
   }
 
   componentDidMount() {
@@ -15,19 +15,13 @@ export class DesktopApp extends React.Component {
     setTimeout(() => {
       document.body.style.overflowY = "visible";
       this.setState({ preloader: true });
-    }, 5000);
+    }, 5750);
     if (window.history.scrollRestoration) {
       window.history.scrollRestoration = "manual";
     } else {
       window.onbeforeunload = function () {
         window.scrollTo(0, 0);
       };
-    }
-
-    if (this.state.dark === "true") {
-      document.querySelector("#preloader").style.backgroundColor = textBlack;
-    } else {
-      document.querySelector("#preloader").style.backgroundColor = textWhite;
     }
   }
 
@@ -56,7 +50,7 @@ export class MobileApp extends React.Component {
     setTimeout(() => {
       document.body.style.overflowY = "visible";
       this.setState({ preloader: true });
-    }, 5000);
+    }, 5750);
     if (window.history.scrollRestoration) {
       window.history.scrollRestoration = "manual";
     } else {
@@ -66,10 +60,8 @@ export class MobileApp extends React.Component {
     }
 
     if (this.state.dark === "true") {
-      document.querySelector("#preloader").style.backgroundColor = textBlack;
       document.body.querySelector("#hamburger-button path").style.fill = textWhite;
     } else {
-      document.querySelector("#preloader").style.backgroundColor = textWhite;
       document.body.querySelector("#hamburger-button path").style.fill = textBlack;
     }
   }

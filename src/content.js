@@ -28,6 +28,7 @@ export function Preloader(props) {
       .add({
         targets: "#blackhole-fill",
         scale: [0, Math.random()],
+        // d: [{ value: ["M30 30A1 1 0 0030 30 1 1 0 0030 30Z", "M0 30A1 1 0 0060 30 1 1 0 000 30Z"] }],
         duration: 1000,
       })
       .add({
@@ -35,15 +36,27 @@ export function Preloader(props) {
         scale: 1,
         duration: 750,
       })
-      .add({
-        targets: "#preloader",
-        opacity: 0,
-      });
+      .add(
+        {
+          targets: "#blackhole-fill-2",
+          scale: [0, 1],
+          duration: 750,
+        },
+        "-=50"
+      )
+      .add(
+        {
+          targets: "#preloader",
+          opacity: 0,
+        },
+        "-=250"
+      );
   }, []);
   return (
     <div id={props.id}>
       <VectorGraphics.Circle id="blackhole-outline" />
       <VectorGraphics.Circle id="blackhole-fill" />
+      <VectorGraphics.Circle id="blackhole-fill-2" />
     </div>
   );
 }
@@ -140,10 +153,13 @@ export function MobileNavBar() {
       hamburgerAnimation.current.play();
     }
     if (!menu) {
-      document.querySelector("#root").style.setProperty("--root-height", `${window.innerHeight}px`);
+      document.body.style.setProperty("--body-height", `${window.innerHeight}px`);
+      document.body.style.overflowY = "hidden";
       document.querySelector("#mobile-menu").style.display = "grid";
+      console.log(`${window.innerHeight}px`);
     } else {
-      document.querySelector("#root").style.setProperty("--root-height", "auto");
+      document.body.style.setProperty("--body-height", "auto");
+      document.body.style.overflowY = "visible";
       setTimeout(() => {
         document.querySelector("#mobile-menu").style.display = "none";
       }, 600);
@@ -153,7 +169,6 @@ export function MobileNavBar() {
     hamburgerAnimation.current = anime
       .timeline({
         easing: "easeOutSine",
-        duration: 600,
         autoplay: false,
         loop: false,
       })
@@ -214,11 +229,11 @@ export function MobileNavBar() {
       >
         <VectorGraphics.HamburgerIcon />
       </button>
-      <MobileMenu setMenuBut={setMenuButton} />
+      <MobileMenu setMenuBut={setMenuButton} linkClick={hamburgerClick} />
     </div>
   );
 }
-function MobileMenu({ setMenuBut }) {
+function MobileMenu({ setMenuBut, linkClick }) {
   const [dark, setDark] = useStickyState(false, "dark");
   const [darkButton, setDarkButton] = useState(false);
 
@@ -240,13 +255,31 @@ function MobileMenu({ setMenuBut }) {
   return (
     <div id="mobile-menu">
       <div id="mobile-menu-list">
-        <Link to="/" onClick={window.location.reload}>
+        <Link
+          to="/"
+          onClick={() => {
+            linkClick();
+            window.scrollTo(0, 0);
+          }}
+        >
           Home
         </Link>
-        <Link to="/about" onClick={window.location.reload}>
+        <Link
+          to="/about"
+          onClick={() => {
+            linkClick();
+            window.scrollTo(0, 0);
+          }}
+        >
           About
         </Link>
-        <Link to="/projects" onClick={window.location.reload}>
+        <Link
+          to="/projects"
+          onClick={() => {
+            linkClick();
+            window.scrollTo(0, 0);
+          }}
+        >
           Projects
         </Link>
       </div>
@@ -321,7 +354,7 @@ function changeBackground(event, dark, desktop) {
     ripples[0].remove();
   }
   if (desktop) {
-    var clone = circle.cloneNode(true);
+    // var clone = circle.cloneNode(true);
     document.body.appendChild(circle);
     // document.querySelector("#desktop-nav-bar").appendChild(clone);
   } else {

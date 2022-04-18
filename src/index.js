@@ -12,19 +12,23 @@ class Index extends React.Component {
   componentDidMount() {
     window.matchMedia("(min-width: 768px)").addEventListener("change", (e) => this.setState({ desktop: e.matches }));
     if (this.state.dark === "true") {
+      document.querySelector("#preloader").style.backgroundColor = textBlack;
       document.body.style.backgroundColor = textBlack;
       document.body.style.color = textWhite;
-      document.querySelector("#blackhole-fill path").style.fill = textWhite;
-      document.querySelector("#blackhole-outline path").style.stroke = textWhite;
-      // document.querySelector("#blackhole-home path").style.stroke = textWhite;
-      // document.querySelector("#blackhole-home path").style.fill = textWhite;
+      let blackholes = document.body.querySelectorAll(".blackhole");
+      for (let i=0;i<blackholes.length;i++){
+        blackholes[i].style.setProperty("--blackhole-color",textWhite);
+        blackholes[i].style.setProperty("--blackhole-color-2", textBlack);
+      }
     } else {
+      document.querySelector("#preloader").style.backgroundColor = textWhite;
       document.body.style.backgroundColor = textWhite;
       document.body.style.color = textBlack;
-      document.querySelector("#blackhole-fill path").style.fill = textBlack;
-      document.querySelector("#blackhole-outline path").style.stroke = textBlack;
-      // document.querySelector("#blackhole-home path").style.stroke = textBlack;
-      // document.querySelector("#blackhole-home path").style.fill = textBlack;
+      let blackholes = document.body.querySelectorAll(".blackhole");
+      for (let i = 0; i < blackholes.length; i++) {
+        blackholes[i].style.setProperty("--blackhole-color", textBlack);
+        blackholes[i].style.setProperty("--blackhole-color-2", textWhite);
+      }
     }
   }
   render() {
