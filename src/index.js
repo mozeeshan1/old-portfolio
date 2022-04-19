@@ -20,6 +20,20 @@ class Index extends React.Component {
         blackholes[i].style.setProperty("--blackhole-color",textWhite);
         blackholes[i].style.setProperty("--blackhole-color-2", textBlack);
       }
+      let blackholesBGD = document.body.querySelectorAll(".blackholes-dark");
+      for (let i = 0; i < blackholesBGD.length; i++) {
+        blackholesBGD[i].style.setProperty("display", "block");
+      }
+      let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
+      for (let i = 0; i < blackholesBGW.length; i++) {
+        blackholesBGW[i].style.setProperty("display", "none");
+      }
+      // document.querySelector("#blackhole-bg-1-white").style.setProperty("display","none");
+      // document.querySelector("#blackhole-bg-1-dark").style.setProperty("display", "block");
+      // document.querySelector("#blackhole-bg-2-white").style.setProperty("display", "none");
+      // document.querySelector("#blackhole-bg-2-dark").style.setProperty("display", "block");
+      // document.querySelector("#blackhole-bg-3-white").style.setProperty("display", "none");
+      // document.querySelector("#blackhole-bg-3-dark").style.setProperty("display", "block");
     } else {
       document.querySelector("#preloader").style.backgroundColor = textWhite;
       document.body.style.backgroundColor = textWhite;
@@ -29,6 +43,20 @@ class Index extends React.Component {
         blackholes[i].style.setProperty("--blackhole-color", textBlack);
         blackholes[i].style.setProperty("--blackhole-color-2", textWhite);
       }
+      let blackholesBGD = document.body.querySelectorAll(".blackholes-dark");
+      for (let i = 0; i < blackholesBGD.length; i++) {
+        blackholesBGD[i].style.setProperty("display", "none");
+      }
+      let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
+      for (let i = 0; i < blackholesBGW.length; i++) {
+        blackholesBGW[i].style.setProperty("display", "block");
+      }
+      // document.querySelector("#blackhole-bg-1-white").style.setProperty("display", "block");
+      // document.querySelector("#blackhole-bg-1-dark").style.setProperty("display", "none");
+      // document.querySelector("#blackhole-bg-2-white").style.setProperty("display", "block");
+      // document.querySelector("#blackhole-bg-2-dark").style.setProperty("display", "none");
+      // document.querySelector("#blackhole-bg-3-white").style.setProperty("display", "block");
+      // document.querySelector("#blackhole-bg-3-dark").style.setProperty("display", "none");
     }
   }
   render() {

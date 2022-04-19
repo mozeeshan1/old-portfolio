@@ -119,12 +119,96 @@ export function DesktopNavBar() {
     </div>
   );
 }
-
 export function DesktopHomeBody() {
+  const blackholeBGAnimation = useRef(null);
+  const loopCompleted = useRef(0);
+  const animationValues = useRef({});
+
+  const updateAnimationValues = () => {
+    animationValues.current.R1 = anime.random(-360, 360);
+    animationValues.current.R2 = anime.random(-360, 360);
+    animationValues.current.R3 = anime.random(-360, 360);
+    animationValues.current.R4 = anime.random(-360, 360);
+    animationValues.current.R5 = anime.random(-360, 360);
+    animationValues.current.R6 = anime.random(-360, 360);
+    animationValues.current.Sc1 = anime.random(2, 10);
+    animationValues.current.Sc2 = anime.random(1, 2);
+    animationValues.current.Sk1 = anime.random(0, 36);
+    animationValues.current.Sk2 = anime.random(0, 36);
+    animationValues.current.Sk3 = anime.random(0, 7);
+    animationValues.current.Sk4 = anime.random(0, 5);
+    animationValues.current.Sk5 = anime.random(0, 36);
+    animationValues.current.Sk6 = anime.random(0, 36);
+  };
+
+  useEffect(() => {
+    updateAnimationValues();
+    function BBGA() {
+      blackholeBGAnimation.current = anime
+        .timeline({
+          easing: "easeInOutQuad",
+          loop: false,
+          autoplay: true,
+          duration: 5000,
+          direction: "normal",
+        })
+        .add(
+          {
+            targets: "#blackhole-bg-1-dark,#blackhole-bg-1-white",
+            scale: [0, animationValues.current.Sc1],
+            rotate: [animationValues.current.R1, animationValues.current.R2],
+            opacity: [0, 0.2],
+            skewX: animationValues.current.Sk1,
+            skewY: animationValues.current.Sk2,
+          },
+          0
+        )
+        .add(
+          {
+            targets: "#blackhole-bg-2-dark,#blackhole-bg-2-white",
+            rotate: [animationValues.current.R3, animationValues.current.R4],
+            opacity: [[0.2, 0.4], 0.6],
+            skewX: animationValues.current.Sk3,
+            skewY: animationValues.current.Sk4,
+          },
+          0
+        )
+        .add(
+          {
+            targets: "#blackhole-bg-3-dark,#blackhole-bg-3-white",
+            scale: [[1, animationValues.current.Sc2], 0.9],
+            rotate: [animationValues.current.R5, animationValues.current.R6],
+            opacity: [[1, 0.5], 1],
+            skewX: animationValues.current.Sk5,
+            skewY: animationValues.current.Sk6,
+          },
+          0
+        ).complete = (anim) => {
+        loopCompleted.current++;
+
+        if (loopCompleted.current === 2) {
+          updateAnimationValues();
+          BBGA();
+          loopCompleted.current = 0;
+        } else if (loopCompleted.current === 1) {
+          anim.reverse();
+          anim.play();
+        }
+      };
+    }
+    BBGA();
+  }, []);
   return (
     <div id="desktop-home-body">
       <h1>Desktop text here</h1>
       <div id="blackhole-div">
+        <div id="blackhole-bg-1-dark" className="blackholes-dark" />
+        <div id="blackhole-bg-1-white" className="blackholes-white" />
+        <div id="blackhole-bg-2-dark" className="blackholes-dark" />
+        <div id="blackhole-bg-2-white" className="blackholes-white" />
+        <div id="blackhole-bg-3-dark" className="blackholes-dark" />
+        <div id="blackhole-bg-3-white" className="blackholes-white" />
+        <div id="blackhole-bg-blur" />
         <VectorGraphics.Circle id="blackhole-home" />
       </div>
     </div>
@@ -156,7 +240,6 @@ export function MobileNavBar() {
       document.body.style.setProperty("--body-height", `${window.innerHeight}px`);
       document.body.style.overflowY = "hidden";
       document.querySelector("#mobile-menu").style.display = "grid";
-      console.log(`${window.innerHeight}px`);
     } else {
       document.body.style.setProperty("--body-height", "auto");
       document.body.style.overflowY = "visible";
@@ -304,10 +387,95 @@ function MobileMenu({ setMenuBut, linkClick }) {
 }
 
 export function MobileHomeBody() {
+  const blackholeBGAnimation = useRef(null);
+  const loopCompleted = useRef(0);
+  const animationValues = useRef({});
+
+  const updateAnimationValues = () => {
+    animationValues.current.R1 = anime.random(-360, 360);
+    animationValues.current.R2 = anime.random(-360, 360);
+    animationValues.current.R3 = anime.random(-360, 360);
+    animationValues.current.R4 = anime.random(-360, 360);
+    animationValues.current.R5 = anime.random(-360, 360);
+    animationValues.current.R6 = anime.random(-360, 360);
+    animationValues.current.Sc1 = anime.random(2, 10);
+    animationValues.current.Sc2 = anime.random(1, 2);
+    animationValues.current.Sk1 = anime.random(0, 36);
+    animationValues.current.Sk2 = anime.random(0, 36);
+    animationValues.current.Sk3 = anime.random(0, 7);
+    animationValues.current.Sk4 = anime.random(0, 5);
+    animationValues.current.Sk5 = anime.random(0, 36);
+    animationValues.current.Sk6 = anime.random(0, 36);
+  };
+
+  useEffect(() => {
+    updateAnimationValues();
+    function BBGA() {
+      blackholeBGAnimation.current = anime
+        .timeline({
+          easing: "easeInOutQuad",
+          loop: false,
+          autoplay: true,
+          duration: 5000,
+          direction: "normal",
+        })
+        .add(
+          {
+            targets: "#blackhole-bg-1-dark,#blackhole-bg-1-white",
+            scale: [0, animationValues.current.Sc1],
+            rotate: [animationValues.current.R1, animationValues.current.R2],
+            opacity: [0, 0.2],
+            skewX: animationValues.current.Sk1,
+            skewY: animationValues.current.Sk2,
+          },
+          0
+        )
+        .add(
+          {
+            targets: "#blackhole-bg-2-dark,#blackhole-bg-2-white",
+            rotate: [animationValues.current.R3, animationValues.current.R4],
+            opacity: [[0.2, 0.4], 0.6],
+            skewX: animationValues.current.Sk3,
+            skewY: animationValues.current.Sk4,
+          },
+          0
+        )
+        .add(
+          {
+            targets: "#blackhole-bg-3-dark,#blackhole-bg-3-white",
+            scale: [[1, animationValues.current.Sc2], 0.9],
+            rotate: [animationValues.current.R5, animationValues.current.R6],
+            opacity: [[1, 0.5], 1],
+            skewX: animationValues.current.Sk5,
+            skewY: animationValues.current.Sk6,
+          },
+          0
+        ).complete = (anim) => {
+        loopCompleted.current++;
+
+        if (loopCompleted.current === 2) {
+          updateAnimationValues();
+          BBGA();
+          loopCompleted.current = 0;
+        } else if (loopCompleted.current === 1) {
+          anim.reverse();
+          anim.play();
+        }
+      };
+    }
+    BBGA();
+  }, []);
   return (
     <div id="mobile-home-body">
       <h1>mobile text here</h1>
       <div id="blackhole-div">
+        <div id="blackhole-bg-1-dark" className="blackholes-dark" />
+        <div id="blackhole-bg-1-white" className="blackholes-white" />
+        <div id="blackhole-bg-2-dark" className="blackholes-dark" />
+        <div id="blackhole-bg-2-white" className="blackholes-white" />
+        <div id="blackhole-bg-3-dark" className="blackholes-dark" />
+        <div id="blackhole-bg-3-white" className="blackholes-white" />
+        <div id="blackhole-bg-blur" />
         <VectorGraphics.Circle id="blackhole-home" />
       </div>
     </div>
@@ -366,9 +534,41 @@ function changeBackground(event, dark, desktop) {
     if (dark) {
       bodyColor = [{ color: textBlack }];
       svgColor = [{ fill: textBlack }];
+      let blackholesBGD = document.body.querySelectorAll(".blackholes-dark");
+      for (let i = 0; i < blackholesBGD.length; i++) {
+        blackholesBGD[i].style.setProperty("display", "none");
+      }
+      let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
+      for (let i = 0; i < blackholesBGW.length; i++) {
+        blackholesBGW[i].style.setProperty("display", "block");
+      }
+      // document.body.querySelector("#blackhole-bg-1-white").animate([{ opacity: 0.3 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
+      // document.body.querySelector("#blackhole-bg-1-dark").animate([{ opacity: 0 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
+      // document.body.querySelector("#blackhole-bg-2-white").animate([{ opacity: 1 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
+      // document.body.querySelector("#blackhole-bg-2-dark").animate([{ opacity: 0 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
+      // document.body.querySelector("#blackhole-bg-3-white").animate([{ opacity: 1 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
+      // document.body.querySelector("#blackhole-bg-3-dark").animate([{ opacity: 0 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
+      document.body.querySelector("#blackhole-home").animate([{ filter: "drop-shadow(0px 0px 10px black)" }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
+      document.body.querySelector("#blackhole-home path").animate([{ fill: textWhite, stroke: textWhite }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
     } else {
       bodyColor = [{ color: textWhite }];
       svgColor = [{ fill: textWhite }];
+      let blackholesBGD = document.body.querySelectorAll(".blackholes-dark");
+      for (let i = 0; i < blackholesBGD.length; i++) {
+        blackholesBGD[i].style.setProperty("display", "block");
+      }
+      let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
+      for (let i = 0; i < blackholesBGW.length; i++) {
+        blackholesBGW[i].style.setProperty("display", "none");
+      }
+      // document.body.querySelector("#blackhole-bg-1-white").animate([{ opacity: 0 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
+      // document.body.querySelector("#blackhole-bg-1-dark").animate([{ opacity: 0.3 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
+      // document.body.querySelector("#blackhole-bg-2-white").animate([{ opacity: 0 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
+      // document.body.querySelector("#blackhole-bg-2-dark").animate([{ opacity: 1 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
+      // document.body.querySelector("#blackhole-bg-3-white").animate([{ opacity: 0 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
+      // document.body.querySelector("#blackhole-bg-3-dark").animate([{ opacity: 1 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
+      document.body.querySelector("#blackhole-home").animate([{ filter: "drop-shadow(0px 0px 10px white)" }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
+      document.body.querySelector("#blackhole-home path").animate([{ fill: "black", stroke: "black" }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
     }
     document.body.animate(bodyColor, { duration: 500, fill: "forwards", easing: "ease-in-out" });
     if (!desktop) {

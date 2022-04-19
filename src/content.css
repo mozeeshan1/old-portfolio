@@ -2,7 +2,15 @@
   --mode-scale: 0;
   --blackhole-color: white;
   --blackhole-color-2: black;
+  --blackhole-bg-1-d: #9448bc;
+  --blackhole-bg-2-d: #90fcf9;
+  --blackhole-bg-3-d:#9448bc;/* FF6F00 */
+  --blackhole-bg-1-w: #059EFF;
+  --blackhole-bg-2-w: #44E1FE;
+  --blackhole-bg-3-w:#00B2FF;
 }
+
+
 
 #desktop-nav-bar {
   width: 100%;
@@ -174,6 +182,7 @@ div.ripple {
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow-x: hidden;
 }
 #blackhole-outline {
   position: absolute;
@@ -200,23 +209,146 @@ div.ripple {
   stroke-width: 1.1px;
 }
 #blackhole-home {
-  mix-blend-mode: difference;
-  filter: drop-shadow(0px 0px 10px white);
+  filter: drop-shadow(0px 0px 10px var(--blackhole-color));
+  z-index: 9;
 }
 #blackhole-home path {
-  fill: black;
-  stroke: black;
+  fill: var(--blackhole-color-2);
+  stroke: var(--blackhole-color-2);
 }
 .blackhole {
   width: 20vw;
   height: 20vh;
 }
-@media (max-width: 768px) {
-  .blackhole {
-    width: 50vw;
-    height: 50vw;
+#blackhole-bg-1-dark {
+  width: 40vw;
+  height: 40vw;
+  border-radius: 63% 50% 55% 42% / 67% 47% 65% 47%;
+  /* animation: b-bg-1 9s ease-in-out 0.5s infinite backwards; */
+  z-index: -4;
+  opacity: 0.3;
+  position: absolute;
+  background: linear-gradient(-45deg, var(--blackhole-bg-1-d), #121212, #121212);
+}
+#blackhole-bg-1-white {
+  width: 40vw;
+  height: 40vw;
+  border-radius: 63% 50% 55% 42% / 67% 47% 65% 47%;
+  /* animation: b-bg-1 9s ease-in-out 0.5s infinite backwards; */
+  z-index: -4;
+  opacity: 0.3;
+  position: absolute;
+  background: linear-gradient(-45deg, var(--blackhole-bg-1-w), white, white);
+}
+#blackhole-bg-2-dark{
+  position: absolute;
+  width: 5vw;
+  height: 5vw;
+  border-radius: 100%;
+  background: var(--blackhole-bg-2-d);
+  /* animation: b-bg-2 8s ease-in-out 0.5s infinite alternate; */
+  z-index: -4;
+  /* box-shadow:inset 50px -10px 0px 4px black; */
+  border: 60px double var(--blackhole-bg-2-d);
+  box-sizing: content-box;
+  padding: 40px;
+  opacity: 1;
+}
+#blackhole-bg-2-white{
+  position: absolute;
+  width: 15vw;
+  height: 15vw;
+  border-radius: 100%;
+  background: var(--blackhole-bg-2-w);
+  /* animation: b-bg-2 8s ease-in-out 0.5s infinite alternate; */
+  z-index: -4;
+  /* box-shadow:inset 50px -10px 0px 4px black; */
+  border: 60px double var(--blackhole-bg-2-w);
+  box-sizing: content-box;
+  padding: 40px;
+  opacity: 1;
+}
+#blackhole-bg-3-dark{
+  position: absolute;
+  width: 10vw;
+  height: 10vw;
+  background: var(--blackhole-bg-3-d);
+  border-radius: 63% 50% 55% 42% / 67% 47% 65% 47%;
+  /* animation: b-bg-3 8s ease-in-out 0.5s infinite alternate; */
+  z-index: -3;
+  opacity: 1;
+}
+#blackhole-bg-3-white{
+  position: absolute;
+  width: 15vw;
+  height: 15vw;
+  background: var(--blackhole-bg-3-w);
+  border-radius: 63% 50% 55% 42% / 67% 47% 65% 47%;
+  /* animation: b-bg-3 8s ease-in-out 0.5s infinite alternate; */
+  z-index: -3;
+  opacity: 1;
+}
+#blackhole-bg-blur {
+  backdrop-filter: blur(75px);
+  height: 200%;
+  width: 100%;
+  position: absolute;
+  margin: auto;
+  z-index: -2;
+}
+/* @keyframes b-bg-1 {
+  0% {
+    transform: scale(0) rotate(0deg);
+    border-radius: 51% 50% 55% 52% / 51% 43% 68% 48%;
+    opacity: 0.2;
+  }
+  99% {
+    transform: scale(10) rotate(-180deg);
+    border-radius: 83% 60% 55% 22% / 67% 97% 65% 47%;
+    opacity: 0.2;
+  }
+  100%{
+    opacity: 0;
+  }
+  0% {
+    transform: scale(1) rotate(-360deg);
+    border-radius: 51% 50% 55% 52% / 51% 43% 68% 48%;
   }
 }
+@keyframes b-bg-2 {
+  0%   {
+    transform: rotate(0deg);
+    border-radius: 51% 50% 155% 52% / 51% 13% 88% 48%;
+    opacity: .2;
+  }
+  50% {
+    transform: rotate(-160deg) ;
+    border-radius: 63% 50% 55% 42% / 67% 27% 65% 47%;
+    opacity: .4;
+    filter: blur(50px);
+  }
+  0%   {
+    transform: rotate(0deg);
+    border-radius: 51% 50% 55% 52% / 51% 43% 38% 48%;
+    opacity: .6;
+  }
+}
+@keyframes b-bg-3 {
+  0%   {
+    transform: scale(1) rotate(0deg);
+    border-radius: 51% 50% 55% 52% / 51% 43% 68% 48%;
+  }
+  50% {
+    transform: scale(1.4) rotate(100deg) ;
+    border-radius: 63% 50% 55% 42% / 67% 47% 65% 47%;
+    opacity: 0.7;
+  }
+  0%   {
+    transform: scale(0.9) rotate(0deg);
+    border-radius: 51% 50% 55% 52% / 51% 43% 68% 48%;
+  }
+} */
+
 #desktop-about-body {
   height: 500vh;
   width: 100%;
@@ -234,4 +366,33 @@ div.ripple {
 }
 #mobile-about-body h1 {
   margin-top: 10vh;
+}
+@media (max-width: 768px) {
+  /* #blackhole-home {
+  filter: drop-shadow(0px 0px 10px var(--blackhole-color)) !important;
+} */
+  .blackhole {
+    width: 50vw !important;
+    height: 50vw !important;
+  }
+  #blackhole-bg-2-dark{
+    width:25vw !important;
+    height:25vw !important;
+  }
+  #blackhole-bg-3-dark{
+    width:45vw !important;
+    height:45vw !important;
+  }
+  #blackhole-bg-2-white{
+    width:40vw !important;
+    height:40vw !important;
+  }
+  #blackhole-bg-3-white{
+    width:45vw !important;
+    height:45vw !important;
+  }
+  #blackhole-bg-blur {
+  backdrop-filter: blur(50px);
+
+}
 }
