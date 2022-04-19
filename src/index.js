@@ -28,12 +28,7 @@ class Index extends React.Component {
       for (let i = 0; i < blackholesBGW.length; i++) {
         blackholesBGW[i].style.setProperty("display", "none");
       }
-      // document.querySelector("#blackhole-bg-1-white").style.setProperty("display","none");
-      // document.querySelector("#blackhole-bg-1-dark").style.setProperty("display", "block");
-      // document.querySelector("#blackhole-bg-2-white").style.setProperty("display", "none");
-      // document.querySelector("#blackhole-bg-2-dark").style.setProperty("display", "block");
-      // document.querySelector("#blackhole-bg-3-white").style.setProperty("display", "none");
-      // document.querySelector("#blackhole-bg-3-dark").style.setProperty("display", "block");
+
     } else {
       document.querySelector("#preloader").style.backgroundColor = textWhite;
       document.body.style.backgroundColor = textWhite;
@@ -51,12 +46,6 @@ class Index extends React.Component {
       for (let i = 0; i < blackholesBGW.length; i++) {
         blackholesBGW[i].style.setProperty("display", "block");
       }
-      // document.querySelector("#blackhole-bg-1-white").style.setProperty("display", "block");
-      // document.querySelector("#blackhole-bg-1-dark").style.setProperty("display", "none");
-      // document.querySelector("#blackhole-bg-2-white").style.setProperty("display", "block");
-      // document.querySelector("#blackhole-bg-2-dark").style.setProperty("display", "none");
-      // document.querySelector("#blackhole-bg-3-white").style.setProperty("display", "block");
-      // document.querySelector("#blackhole-bg-3-dark").style.setProperty("display", "none");
     }
   }
   render() {

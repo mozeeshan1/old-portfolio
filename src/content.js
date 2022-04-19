@@ -534,39 +534,31 @@ function changeBackground(event, dark, desktop) {
     if (dark) {
       bodyColor = [{ color: textBlack }];
       svgColor = [{ fill: textBlack }];
-      let blackholesBGD = document.body.querySelectorAll(".blackholes-dark");
-      for (let i = 0; i < blackholesBGD.length; i++) {
-        blackholesBGD[i].style.setProperty("display", "none");
-      }
-      let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
-      for (let i = 0; i < blackholesBGW.length; i++) {
-        blackholesBGW[i].style.setProperty("display", "block");
-      }
-      // document.body.querySelector("#blackhole-bg-1-white").animate([{ opacity: 0.3 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
-      // document.body.querySelector("#blackhole-bg-1-dark").animate([{ opacity: 0 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
-      // document.body.querySelector("#blackhole-bg-2-white").animate([{ opacity: 1 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
-      // document.body.querySelector("#blackhole-bg-2-dark").animate([{ opacity: 0 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
-      // document.body.querySelector("#blackhole-bg-3-white").animate([{ opacity: 1 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
-      // document.body.querySelector("#blackhole-bg-3-dark").animate([{ opacity: 0 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
+      setTimeout(() => {
+        let blackholesBGD = document.body.querySelectorAll(".blackholes-dark");
+        for (let i = 0; i < blackholesBGD.length; i++) {
+          blackholesBGD[i].style.setProperty("display", "none");
+        }
+        let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
+        for (let i = 0; i < blackholesBGW.length; i++) {
+          blackholesBGW[i].style.setProperty("display", "block");
+        }
+      }, 250);
       document.body.querySelector("#blackhole-home").animate([{ filter: "drop-shadow(0px 0px 10px black)" }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
       document.body.querySelector("#blackhole-home path").animate([{ fill: textWhite, stroke: textWhite }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
     } else {
       bodyColor = [{ color: textWhite }];
       svgColor = [{ fill: textWhite }];
-      let blackholesBGD = document.body.querySelectorAll(".blackholes-dark");
-      for (let i = 0; i < blackholesBGD.length; i++) {
-        blackholesBGD[i].style.setProperty("display", "block");
-      }
-      let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
-      for (let i = 0; i < blackholesBGW.length; i++) {
-        blackholesBGW[i].style.setProperty("display", "none");
-      }
-      // document.body.querySelector("#blackhole-bg-1-white").animate([{ opacity: 0 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
-      // document.body.querySelector("#blackhole-bg-1-dark").animate([{ opacity: 0.3 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
-      // document.body.querySelector("#blackhole-bg-2-white").animate([{ opacity: 0 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
-      // document.body.querySelector("#blackhole-bg-2-dark").animate([{ opacity: 1 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
-      // document.body.querySelector("#blackhole-bg-3-white").animate([{ opacity: 0 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
-      // document.body.querySelector("#blackhole-bg-3-dark").animate([{ opacity: 1 }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
+      setTimeout(() => {
+        let blackholesBGD = document.body.querySelectorAll(".blackholes-dark");
+        for (let i = 0; i < blackholesBGD.length; i++) {
+          blackholesBGD[i].style.setProperty("display", "block");
+        }
+        let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
+        for (let i = 0; i < blackholesBGW.length; i++) {
+          blackholesBGW[i].style.setProperty("display", "none");
+        }
+      }, 250);
       document.body.querySelector("#blackhole-home").animate([{ filter: "drop-shadow(0px 0px 10px white)" }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
       document.body.querySelector("#blackhole-home path").animate([{ fill: "black", stroke: "black" }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
     }
