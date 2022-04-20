@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { DesktopApp, MobileApp } from "./App";
-import { textBlack, textWhite } from "./content";
+import { textBlack, textWhite, routeLocation } from "./content";
 
 class Index extends React.Component {
   constructor(props) {
@@ -16,19 +16,22 @@ class Index extends React.Component {
       document.body.style.backgroundColor = textBlack;
       document.body.style.color = textWhite;
       let blackholes = document.body.querySelectorAll(".blackhole");
-      for (let i=0;i<blackholes.length;i++){
-        blackholes[i].style.setProperty("--blackhole-color",textWhite);
+      for (let i = 0; i < blackholes.length; i++) {
+        blackholes[i].style.setProperty("--blackhole-color", textWhite);
         blackholes[i].style.setProperty("--blackhole-color-2", textBlack);
       }
-      let blackholesBGD = document.body.querySelectorAll(".blackholes-dark");
-      for (let i = 0; i < blackholesBGD.length; i++) {
-        blackholesBGD[i].style.setProperty("display", "block");
-      }
-      let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
-      for (let i = 0; i < blackholesBGW.length; i++) {
-        blackholesBGW[i].style.setProperty("display", "none");
-      }
-
+      setTimeout(() => {
+        if (routeLocation.pathname === "/") {
+          let blackholesBGD = document.body.querySelectorAll(".blackholes-dark");
+          for (let i = 0; i < blackholesBGD.length; i++) {
+            blackholesBGD[i].style.setProperty("display", "block");
+          }
+          let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
+          for (let i = 0; i < blackholesBGW.length; i++) {
+            blackholesBGW[i].style.setProperty("display", "none");
+          }
+        }
+      }, 100);
     } else {
       document.querySelector("#preloader").style.backgroundColor = textWhite;
       document.body.style.backgroundColor = textWhite;
@@ -38,14 +41,18 @@ class Index extends React.Component {
         blackholes[i].style.setProperty("--blackhole-color", textBlack);
         blackholes[i].style.setProperty("--blackhole-color-2", textWhite);
       }
-      let blackholesBGD = document.body.querySelectorAll(".blackholes-dark");
-      for (let i = 0; i < blackholesBGD.length; i++) {
-        blackholesBGD[i].style.setProperty("display", "none");
-      }
-      let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
-      for (let i = 0; i < blackholesBGW.length; i++) {
-        blackholesBGW[i].style.setProperty("display", "block");
-      }
+      setTimeout(() => {
+        if (routeLocation.pathname === "/") {
+          let blackholesBGD = document.body.querySelectorAll(".blackholes-dark");
+          for (let i = 0; i < blackholesBGD.length; i++) {
+            blackholesBGD[i].style.setProperty("display", "none");
+          }
+          let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
+          for (let i = 0; i < blackholesBGW.length; i++) {
+            blackholesBGW[i].style.setProperty("display", "block");
+          }
+        }
+      }, 100);
     }
   }
   render() {

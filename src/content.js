@@ -2,10 +2,87 @@ import React, { useEffect, useRef, useState } from "react";
 import * as VectorGraphics from "./svgs";
 import "./content.css";
 import anime from "animejs/lib/anime.es.js";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export const textBlack = "#121212";
 export const textWhite = "#FFFFFF";
+export let darkMode = false;
+export let routeLocation = {};
+export let playedBBG = false;
+export let removeBBG = false;
+
+export function BlackholeWhiteUpdate(time1 = 0, time2 = 0) {
+  if (routeLocation.pathname === "/") {
+    if (time1 > 0) {
+      setTimeout(() => {
+        let blackholesBGD = document.body.querySelectorAll(".blackholes-dark");
+        for (let i = 0; i < blackholesBGD.length; i++) {
+          blackholesBGD[i].style.setProperty("display", "none");
+        }
+        let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
+        for (let i = 0; i < blackholesBGW.length; i++) {
+          blackholesBGW[i].style.setProperty("display", "block");
+        }
+      }, time1);
+    } else {
+      let blackholesBGD = document.body.querySelectorAll(".blackholes-dark");
+      for (let i = 0; i < blackholesBGD.length; i++) {
+        blackholesBGD[i].style.setProperty("display", "none");
+      }
+      let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
+      for (let i = 0; i < blackholesBGW.length; i++) {
+        blackholesBGW[i].style.setProperty("display", "block");
+      }
+    }
+    if (time2 > 0) {
+      document.body.querySelector("#blackhole-home").animate([{ filter: "drop-shadow(0px 0px 10px black)" }], { duration: time2, fill: "forwards", easing: "ease-in-out" });
+      document.body.querySelector("#blackhole-home path").animate([{ fill: "black", stroke: "black" }], { duration: time2, fill: "forwards", easing: "ease-in-out" });
+    } else {
+      document.body.querySelector("#blackhole-home").style.cssText = "filter: drop-shadow(0px 0px 10px black)";
+      document.body.querySelector("#blackhole-home path").style.cssText = "fill: white;stroke: white;";
+    }
+  }
+}
+export function BlackholeDarkUpdate(time1 = 0, time2 = 0) {
+  if (routeLocation.pathname === "/") {
+    if (time1 > 0) {
+      setTimeout(() => {
+        let blackholesBGD = document.body.querySelectorAll(".blackholes-dark");
+        for (let i = 0; i < blackholesBGD.length; i++) {
+          blackholesBGD[i].style.setProperty("display", "block");
+        }
+        let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
+        for (let i = 0; i < blackholesBGW.length; i++) {
+          blackholesBGW[i].style.setProperty("display", "none");
+        }
+      }, time1);
+    } else {
+      let blackholesBGD = document.body.querySelectorAll(".blackholes-dark");
+      for (let i = 0; i < blackholesBGD.length; i++) {
+        blackholesBGD[i].style.setProperty("display", "block");
+      }
+      let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
+      for (let i = 0; i < blackholesBGW.length; i++) {
+        blackholesBGW[i].style.setProperty("display", "none");
+      }
+    }
+    if (time2 > 0) {
+      document.body.querySelector("#blackhole-home").animate([{ filter: "drop-shadow(0px 0px 10px white)" }], { duration: time2, fill: "forwards", easing: "ease-in-out" });
+      document.body.querySelector("#blackhole-home path").animate([{ fill: "black", stroke: "black" }], { duration: time2, fill: "forwards", easing: "ease-in-out" });
+    } else {
+      document.body.querySelector("#blackhole-home").style.cssText = "filter: drop-shadow(0px 0px 10px white);";
+      document.body.querySelector("#blackhole-home path").style.cssText = "fill: black;stroke: black;";
+    }
+  }
+}
+
+export function UpdateRoute(dark) {
+  let location = useLocation();
+  React.useEffect(() => {
+    routeLocation = location;
+    darkMode = dark;
+  }, [location]);
+}
 
 export function Preloader(props) {
   const blackholeStartAnimation = useRef(null);
@@ -65,6 +142,7 @@ export function DesktopNavBar() {
   const [dark, setDark] = useStickyState(false, "dark");
   const [darkButton, setDarkButton] = useState(false);
 
+  UpdateRoute(dark);
   return (
     <div id="desktop-nav-bar">
       <Link
@@ -123,6 +201,7 @@ export function DesktopHomeBody() {
   const blackholeBGAnimation = useRef(null);
   const loopCompleted = useRef(0);
   const animationValues = useRef({});
+  const [spanText1, setSpanText1] = useState({ current: ["one", "two", "3", "4.5", "true"], i: 1 });
 
   const updateAnimationValues = () => {
     animationValues.current.R1 = anime.random(-360, 360);
@@ -151,6 +230,12 @@ export function DesktopHomeBody() {
           autoplay: true,
           duration: 5000,
           direction: "normal",
+          update: (anim) => {
+            if (removeBBG) {
+              anim.pause();
+              removeBBG = false;
+            }
+          },
         })
         .add(
           {
@@ -196,11 +281,61 @@ export function DesktopHomeBody() {
         }
       };
     }
-    BBGA();
+    if (!playedBBG) {
+      BBGA();
+      playedBBG = true;
+    } else {
+      removeBBG = true;
+      loopCompleted.current = 0;
+      BBGA();
+    }
+    if (darkMode) {
+      BlackholeDarkUpdate();
+    } else {
+      BlackholeWhiteUpdate();
+    }
+    setSpanText1((spanText1.i = anime.random(0, spanText1.current.length - 1)));
+    const spanAnimation1 = () => {
+      anime
+        .timeline({
+          autoplay: true,
+          loop: false,
+          easing: "easeInOutQuad",
+          duration: 6000,
+        })
+        .add(
+          {
+            targets: "#desktop-home-title-1-span",
+            opacity: 0,
+            duration: 2500,
+          },
+          0
+        )
+        .add(
+          {
+            targets: "#desktop-home-title-1-span",
+            opacity: 1,
+            duration: 2500,
+          },
+          "+=500"
+        ).begin = (anim) => {
+        setTimeout(() => {
+          document.querySelector("#desktop-home-title-1-span").innerHTML = spanText1.current[spanText1.i];
+        }, 2750);
+        setSpanText1((spanText1.i = anime.random(0, spanText1.current.length - 1)));
+        setTimeout(() => {
+          anim.pause();
+          spanAnimation1();
+        }, 8000);
+      };
+    };
+    spanAnimation1();
   }, []);
   return (
     <div id="desktop-home-body">
-      <h1>Desktop text here</h1>
+      <h1 id="desktop-home-title-1">
+        Desktop text here <span id="desktop-home-title-1-span"></span>
+      </h1>
       <div id="blackhole-div">
         <div id="blackhole-bg-1-dark" className="blackholes-dark" />
         <div id="blackhole-bg-1-white" className="blackholes-white" />
@@ -320,6 +455,8 @@ function MobileMenu({ setMenuBut, linkClick }) {
   const [dark, setDark] = useStickyState(false, "dark");
   const [darkButton, setDarkButton] = useState(false);
 
+  UpdateRoute(dark);
+
   useEffect(() => {
     dark ? (document.querySelector("#mobile-menu").style.backgroundColor = textBlack) : (document.querySelector("#mobile-menu").style.backgroundColor = textWhite);
   }, []);
@@ -390,6 +527,7 @@ export function MobileHomeBody() {
   const blackholeBGAnimation = useRef(null);
   const loopCompleted = useRef(0);
   const animationValues = useRef({});
+  const [spanText1, setSpanText1] = useState({ current: ["one", "two", "3", "4.5", "true"], i: 1 });
 
   const updateAnimationValues = () => {
     animationValues.current.R1 = anime.random(-360, 360);
@@ -418,6 +556,12 @@ export function MobileHomeBody() {
           autoplay: true,
           duration: 5000,
           direction: "normal",
+          update: (anim) => {
+            if (removeBBG) {
+              anim.pause();
+              removeBBG = false;
+            }
+          },
         })
         .add(
           {
@@ -434,6 +578,7 @@ export function MobileHomeBody() {
           {
             targets: "#blackhole-bg-2-dark,#blackhole-bg-2-white",
             rotate: [animationValues.current.R3, animationValues.current.R4],
+            scale: 0.6,
             opacity: [[0.2, 0.4], 0.6],
             skewX: animationValues.current.Sk3,
             skewY: animationValues.current.Sk4,
@@ -463,11 +608,61 @@ export function MobileHomeBody() {
         }
       };
     }
-    BBGA();
+    if (!playedBBG) {
+      BBGA();
+      playedBBG = true;
+    } else {
+      removeBBG = true;
+      loopCompleted.current = 0;
+      BBGA();
+    }
+    if (darkMode) {
+      BlackholeDarkUpdate();
+    } else {
+      BlackholeWhiteUpdate();
+    }
+    setSpanText1((spanText1.i = anime.random(0, spanText1.current.length - 1)));
+    const spanAnimation1 = () => {
+      anime
+        .timeline({
+          autoplay: true,
+          loop: false,
+          easing: "easeInOutQuad",
+          duration: 6000,
+        })
+        .add(
+          {
+            targets: "#mobile-home-title-1-span",
+            opacity: 0,
+            duration: 2500,
+          },
+          0
+        )
+        .add(
+          {
+            targets: "#mobile-home-title-1-span",
+            opacity: 1,
+            duration: 2500,
+          },
+          "+=500"
+        ).begin = (anim) => {
+        setTimeout(() => {
+          document.querySelector("#mobile-home-title-1-span").innerHTML = spanText1.current[spanText1.i];
+        }, 2750);
+        setSpanText1((spanText1.i = anime.random(0, spanText1.current.length - 1)));
+        setTimeout(() => {
+          anim.pause();
+          spanAnimation1();
+        }, 8000);
+      };
+    };
+    spanAnimation1();
   }, []);
   return (
     <div id="mobile-home-body">
-      <h1>mobile text here</h1>
+      <h1 id="mobile-home-title-1">
+        mobile text here <span id="mobile-home-title-1-span"></span>
+      </h1>
       <div id="blackhole-div">
         <div id="blackhole-bg-1-dark" className="blackholes-dark" />
         <div id="blackhole-bg-1-white" className="blackholes-white" />
@@ -534,33 +729,11 @@ function changeBackground(event, dark, desktop) {
     if (dark) {
       bodyColor = [{ color: textBlack }];
       svgColor = [{ fill: textBlack }];
-      setTimeout(() => {
-        let blackholesBGD = document.body.querySelectorAll(".blackholes-dark");
-        for (let i = 0; i < blackholesBGD.length; i++) {
-          blackholesBGD[i].style.setProperty("display", "none");
-        }
-        let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
-        for (let i = 0; i < blackholesBGW.length; i++) {
-          blackholesBGW[i].style.setProperty("display", "block");
-        }
-      }, 250);
-      document.body.querySelector("#blackhole-home").animate([{ filter: "drop-shadow(0px 0px 10px black)" }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
-      document.body.querySelector("#blackhole-home path").animate([{ fill: textWhite, stroke: textWhite }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
+      BlackholeWhiteUpdate(250, 500);
     } else {
       bodyColor = [{ color: textWhite }];
       svgColor = [{ fill: textWhite }];
-      setTimeout(() => {
-        let blackholesBGD = document.body.querySelectorAll(".blackholes-dark");
-        for (let i = 0; i < blackholesBGD.length; i++) {
-          blackholesBGD[i].style.setProperty("display", "block");
-        }
-        let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
-        for (let i = 0; i < blackholesBGW.length; i++) {
-          blackholesBGW[i].style.setProperty("display", "none");
-        }
-      }, 250);
-      document.body.querySelector("#blackhole-home").animate([{ filter: "drop-shadow(0px 0px 10px white)" }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
-      document.body.querySelector("#blackhole-home path").animate([{ fill: "black", stroke: "black" }], { duration: 500, fill: "forwards", easing: "ease-in-out" });
+      BlackholeDarkUpdate(250, 500);
     }
     document.body.animate(bodyColor, { duration: 500, fill: "forwards", easing: "ease-in-out" });
     if (!desktop) {

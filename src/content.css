@@ -163,16 +163,23 @@ div.ripple {
   color: inherit;
   background-color: transparent;
 }
-#desktop-home-body h1 {
-  margin-top: 8vh;
+#desktop-home-title-1 {
+  margin-top: 18vh;
+  text-align: center;
+}
+#desktop-home-title-1-span{
+  display: inline-block;
+  width: 1vw;
 }
 #mobile-home-body {
   height: 500vh;
   width: 100%;
   position: absolute;
 }
-#mobile-home-body h1 {
-  margin-top: 10vh;
+#mobile-home-title-1 {
+  margin-top: 18vh;
+  text-align: center;
+  font-size: 1.8rem;
 }
 #blackhole-div {
   position: absolute;
@@ -182,7 +189,7 @@ div.ripple {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 #blackhole-outline {
   position: absolute;
@@ -224,7 +231,6 @@ div.ripple {
   width: 40vw;
   height: 40vw;
   border-radius: 63% 50% 55% 42% / 67% 47% 65% 47%;
-  /* animation: b-bg-1 9s ease-in-out 0.5s infinite backwards; */
   z-index: -4;
   opacity: 0.3;
   position: absolute;
@@ -234,7 +240,6 @@ div.ripple {
   width: 40vw;
   height: 40vw;
   border-radius: 63% 50% 55% 42% / 67% 47% 65% 47%;
-  /* animation: b-bg-1 9s ease-in-out 0.5s infinite backwards; */
   z-index: -4;
   opacity: 0.3;
   position: absolute;
@@ -246,9 +251,7 @@ div.ripple {
   height: 5vw;
   border-radius: 100%;
   background: var(--blackhole-bg-2-d);
-  /* animation: b-bg-2 8s ease-in-out 0.5s infinite alternate; */
   z-index: -4;
-  /* box-shadow:inset 50px -10px 0px 4px black; */
   border: 60px double var(--blackhole-bg-2-d);
   box-sizing: content-box;
   padding: 40px;
@@ -260,9 +263,7 @@ div.ripple {
   height: 15vw;
   border-radius: 100%;
   background: var(--blackhole-bg-2-w);
-  /* animation: b-bg-2 8s ease-in-out 0.5s infinite alternate; */
   z-index: -4;
-  /* box-shadow:inset 50px -10px 0px 4px black; */
   border: 60px double var(--blackhole-bg-2-w);
   box-sizing: content-box;
   padding: 40px;
@@ -274,7 +275,6 @@ div.ripple {
   height: 10vw;
   background: var(--blackhole-bg-3-d);
   border-radius: 63% 50% 55% 42% / 67% 47% 65% 47%;
-  /* animation: b-bg-3 8s ease-in-out 0.5s infinite alternate; */
   z-index: -3;
   opacity: 1;
 }
@@ -284,7 +284,6 @@ div.ripple {
   height: 15vw;
   background: var(--blackhole-bg-3-w);
   border-radius: 63% 50% 55% 42% / 67% 47% 65% 47%;
-  /* animation: b-bg-3 8s ease-in-out 0.5s infinite alternate; */
   z-index: -3;
   opacity: 1;
 }
@@ -296,58 +295,6 @@ div.ripple {
   margin: auto;
   z-index: -2;
 }
-/* @keyframes b-bg-1 {
-  0% {
-    transform: scale(0) rotate(0deg);
-    border-radius: 51% 50% 55% 52% / 51% 43% 68% 48%;
-    opacity: 0.2;
-  }
-  99% {
-    transform: scale(10) rotate(-180deg);
-    border-radius: 83% 60% 55% 22% / 67% 97% 65% 47%;
-    opacity: 0.2;
-  }
-  100%{
-    opacity: 0;
-  }
-  0% {
-    transform: scale(1) rotate(-360deg);
-    border-radius: 51% 50% 55% 52% / 51% 43% 68% 48%;
-  }
-}
-@keyframes b-bg-2 {
-  0%   {
-    transform: rotate(0deg);
-    border-radius: 51% 50% 155% 52% / 51% 13% 88% 48%;
-    opacity: .2;
-  }
-  50% {
-    transform: rotate(-160deg) ;
-    border-radius: 63% 50% 55% 42% / 67% 27% 65% 47%;
-    opacity: .4;
-    filter: blur(50px);
-  }
-  0%   {
-    transform: rotate(0deg);
-    border-radius: 51% 50% 55% 52% / 51% 43% 38% 48%;
-    opacity: .6;
-  }
-}
-@keyframes b-bg-3 {
-  0%   {
-    transform: scale(1) rotate(0deg);
-    border-radius: 51% 50% 55% 52% / 51% 43% 68% 48%;
-  }
-  50% {
-    transform: scale(1.4) rotate(100deg) ;
-    border-radius: 63% 50% 55% 42% / 67% 47% 65% 47%;
-    opacity: 0.7;
-  }
-  0%   {
-    transform: scale(0.9) rotate(0deg);
-    border-radius: 51% 50% 55% 52% / 51% 43% 68% 48%;
-  }
-} */
 
 #desktop-about-body {
   height: 500vh;
