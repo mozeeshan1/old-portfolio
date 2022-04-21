@@ -167,9 +167,12 @@ div.ripple {
   margin-top: 18vh;
   text-align: center;
 }
-#desktop-home-title-1-span{
+/* #desktop-home-title-1-span{
   display: inline-block;
   width: 1vw;
+} */
+#desktop-home-title-1-span .letter,#mobile-home-title-1-span .letter{
+  opacity: 0;
 }
 #mobile-home-body {
   height: 500vh;
