@@ -11,6 +11,42 @@ export let routeLocation = {};
 export let playedBBG = false;
 export let removeBBG = false;
 
+export function UpdateRoute(dark) {
+  let location = useLocation();
+  React.useEffect(() => {
+    routeLocation = location;
+    darkMode = dark;
+  }, [location]);
+}
+export function getScrollPercent(section, topOffset = 0, bottomOffset = 0) {
+  // var h = document.documentElement,
+  //   b = document.body,
+  //   st = "scrollTop",
+  //   sh = "scrollHeight";
+  // var scrollPercent = ((h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight)) * 100;
+  // var documentSize = Math.max(b.scrollHeight, b.offsetHeight, h.clientHeight, h.scrollHeight, h.offsetHeight);
+  if ((topOffset > 0 && topOffset <= 1) || (topOffset >= -1 && topOffset < 0)) {
+    topOffset = parseFloat((section.clientHeight * topOffset).toFixed(2));
+  }
+  if ((bottomOffset > 0 && bottomOffset <= 1) || (bottomOffset >= -1 && bottomOffset < 0)) {
+    bottomOffset = parseFloat((section.clientHeight * bottomOffset).toFixed(2));
+  }
+  var elementTop = section.offsetTop + topOffset;
+  var elementBottom = elementTop + section.clientHeight + bottomOffset;
+  var verticalScroll = window.pageYOffset;
+  var elementDifference = elementBottom - elementTop;
+  if (verticalScroll >= elementTop && verticalScroll <= elementBottom) {
+    return ((verticalScroll - elementTop) / elementDifference) * 100;
+  }
+  // var elementTopPercent = (elementTop / documentSize) * 100;
+  // var elementBottomPercent = (elementBottom / documentSize) * 100;
+  // if (scrollPercent >= elementTopPercent && scrollPercent <= elementBottomPercent) {
+  //   var elementDifference = elementBottomPercent - elementTopPercent;
+  //   var elementPercent = ((scrollPercent - elementTopPercent) / elementDifference) * 100;
+  //   return elementPercent;
+  // }
+}
+
 export function BlackholeWhiteUpdate(time1 = 0, time2 = 0) {
   if (routeLocation.pathname === "/") {
     if (time1 > 0) {
@@ -74,14 +110,6 @@ export function BlackholeDarkUpdate(time1 = 0, time2 = 0) {
       document.body.querySelector("#blackhole-home path").style.cssText = "fill: black;stroke: black;";
     }
   }
-}
-
-export function UpdateRoute(dark) {
-  let location = useLocation();
-  React.useEffect(() => {
-    routeLocation = location;
-    darkMode = dark;
-  }, [location]);
 }
 
 export function Preloader(props) {
@@ -202,6 +230,7 @@ export function DesktopHomeBody() {
   const loopCompleted = useRef(0);
   const animationValues = useRef({});
   const [spanText1, setSpanText1] = useState({ current: ["one", "two", "3", "4.5", "true"], i: 1 });
+  const homeArrowAnimation = useRef(null);
 
   const updateAnimationValues = () => {
     animationValues.current.R1 = anime.random(-360, 360);
@@ -321,7 +350,23 @@ export function DesktopHomeBody() {
         }, textArray.length * 1500);
       }, textLength * 500);
     };
+    homeArrowAnimation.current = anime({
+      targets: "#desktop-home-arrow path",
+      d: ["M30 0V45L25 45 30 50 35 45 30 45V0Z", "M30 45V45L25 45 30 50 35 45 30 45V45Z"],
+      autoplay: false,
+      easing: "easeInOutSine",
+    });
     spanChange();
+    homeArrowAnimation.current = anime({
+      targets: "#desktop-home-arrow path",
+      d: ["M30 0V45L25 45 30 50 35 45 30 45V0Z", "M30 45V45L25 45 30 50 35 45 30 45V45Z"],
+      autoplay: false,
+      easing: "easeInOutSine",
+    });
+    window.addEventListener("scroll", () => {
+      const percentage = getScrollPercent(document.querySelector("#blackhole-div"), 0, -0.3);
+      homeArrowAnimation.current.seek(homeArrowAnimation.current.duration * (percentage * 0.01));
+    });
   }, []);
   return (
     <div id="desktop-home-body">
@@ -338,6 +383,7 @@ export function DesktopHomeBody() {
         <div id="blackhole-bg-blur" />
         <VectorGraphics.Circle id="blackhole-home" />
       </div>
+      <VectorGraphics.Arrow id="desktop-home-arrow" />
     </div>
   );
 }
@@ -520,6 +566,7 @@ export function MobileHomeBody() {
   const loopCompleted = useRef(0);
   const animationValues = useRef({});
   const [spanText1, setSpanText1] = useState({ current: ["one", "two", "3", "4.5", "true"], i: 1 });
+  const homeArrowAnimation = useRef(null);
 
   const updateAnimationValues = () => {
     animationValues.current.R1 = anime.random(-360, 360);
@@ -613,66 +660,49 @@ export function MobileHomeBody() {
     } else {
       BlackholeWhiteUpdate();
     }
+    const tempSpanTextArray = spanText1.current.map((elem) => {
+      return " ".concat(elem);
+    });
+    setSpanText1((spanText1.current = tempSpanTextArray));
     setSpanText1((spanText1.i = anime.random(0, spanText1.current.length - 1)));
     document.querySelector("#mobile-home-title-1-span").innerHTML = spanText1.current[spanText1.i];
-    var textWrapper = document.querySelector("#mobile-home-title-1-span");
-    textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
-    const spanAnimation1 = () => {
-      anime
-        .timeline({
-          autoplay: true,
-          loop: false,
-          easing: "easeInOutQuad",
-        })
-        .add(
-          {
-            targets: "#mobile-home-title-1-span .letter",
-            opacity: [0, 1],
-            duration: 2500,
-            delay: (el, i) => 150 * (i + 1),
-          },
-          0
-        )
-        .add(
-          {
-            targets: "#mobile-home-title-1-span .letter",
-            opacity: 0,
-            duration: 2500,
-            delay: (el, i) => 150 * (i + 1),
-          },
-          "+=5000"
-        ).complete = (anim) => {
-        anim.pause();
-        setSpanText1((spanText1.i = anime.random(0, spanText1.current.length - 1)));
-        var textWrapper = document.querySelector("#mobile-home-title-1-span");
-        const textLength = textWrapper.textContent.length;
-        textWrapper.style.opacity = 0;
-        for (let i in textWrapper.textContent) {
+    const spanChange = () => {
+      var textWrapper = document.querySelector("#mobile-home-title-1-span");
+      setSpanText1((spanText1.i = anime.random(0, spanText1.current.length - 1)));
+      const textLength = textWrapper.textContent.length;
+      for (let i in textWrapper.textContent) {
+        setTimeout(() => {
+          textWrapper.textContent = textWrapper.textContent.slice(0, -1);
+        }, i * 350);
+      }
+      setTimeout(() => {
+        var textArray = spanText1.current[spanText1.i].split("");
+        for (let i in textArray) {
           setTimeout(() => {
-            textWrapper.textContent = textWrapper.textContent.substring(1);
+            textWrapper.textContent = textWrapper.textContent.concat(textArray[i]);
           }, i * 350);
         }
         setTimeout(() => {
-          var textArray = spanText1.current[spanText1.i].split("");
-          for (let i in textArray) {
-            setTimeout(() => {
-              textWrapper.textContent = textWrapper.textContent.concat(textArray[i]);
-            }, i * 350);
-          }
-          setTimeout(() => {
-            textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
-            textWrapper.style.opacity = 1;
-            spanAnimation1();
-          }, textArray.length * 350);
-        }, textLength * 750);
-      };
+          spanChange();
+        }, textArray.length * 1500);
+      }, textLength * 500);
     };
-    spanAnimation1();
+    spanChange();
+    homeArrowAnimation.current = anime({
+      targets: "#mobile-home-arrow path",
+      d: ["M30 0V45L25 45 30 50 35 45 30 45V0Z", "M30 45V45L25 45 30 50 35 45 30 45V45Z"],
+      autoplay: false,
+      easing: "easeInOutSine",
+    });
+    window.addEventListener("scroll", () => {
+      const percentage = getScrollPercent(document.querySelector("#blackhole-div"), 0, -0.3);
+      homeArrowAnimation.current.seek(homeArrowAnimation.current.duration * (percentage * 0.01));
+    });
   }, []);
   return (
     <div id="mobile-home-body">
       <h1 id="mobile-home-title-1">
-        mobile text here <span id="mobile-home-title-1-span"></span>
+        mobile text here<span id="mobile-home-title-1-span"></span>
       </h1>
       <div id="blackhole-div">
         <div id="blackhole-bg-1-dark" className="blackholes-dark" />
@@ -684,6 +714,7 @@ export function MobileHomeBody() {
         <div id="blackhole-bg-blur" />
         <VectorGraphics.Circle id="blackhole-home" />
       </div>
+      <VectorGraphics.Arrow id="mobile-home-arrow" />
     </div>
   );
 }

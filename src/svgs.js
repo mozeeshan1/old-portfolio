@@ -31,7 +31,13 @@ export const Circle =(props)=>{
   return (
     <svg id={props.id} className="blackhole" width="256" height="256" viewBox="-5 -5 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 30A1 1 0 0060 30 1 1 0 000 30Z" fill="white" />
-      {/* <circle cx="24" cy="24" r="24" fill="white" /> */}
+    </svg>
+  );
+}
+export const Arrow=(props)=>{
+  return (
+    <svg id={props.id} width="60" height="50" viewBox="0 0 60 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M30 0V45L25 45 30 50 35 45 30 45V0Z" fill="white" />
     </svg>
   );
 }

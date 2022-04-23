@@ -4,13 +4,11 @@
   --blackhole-color-2: black;
   --blackhole-bg-1-d: #9448bc;
   --blackhole-bg-2-d: #90fcf9;
-  --blackhole-bg-3-d:#9448bc;/* FF6F00 */
-  --blackhole-bg-1-w: #059EFF;
-  --blackhole-bg-2-w: #44E1FE;
-  --blackhole-bg-3-w:#00B2FF;
+  --blackhole-bg-3-d: #9448bc; /* FF6F00 */
+  --blackhole-bg-1-w: #059eff;
+  --blackhole-bg-2-w: #44e1fe;
+  --blackhole-bg-3-w: #00b2ff;
 }
-
-
 
 #desktop-nav-bar {
   width: 100%;
@@ -171,7 +169,8 @@ div.ripple {
   display: inline-block;
   width: 1vw;
 } */
-#desktop-home-title-1-span .letter,#mobile-home-title-1-span .letter{
+#desktop-home-title-1-span .letter,
+#mobile-home-title-1-span .letter {
   opacity: 0;
 }
 #mobile-home-body {
@@ -248,7 +247,7 @@ div.ripple {
   position: absolute;
   background: linear-gradient(-45deg, var(--blackhole-bg-1-w), white, white);
 }
-#blackhole-bg-2-dark{
+#blackhole-bg-2-dark {
   position: absolute;
   width: 5vw;
   height: 5vw;
@@ -260,7 +259,7 @@ div.ripple {
   padding: 40px;
   opacity: 1;
 }
-#blackhole-bg-2-white{
+#blackhole-bg-2-white {
   position: absolute;
   width: 15vw;
   height: 15vw;
@@ -272,7 +271,7 @@ div.ripple {
   padding: 40px;
   opacity: 1;
 }
-#blackhole-bg-3-dark{
+#blackhole-bg-3-dark {
   position: absolute;
   width: 10vw;
   height: 10vw;
@@ -281,7 +280,7 @@ div.ripple {
   z-index: -3;
   opacity: 1;
 }
-#blackhole-bg-3-white{
+#blackhole-bg-3-white {
   position: absolute;
   width: 15vw;
   height: 15vw;
@@ -297,6 +296,33 @@ div.ripple {
   position: absolute;
   margin: auto;
   z-index: -2;
+}
+#desktop-home-arrow {
+  width: 5vw;
+  height: auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  top:90vh;
+  mix-blend-mode: difference;
+}
+#mobile-home-arrow{
+  width:20vw;
+  height: auto;
+  position:absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  top:75vh;
+  mix-blend-mode: difference;
+}
+#desktop-home-arrow path,#mobile-home-arrow path {
+  fill: none;
+  stroke: white;
+  stroke-width: 1px;
 }
 
 #desktop-about-body {
@@ -325,24 +351,23 @@ div.ripple {
     width: 50vw !important;
     height: 50vw !important;
   }
-  #blackhole-bg-2-dark{
-    width:25vw !important;
-    height:25vw !important;
+  #blackhole-bg-2-dark {
+    width: 25vw !important;
+    height: 25vw !important;
   }
-  #blackhole-bg-3-dark{
-    width:45vw !important;
-    height:45vw !important;
+  #blackhole-bg-3-dark {
+    width: 45vw !important;
+    height: 45vw !important;
   }
-  #blackhole-bg-2-white{
-    width:40vw !important;
-    height:40vw !important;
+  #blackhole-bg-2-white {
+    width: 40vw !important;
+    height: 40vw !important;
   }
-  #blackhole-bg-3-white{
-    width:45vw !important;
-    height:45vw !important;
+  #blackhole-bg-3-white {
+    width: 45vw !important;
+    height: 45vw !important;
   }
   #blackhole-bg-blur {
-  backdrop-filter: blur(50px);
-
-}
+    backdrop-filter: blur(50px);
+  }
 }
