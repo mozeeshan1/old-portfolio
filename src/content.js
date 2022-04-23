@@ -229,7 +229,7 @@ export function DesktopHomeBody() {
   const blackholeBGAnimation = useRef(null);
   const loopCompleted = useRef(0);
   const animationValues = useRef({});
-  const [spanText1, setSpanText1] = useState({ current: ["one", "two", "3", "4.5", "true"], i: 1 });
+  const [spanText1, setSpanText1] = useState({ current: ["This is a long line of text to test the limits of this animation.", "two", "3", "4.5", "true"], i: 1 });
   const homeArrowAnimation = useRef(null);
 
   const updateAnimationValues = () => {
@@ -323,40 +323,52 @@ export function DesktopHomeBody() {
     } else {
       BlackholeWhiteUpdate();
     }
-    const tempSpanTextArray = spanText1.current.map((elem) => {
-      return " ".concat(elem);
-    });
-    setSpanText1((spanText1.current = tempSpanTextArray));
     setSpanText1((spanText1.i = anime.random(0, spanText1.current.length - 1)));
-    document.querySelector("#desktop-home-title-1-span").innerHTML = spanText1.current[spanText1.i];
-    const spanChange = () => {
-      var textWrapper = document.querySelector("#desktop-home-title-1-span");
-      setSpanText1((spanText1.i = anime.random(0, spanText1.current.length - 1)));
-      const textLength = textWrapper.textContent.length;
-      for (let i in textWrapper.textContent) {
-        setTimeout(() => {
-          textWrapper.textContent = textWrapper.textContent.slice(0, -1);
-        }, i * 350);
-      }
-      setTimeout(() => {
-        var textArray = spanText1.current[spanText1.i].split("");
-        for (let i in textArray) {
-          setTimeout(() => {
-            textWrapper.textContent = textWrapper.textContent.concat(textArray[i]);
-          }, i * 350);
-        }
-        setTimeout(() => {
-          spanChange();
-        }, textArray.length * 1500);
-      }, textLength * 500);
+    document.querySelector("#desktop-home-title-1").innerHTML = spanText1.current[spanText1.i];
+    var textWrapper = document.querySelector("#desktop-home-title-1");
+    textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+    const spanAnimation1 = () => {
+      anime
+        .timeline({
+          autoplay: true,
+          loop: false,
+          easing: "easeInOutQuad",
+        })
+        .add(
+          {
+            targets: "#desktop-home-title-1 .letter",
+            opacity: [0, 1],
+            duration: 2500,
+            delay: (el, i) => 150 * (i + 1),
+          },
+          0
+        )
+        .add(
+          {
+            targets: "#desktop-home-title-1 .letter",
+            opacity: 0,
+            duration: 2500,
+            delay: (el, i) => 150 * (i + 1),
+          },
+          "+=5000"
+        ).complete = (anim) => {
+        anim.pause();
+        setSpanText1((spanText1.i = anime.random(0, spanText1.current.length - 1)));
+        var textWrapper = document.querySelector("#desktop-home-title-1");
+
+        textWrapper.textContent = spanText1.current[spanText1.i];
+        textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+        textWrapper.style.opacity = 1;
+        spanAnimation1();
+      };
     };
+    setTimeout(()=>{spanAnimation1();},5000);
     homeArrowAnimation.current = anime({
       targets: "#desktop-home-arrow path",
       d: ["M30 0V45L25 45 30 50 35 45 30 45V0Z", "M30 45V45L25 45 30 50 35 45 30 45V45Z"],
       autoplay: false,
       easing: "easeInOutSine",
     });
-    spanChange();
     homeArrowAnimation.current = anime({
       targets: "#desktop-home-arrow path",
       d: ["M30 0V45L25 45 30 50 35 45 30 45V0Z", "M30 45V45L25 45 30 50 35 45 30 45V45Z"],
@@ -565,7 +577,7 @@ export function MobileHomeBody() {
   const blackholeBGAnimation = useRef(null);
   const loopCompleted = useRef(0);
   const animationValues = useRef({});
-  const [spanText1, setSpanText1] = useState({ current: ["one", "two", "3", "4.5", "true"], i: 1 });
+  const [spanText1, setSpanText1] = useState({ current: ["This is a long line of text to test the limits of this animation.", "two", "3", "4.5", "true"], i: 1 });
   const homeArrowAnimation = useRef(null);
 
   const updateAnimationValues = () => {
@@ -660,34 +672,48 @@ export function MobileHomeBody() {
     } else {
       BlackholeWhiteUpdate();
     }
-    const tempSpanTextArray = spanText1.current.map((elem) => {
-      return " ".concat(elem);
-    });
-    setSpanText1((spanText1.current = tempSpanTextArray));
     setSpanText1((spanText1.i = anime.random(0, spanText1.current.length - 1)));
-    document.querySelector("#mobile-home-title-1-span").innerHTML = spanText1.current[spanText1.i];
-    const spanChange = () => {
-      var textWrapper = document.querySelector("#mobile-home-title-1-span");
-      setSpanText1((spanText1.i = anime.random(0, spanText1.current.length - 1)));
-      const textLength = textWrapper.textContent.length;
-      for (let i in textWrapper.textContent) {
-        setTimeout(() => {
-          textWrapper.textContent = textWrapper.textContent.slice(0, -1);
-        }, i * 350);
-      }
-      setTimeout(() => {
-        var textArray = spanText1.current[spanText1.i].split("");
-        for (let i in textArray) {
-          setTimeout(() => {
-            textWrapper.textContent = textWrapper.textContent.concat(textArray[i]);
-          }, i * 350);
-        }
-        setTimeout(() => {
-          spanChange();
-        }, textArray.length * 1500);
-      }, textLength * 500);
+    document.querySelector("#mobile-home-title-1").innerHTML = spanText1.current[spanText1.i];
+    var textWrapper = document.querySelector("#mobile-home-title-1");
+    textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+    const spanAnimation1 = () => {
+      anime
+        .timeline({
+          autoplay: true,
+          loop: false,
+          easing: "easeInOutQuad",
+        })
+        .add(
+          {
+            targets: "#mobile-home-title-1 .letter",
+            opacity: [0, 1],
+            duration: 2500,
+            delay: (el, i) => 150 * (i + 1),
+          },
+          0
+        )
+        .add(
+          {
+            targets: "#mobile-home-title-1 .letter",
+            opacity: 0,
+            duration: 2500,
+            delay: (el, i) => 150 * (i + 1),
+          },
+          "+=5000"
+        ).complete = (anim) => {
+        anim.pause();
+        setSpanText1((spanText1.i = anime.random(0, spanText1.current.length - 1)));
+        var textWrapper = document.querySelector("#mobile-home-title-1");
+
+        textWrapper.textContent = spanText1.current[spanText1.i];
+        textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+        textWrapper.style.opacity = 1;
+        spanAnimation1();
+      };
     };
-    spanChange();
+    setTimeout(() => {
+      spanAnimation1();
+    }, 5000);
     homeArrowAnimation.current = anime({
       targets: "#mobile-home-arrow path",
       d: ["M30 0V45L25 45 30 50 35 45 30 45V0Z", "M30 45V45L25 45 30 50 35 45 30 45V45Z"],
@@ -701,9 +727,7 @@ export function MobileHomeBody() {
   }, []);
   return (
     <div id="mobile-home-body">
-      <h1 id="mobile-home-title-1">
-        mobile text here<span id="mobile-home-title-1-span"></span>
-      </h1>
+      <h1 id="mobile-home-title-1">mobile text here</h1>
       <div id="blackhole-div">
         <div id="blackhole-bg-1-dark" className="blackholes-dark" />
         <div id="blackhole-bg-1-white" className="blackholes-white" />
