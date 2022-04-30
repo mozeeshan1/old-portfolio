@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, forwardRef } from "react";
 import * as VectorGraphics from "./svgs";
 import "./content.css";
 import anime from "animejs/lib/anime.es.js";
@@ -10,6 +10,7 @@ export let darkMode = false;
 export let routeLocation = {};
 export let playedBBG = false;
 export let removeBBG = false;
+export let lastScroll = 0;
 
 export function UpdateRoute(dark) {
   let location = useLocation();
@@ -19,12 +20,6 @@ export function UpdateRoute(dark) {
   }, [location]);
 }
 export function getScrollPercent(section, topOffset = 0, bottomOffset = 0) {
-  // var h = document.documentElement,
-  //   b = document.body,
-  //   st = "scrollTop",
-  //   sh = "scrollHeight";
-  // var scrollPercent = ((h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight)) * 100;
-  // var documentSize = Math.max(b.scrollHeight, b.offsetHeight, h.clientHeight, h.scrollHeight, h.offsetHeight);
   if ((topOffset > 0 && topOffset <= 1) || (topOffset >= -1 && topOffset < 0)) {
     topOffset = parseFloat((section.clientHeight * topOffset).toFixed(2));
   }
@@ -38,13 +33,39 @@ export function getScrollPercent(section, topOffset = 0, bottomOffset = 0) {
   if (verticalScroll >= elementTop && verticalScroll <= elementBottom) {
     return ((verticalScroll - elementTop) / elementDifference) * 100;
   }
-  // var elementTopPercent = (elementTop / documentSize) * 100;
-  // var elementBottomPercent = (elementBottom / documentSize) * 100;
-  // if (scrollPercent >= elementTopPercent && scrollPercent <= elementBottomPercent) {
-  //   var elementDifference = elementBottomPercent - elementTopPercent;
-  //   var elementPercent = ((scrollPercent - elementTopPercent) / elementDifference) * 100;
-  //   return elementPercent;
-  // }
+}
+
+export function getScrollDirecion(offset = 0, anim) {
+  var downPlayed = false;
+  var topPlayed = true;
+  var lastScroll=window.pageYOffset;
+  window.addEventListener("scroll", () => {
+    const currentScroll = window.pageYOffset;
+    if (currentScroll <= 0) {
+      lastScroll = currentScroll;
+      return;
+    }
+    if (currentScroll > lastScroll + Math.abs(offset) && !downPlayed) {
+      downPlayed = true;
+      anim.reverse();
+      anim.play();
+      setTimeout(() => {
+        topPlayed = false;
+      }, 10);
+      lastScroll = currentScroll;
+    } else if (currentScroll < lastScroll - Math.abs(offset) && !topPlayed) {
+      topPlayed = true;
+      anim.reverse();
+      anim.play();
+      setTimeout(() => {
+        downPlayed = false;
+      }, 10);
+      lastScroll = currentScroll;
+    }
+    else if((currentScroll > lastScroll + Math.abs(offset))||(currentScroll < lastScroll - Math.abs(offset))){
+      lastScroll = currentScroll;
+    }
+  });
 }
 
 export function BlackholeWhiteUpdate(time1 = 0, time2 = 0) {
@@ -169,12 +190,49 @@ export function Preloader(props) {
 export function DesktopNavBar() {
   const [dark, setDark] = useStickyState(false, "dark");
   const [darkButton, setDarkButton] = useState(false);
+  const navAnimation = useRef(null);
+
+  useEffect(() => {
+    var textWrapper = document.querySelector("#desktop-nav-bar h1");
+    textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+    navAnimation.current = anime
+      .timeline({
+        easing: "easeOutCirc",
+        autoplay: false,
+        loop: false,
+        direction: "normal",
+      })
+      .add(
+        {
+          targets: "#desktop-menu a,#desktop-dark-mode",
+          translateY: [-100, 0],
+          delay: (el, i) => 500 * (i + 1),
+        },
+        0
+      );
+    setTimeout(() => {
+      navAnimation.current.play();
+      anime({
+        easing: "easeInOutQuad",
+        autoplay: true,
+        loop: false,
+        direction: "normal",
+        targets: "#desktop-logo .letter",
+        opacity: [0, 1],
+        delay: (el, i) => 15 * (i + 1),
+        duration: 2500,
+      });
+      setTimeout(() => {
+        getScrollDirecion(100, navAnimation.current);
+      }, 4000);
+    }, 7000);
+  }, []);
 
   UpdateRoute(dark);
   return (
     <div id="desktop-nav-bar">
       <Link
-        id="logo"
+        id="desktop-logo"
         to="/"
         onClick={() => {
           window.scrollTo(0, 0);
@@ -362,7 +420,9 @@ export function DesktopHomeBody() {
         spanAnimation1();
       };
     };
-    setTimeout(()=>{spanAnimation1();},5000);
+    setTimeout(() => {
+      spanAnimation1();
+    }, 5000);
     homeArrowAnimation.current = anime({
       targets: "#desktop-home-arrow path",
       d: ["M30 0V45L25 45 30 50 35 45 30 45V0Z", "M30 45V45L25 45 30 50 35 45 30 45V45Z"],
@@ -476,7 +536,7 @@ export function MobileNavBar() {
   return (
     <div id="mobile-nav-bar">
       <Link
-        id="logo"
+        id="mobile-logo"
         to="/"
         onClick={() => {
           window.scrollTo(0, 0);
