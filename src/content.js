@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, forwardRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as VectorGraphics from "./svgs";
 import "./content.css";
 import anime from "animejs/lib/anime.es.js";
@@ -38,7 +38,7 @@ export function getScrollPercent(section, topOffset = 0, bottomOffset = 0) {
 export function getScrollDirecion(offset = 0, anim) {
   var downPlayed = false;
   var topPlayed = true;
-  var lastScroll=window.pageYOffset;
+  var lastScroll = window.pageYOffset;
   window.addEventListener("scroll", () => {
     const currentScroll = window.pageYOffset;
     if (currentScroll <= 0) {
@@ -61,8 +61,7 @@ export function getScrollDirecion(offset = 0, anim) {
         downPlayed = false;
       }, 10);
       lastScroll = currentScroll;
-    }
-    else if((currentScroll > lastScroll + Math.abs(offset))||(currentScroll < lastScroll - Math.abs(offset))){
+    } else if (currentScroll > lastScroll + Math.abs(offset) || currentScroll < lastScroll - Math.abs(offset)) {
       lastScroll = currentScroll;
     }
   });
@@ -283,7 +282,7 @@ export function DesktopNavBar() {
     </div>
   );
 }
-export function DesktopHomeBody() {
+export function DesktopHomeBodyIntro() {
   const blackholeBGAnimation = useRef(null);
   const loopCompleted = useRef(0);
   const animationValues = useRef({});
@@ -440,6 +439,7 @@ export function DesktopHomeBody() {
       homeArrowAnimation.current.seek(homeArrowAnimation.current.duration * (percentage * 0.01));
     });
   }, []);
+
   return (
     <div id="desktop-home-body">
       <h1 id="desktop-home-title-1">
@@ -458,6 +458,9 @@ export function DesktopHomeBody() {
       <VectorGraphics.Arrow id="desktop-home-arrow" />
     </div>
   );
+}
+export function DesktopHomeBody() {
+  return <DesktopHomeBodyIntro />;
 }
 
 export function DesktopAboutBody() {
@@ -633,7 +636,7 @@ function MobileMenu({ setMenuBut, linkClick }) {
   );
 }
 
-export function MobileHomeBody() {
+export function MobileHomeBodyIntro() {
   const blackholeBGAnimation = useRef(null);
   const loopCompleted = useRef(0);
   const animationValues = useRef({});
@@ -785,6 +788,7 @@ export function MobileHomeBody() {
       homeArrowAnimation.current.seek(homeArrowAnimation.current.duration * (percentage * 0.01));
     });
   }, []);
+
   return (
     <div id="mobile-home-body">
       <h1 id="mobile-home-title-1">mobile text here</h1>
@@ -801,6 +805,10 @@ export function MobileHomeBody() {
       <VectorGraphics.Arrow id="mobile-home-arrow" />
     </div>
   );
+}
+
+export function MobileHomeBody() {
+  return <MobileHomeBodyIntro />;
 }
 
 export function MobileAboutBody() {
