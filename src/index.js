@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { DesktopApp, MobileApp } from "./App";
-import { textBlack, textWhite, routeLocation } from "./content";
+import { routeLocation } from "./segments";
+import * as Content from "./content";
 
 class Index extends React.Component {
   constructor(props) {
@@ -12,13 +13,13 @@ class Index extends React.Component {
   componentDidMount() {
     window.matchMedia("(min-width: 768px)").addEventListener("change", (e) => this.setState({ desktop: e.matches }));
     if (this.state.dark === "true") {
-      document.querySelector("#preloader").style.backgroundColor = textBlack;
-      document.body.style.backgroundColor = textBlack;
-      document.body.style.color = textWhite;
+      document.querySelector("#preloader").style.backgroundColor = Content.textBlack;
+      document.body.style.backgroundColor = Content.textBlack;
+      document.body.style.color = Content.textWhite;
       let blackholes = document.body.querySelectorAll(".blackhole");
       for (let i = 0; i < blackholes.length; i++) {
-        blackholes[i].style.setProperty("--blackhole-color", textWhite);
-        blackholes[i].style.setProperty("--blackhole-color-2", textBlack);
+        blackholes[i].style.setProperty("--blackhole-color", Content.textWhite);
+        blackholes[i].style.setProperty("--blackhole-color-2", Content.textBlack);
       }
       setTimeout(() => {
         if (routeLocation.pathname === "/") {
@@ -33,13 +34,13 @@ class Index extends React.Component {
         }
       }, 100);
     } else {
-      document.querySelector("#preloader").style.backgroundColor = textWhite;
-      document.body.style.backgroundColor = textWhite;
-      document.body.style.color = textBlack;
+      document.querySelector("#preloader").style.backgroundColor = Content.textWhite;
+      document.body.style.backgroundColor = Content.textWhite;
+      document.body.style.color = Content.textBlack;
       let blackholes = document.body.querySelectorAll(".blackhole");
       for (let i = 0; i < blackholes.length; i++) {
-        blackholes[i].style.setProperty("--blackhole-color", textBlack);
-        blackholes[i].style.setProperty("--blackhole-color-2", textWhite);
+        blackholes[i].style.setProperty("--blackhole-color", Content.textBlack);
+        blackholes[i].style.setProperty("--blackhole-color-2", Content.textWhite);
       }
       setTimeout(() => {
         if (routeLocation.pathname === "/") {

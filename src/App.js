@@ -1,7 +1,7 @@
 import "./App.css";
-import * as Content from "./content";
+import * as Segments from "./segments";
 import React from "react";
-import { textBlack, textWhite } from "./content";
+import * as Content from "./content";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 export class DesktopApp extends React.Component {
@@ -28,11 +28,12 @@ export class DesktopApp extends React.Component {
   render() {
     return (
       <BrowserRouter>
-        {!this.state.preloader && <Content.Preloader id="preloader"/>}
-        <Content.DesktopNavBar />
+        {!this.state.preloader && <Segments.Preloader id="preloader"/>}
+        <Segments.DesktopNavBar />
         <Routes>
-          <Route path="/" element={<Content.DesktopHomeBody />} />
-          <Route path="/about" element={<Content.DesktopAboutBody />} />
+          <Route path="/" element={<Segments.DesktopHomeBody />} />
+          <Route path="/about" element={<Segments.DesktopAboutBody />} />
+          <Route path="/projects" element={<Segments.DesktopProjectsBody/>}/>
         </Routes>
       </BrowserRouter>
     );
@@ -60,19 +61,20 @@ export class MobileApp extends React.Component {
     }
 
     if (this.state.dark === "true") {
-      document.body.querySelector("#hamburger-button path").style.fill = textWhite;
+      document.body.querySelector("#hamburger-button path").style.fill = Content.textWhite;
     } else {
-      document.body.querySelector("#hamburger-button path").style.fill = textBlack;
+      document.body.querySelector("#hamburger-button path").style.fill = Content.textBlack;
     }
   }
   render() {
     return (
       <BrowserRouter>
-        {!this.state.preloader && <Content.Preloader id="preloader" />}
-        <Content.MobileNavBar />
+        {!this.state.preloader && <Segments.Preloader id="preloader" />}
+        <Segments.MobileNavBar />
         <Routes>
-          <Route path="/" element={<Content.MobileHomeBody />} />
-          <Route path="/about" element={<Content.MobileAboutBody />} />
+          <Route path="/" element={<Segments.MobileHomeBody />} />
+          <Route path="/about" element={<Segments.MobileAboutBody />} />
+          <Route path="/projects" element={<Segments.MobileProjectsBody />} />
         </Routes>
       </BrowserRouter>
     );
