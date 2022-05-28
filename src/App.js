@@ -35,6 +35,7 @@ export class DesktopApp extends React.Component {
           <Route path="/about" element={<Segments.DesktopAboutBody />} />
           <Route path="/projects" element={<Segments.DesktopProjectsBody/>}/>
         </Routes>
+        <Segments.Footer/>
       </BrowserRouter>
     );
   }
@@ -76,6 +77,7 @@ export class MobileApp extends React.Component {
           <Route path="/about" element={<Segments.MobileAboutBody />} />
           <Route path="/projects" element={<Segments.MobileProjectsBody />} />
         </Routes>
+        <Segments.Footer/>
       </BrowserRouter>
     );
   }

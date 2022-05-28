@@ -5,8 +5,6 @@ import anime from "animejs/lib/anime.es.js";
 import { Link, useLocation } from "react-router-dom";
 import * as Content from "./content";
 
-//MAKE IT SO THAT NAVBAR SCROLL EEVENT LISTENER RESETS TO 0 ON PAGE CHANGE
-
 export let darkMode = false;
 export let routeLocation = {};
 export let playedBBG = false;
@@ -14,6 +12,8 @@ export let removeBBG = false;
 export let lastScroll = 0;
 export let selectedTags = [];
 export let changeHome = false;
+export let HBIntroH = 0;
+export let HBProjectsH = 0;
 
 export function UpdateRoute(dark) {
   let location = useLocation();
@@ -271,7 +271,7 @@ export function DesktopNavBar() {
   );
 }
 
-export function DesktopHomeBodyIntro() {
+function DesktopHomeBodyIntro() {
   const blackholeBGAnimation = useRef(null);
   const loopCompleted = useRef(0);
   const animationValues = useRef({});
@@ -318,7 +318,7 @@ export function DesktopHomeBodyIntro() {
             targets: "#blackhole-bg-1-dark,#blackhole-bg-1-white",
             scale: [0, animationValues.current.Sc1],
             rotate: [animationValues.current.R1, animationValues.current.R2],
-            opacity: [0.2,0],
+            opacity: [0.2, 0],
             skewX: animationValues.current.Sk1,
             skewY: animationValues.current.Sk2,
           },
@@ -459,7 +459,8 @@ export function DesktopHomeBodyIntro() {
     </div>
   );
 }
-export function DesktopLargeProject(props) {
+
+export function LargeProject(props) {
   const pTags = props.tags.map((elem, ind) => {
     return (
       <Link
@@ -487,11 +488,11 @@ export function DesktopLargeProject(props) {
     </div>
   );
 }
-export function DesktopHomeBodyProjects() {
+function DesktopHomeBodyProjects() {
   return (
     <div id="home-body-projects">
       <h1>Projects</h1>
-      <DesktopLargeProject pClass="l" imageLocation={Content.p1ImgLoc} imageAlt={Content.p1ImgAlt} title={Content.p1Title} summary={Content.p1Summary} tags={Content.p1Tags} />
+      <LargeProject pClass="l" imageLocation={Content.p1ImgLoc} imageAlt={Content.p1ImgAlt} title={Content.p1Title} summary={Content.p1Summary} tags={Content.p1Tags} />
     </div>
   );
 }
@@ -499,6 +500,31 @@ export function DesktopHomeBody() {
   useEffect(() => {
     lastScroll = 0;
     window.scrollTo(0, 0);
+    setTimeout(() => {
+      if (routeLocation.pathname === "/") {
+        setTimeout(() => {
+          const homeBodyResize = new ResizeObserver((entries) => {
+            for (let i of entries) {
+              switch (i.target.id) {
+                case "home-body-intro":
+                  HBIntroH = i.target.clientHeight;
+                  break;
+                case "home-body-projects":
+                  HBProjectsH = i.target.clientHeight;
+                  break;
+                default:
+                  break;
+              }
+            }
+            document.querySelector("#home-body").style.setProperty("--body-height", (HBIntroH + HBProjectsH + 100).toString().concat("px"));
+            document.querySelector("#bg-blur").style.setProperty("--body-height", (HBIntroH + HBProjectsH + 100 + document.querySelector("#footer").clientHeight).toString().concat("px"));
+          });
+          document.querySelectorAll("#home-body-intro,#home-body-projects").forEach((elem) => {
+            homeBodyResize.observe(elem);
+          });
+        }, 100);
+      }
+    }, 100);
     return () => {
       removeBBG = true;
       changeHome = true;
@@ -538,6 +564,15 @@ export function DesktopProjectsBody() {
     </div>
   );
 }
+
+export function Footer() {
+  return (
+    <div id="footer">
+      <p>© 2022 Mohammed Zeeshan's Portfolio — Published with Cloudflare Pages</p>
+    </div>
+  );
+}
+
 export function MobileNavBar() {
   const [menu, setMenu] = useState(false);
   const [menuButton, setMenuButton] = useState(false);
@@ -694,7 +729,7 @@ function MobileMenu({ setMenuBut, linkClick }) {
   );
 }
 
-export function MobileHomeBodyIntro() {
+function MobileHomeBodyIntro() {
   const blackholeBGAnimation = useRef(null);
   const loopCompleted = useRef(0);
   const animationValues = useRef({});
@@ -741,7 +776,7 @@ export function MobileHomeBodyIntro() {
             targets: "#blackhole-bg-1-dark,#blackhole-bg-1-white",
             scale: [0, animationValues.current.Sc1],
             rotate: [animationValues.current.R1, animationValues.current.R2],
-            opacity: [0.2,0],
+            opacity: [0.2, 0],
             skewX: animationValues.current.Sk1,
             skewY: animationValues.current.Sk2,
           },
@@ -863,7 +898,7 @@ export function MobileHomeBodyIntro() {
   }, []);
 
   return (
-    <div id="home-body">
+    <div id="home-body-intro">
       <h1 id="home-title-1">mobile text here</h1>
       <div id="blackhole-div">
         <div id="blackhole-bg-1-dark" className="blackholes-dark" />
@@ -880,39 +915,11 @@ export function MobileHomeBodyIntro() {
   );
 }
 
-export function MobileLargeProject(props) {
-  const pTags = props.tags.map((elem, ind) => {
-    return (
-      <Link
-        to="/projects"
-        onClick={() => {
-          selectedTags.push(elem.name);
-          console.log(selectedTags);
-        }}
-        className={"tag ".concat(elem.name.toLowerCase().replace(/\s|\W/g, ""))}
-        key={ind}
-      >
-        {elem.name}
-      </Link>
-    );
-  });
-
-  return (
-    <div className={"large-project-".concat(props.pClass)}>
-      <img src={props.imageLocation} alt={props.imageAlt} className="large-project-img" />
-      <div className="large-project-text">
-        <h2>{props.title}</h2>
-        <p>{props.summary}</p>
-        <div className="large-project-tags">{pTags}</div>
-      </div>
-    </div>
-  );
-}
-export function MobileHomeBodyProjects() {
+function MobileHomeBodyProjects() {
   return (
     <div id="home-body-projects">
       <h1>Projects</h1>
-      <MobileLargeProject pClass="m" imageLocation={Content.p1ImgLoc} imageAlt={Content.p1ImgAlt} title={Content.p1Title} summary={Content.p1Summary} tags={Content.p1Tags} />
+      <LargeProject pClass="m" imageLocation={Content.p1ImgLoc} imageAlt={Content.p1ImgAlt} title={Content.p1Title} summary={Content.p1Summary} tags={Content.p1Tags} />
     </div>
   );
 }
@@ -921,12 +928,41 @@ export function MobileHomeBody() {
   useEffect(() => {
     lastScroll = 0;
     window.scrollTo(0, 0);
+    setTimeout(() => {
+      if (routeLocation.pathname === "/") {
+        setTimeout(() => {
+          const homeBodyResize = new ResizeObserver((entries) => {
+            for (let i of entries) {
+              switch (i.target.id) {
+                case "home-body-intro":
+                  HBIntroH = i.target.clientHeight;
+                  break;
+                case "home-body-projects":
+                  HBProjectsH = i.target.clientHeight;
+                  break;
+                default:
+                  break;
+              }
+            }
+            document.querySelector("#home-body").style.setProperty("--body-height", (HBIntroH + HBProjectsH + 100).toString().concat("px"));
+            document.querySelector("#bg-blur").style.setProperty("--body-height", (HBIntroH + HBProjectsH + 100 + document.querySelector("#footer").clientHeight).toString().concat("px"));
+          });
+          document.querySelectorAll("#home-body-intro,#home-body-projects").forEach((elem) => {
+            homeBodyResize.observe(elem);
+          });
+        }, 100);
+      }
+    }, 100);
+    return () => {
+      removeBBG = true;
+      changeHome = true;
+    };
   }, []);
 
   return (
     <div id="home-body">
       <MobileHomeBodyIntro />
-      <MobileHomeBodyProjects/>
+      <MobileHomeBodyProjects />
     </div>
   );
 }
