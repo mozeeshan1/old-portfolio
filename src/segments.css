@@ -8,9 +8,16 @@
   --blackhole-bg-1-w: #059eff;
   --blackhole-bg-2-w: #44e1fe;
   --blackhole-bg-3-w: #00b2ff;
-  --body-height:null;
+  --body-height: null;
+  --tag-bg: black;
+  --tag-color: white;
+  --input-bg: null;
+  --option-bg: null;
+  --option-highlight-bg: null;
+  --chip-text-color:null;
+  --text-color:null;
 }
-#bg-blur{
+#bg-blur {
   backdrop-filter: blur(75px);
   height: var(--body-height);
   width: 100%;
@@ -252,14 +259,14 @@ div.ripple {
   position: absolute;
   background: linear-gradient(-45deg, var(--blackhole-bg-1-d), #121212, #121212);
 }
-#blackhole-bg-1-white {
+#blackhole-bg-1-light {
   width: 40vw;
   height: 40vw;
   border-radius: 63% 50% 55% 42% / 67% 47% 65% 47%;
   z-index: -4;
   opacity: 0.3;
   position: absolute;
-  background: linear-gradient(-45deg, var(--blackhole-bg-1-w), white, white);
+  background: linear-gradient(-45deg, white, white, white);
 }
 #blackhole-bg-2-dark {
   position: absolute;
@@ -273,7 +280,7 @@ div.ripple {
   padding: 40px;
   opacity: 1;
 }
-#blackhole-bg-2-white {
+#blackhole-bg-2-light {
   position: absolute;
   width: 15vw;
   height: 15vw;
@@ -294,7 +301,7 @@ div.ripple {
   z-index: -3;
   opacity: 1;
 }
-#blackhole-bg-3-white {
+#blackhole-bg-3-light {
   position: absolute;
   width: 15vw;
   height: 15vw;
@@ -391,38 +398,113 @@ div.ripple {
 }
 .tag {
   text-decoration: none;
-  color: inherit;
+  color: var(--tag-bg);
   background-color: transparent;
   border-radius: 1rem;
   border-style: solid;
-  padding: 0.3em 0.8em 0.3em 0.8em;
+  padding: 0.3em 0.8em 0.4em 0.8em;
   font-size: 0.8rem;
+  font-weight: 600;
   border-width: 0.2em;
+  border-color: var(--tag-bg);
 }
 .tag:hover {
-  background-color: var(--blackhole-bg-1-d);
-  border-color: var(--blackhole-bg-1-d);
+  background-color: var(--tag-bg);
+  border-color: var(--tag-bg);
+  color: var(--tag-color);
 }
 
 #about-body {
   height: 500vh;
   width: 100%;
-  position: absolute;
-  z-index: -1;
+  position: relative;
 }
 #about-body h1 {
   margin-top: 8vh;
 }
 
 #projects-body {
-  height: 500vh;
   width: 100%;
-  position: absolute;
-  z-index: -1;
+  position: relative;
 }
 #projects-body h1 {
   margin-top: 8vh;
 }
+#projects-body-bar {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  top: 8vh;
+  fill:var(--text-color);
+}
+#projects-filter-search-bar-parent {
+  width: 50%;
+  min-width: 300px;
+  max-width: 40vw;
+  margin-right: 0;
+}
+.search-wrapper {
+  background: var(--input-bg);
+  border: none !important;
+}
+.search-wrapper .chip {
+  background: var(--option-highlight-bg);
+  color: var(--chip-text-color);
+  fill: var(--chip-text-color);
+  white-space: normal;
+}
+#chip-close-icon {
+  height: 24px;
+  width: auto;
+}
+#chip-close-icon path{
+  fill: inherit;
+}
+.search-wrapper input {
+  color: inherit !important;
+}
+.optionContainer,
+.optionListContainer {
+  border: none !important;
+  background: transparent !important;
+}
+.option {
+  background: var(--option-bg) !important;
+}
+.notFound{
+  background: var(--option-bg) !important;
+}
+.optionListContainer li:hover {
+  background: var(--option-highlight-bg) !important;
+}
+.highlightOption {
+  background: var(--option-highlight-bg) !important;
+  white-space: normal !important;
+}
+
+#projects-body-bar-filter-button{
+  background: transparent;
+  border: none;
+}
+#projects-body-bar-filter-icon{
+  fill: inherit;
+}
+
+
+#projects-filter-search-bar {
+}
+#projects-body-bar h2 {
+}
+
+#projects-body-projects{
+  height:100vh;
+  width:100%;
+}
+
 #footer {
   width: 100%;
   height: 10vh;
@@ -466,11 +548,11 @@ div.ripple {
     width: 45vw !important;
     height: 45vw !important;
   }
-  #blackhole-bg-2-white {
+  #blackhole-bg-2-light {
     width: 40vw !important;
     height: 40vw !important;
   }
-  #blackhole-bg-3-white {
+  #blackhole-bg-3-light {
     width: 45vw !important;
     height: 45vw !important;
   }
@@ -522,10 +604,8 @@ div.ripple {
     margin-top: 10vh;
   }
   #projects-body {
-    height: 500vh;
     width: 100%;
-    position: absolute;
-    z-index: -1;
+    position: relative;
   }
   #projects-body h1 {
     margin-top: 10vh;

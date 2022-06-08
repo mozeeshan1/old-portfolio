@@ -4,6 +4,7 @@ import "./segments.css";
 import anime from "animejs/lib/anime.es.js";
 import { Link, useLocation } from "react-router-dom";
 import * as Content from "./content";
+import Multiselect from "multiselect-react-dropdown";
 
 export let darkMode = false;
 export let routeLocation = {};
@@ -14,6 +15,21 @@ export let selectedTags = [];
 export let changeHome = false;
 export let HBIntroH = 0;
 export let HBProjectsH = 0;
+export let PBBarH = 0;
+export let PBProjectsH = 0;
+export let tagBgL = "#3B28CC";
+export let tagBgD = "#CAC6FF";
+export let tagColorL = "#FFFFFF";
+export let tagColorD = "#121212";
+export let inputBgD = "#3d3d3d";
+export let inputBgL = "#F7F7F7";
+export let optionHighlightBgD = "#9448bc";
+export let optionHighlightBgL = "#0096FB";
+export let optionBgD = "#282828";
+export let optionBgL = "#F7F7F7";
+export let chipTextL = "#FFFFFF";
+export let chipTextD = "#FFFFFF";
+export let fullTagsList = [];
 
 export function UpdateRoute(dark) {
   let location = useLocation();
@@ -41,7 +57,7 @@ export function getScrollPercent(section, topOffset = 0, bottomOffset = 0) {
 export function getScrollDirecion(offset = 0, anim) {
   var downPlayed = false;
   var topPlayed = true;
-  var lastScroll = window.pageYOffset;
+  lastScroll = window.pageYOffset;
 
   window.addEventListener("scroll", () => {
     const currentScroll = window.pageYOffset;
@@ -90,7 +106,7 @@ export function BlackholeWhiteUpdate(time1 = 0, time2 = 0) {
         for (let i = 0; i < blackholesBGD.length; i++) {
           blackholesBGD[i].style.setProperty("display", "none");
         }
-        let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
+        let blackholesBGW = document.body.querySelectorAll(".blackholes-light");
         for (let i = 0; i < blackholesBGW.length; i++) {
           blackholesBGW[i].style.setProperty("display", "block");
         }
@@ -100,17 +116,17 @@ export function BlackholeWhiteUpdate(time1 = 0, time2 = 0) {
       for (let i = 0; i < blackholesBGD.length; i++) {
         blackholesBGD[i].style.setProperty("display", "none");
       }
-      let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
+      let blackholesBGW = document.body.querySelectorAll(".blackholes-light");
       for (let i = 0; i < blackholesBGW.length; i++) {
         blackholesBGW[i].style.setProperty("display", "block");
       }
     }
     if (time2 > 0) {
       document.body.querySelector("#blackhole-home").animate([{ filter: "drop-shadow(0px 0px 10px black)" }], { duration: time2, fill: "forwards", easing: "ease-in-out" });
-      document.body.querySelector("#blackhole-home path").animate([{ fill: "black", stroke: "black" }], { duration: time2, fill: "forwards", easing: "ease-in-out" });
+      document.body.querySelector("#blackhole-home path").animate([{ fill: "white", stroke: "white" }], { duration: time2, fill: "forwards", easing: "ease-in-out" });
     } else {
       document.body.querySelector("#blackhole-home").style.cssText = "filter: drop-shadow(0px 0px 10px black)";
-      document.body.querySelector("#blackhole-home path").style.cssText = "fill: white;stroke: white;";
+      document.body.querySelector("#blackhole-home path").style.cssText = "fill: white; stroke: white;";
     }
   }
 }
@@ -122,7 +138,7 @@ export function BlackholeDarkUpdate(time1 = 0, time2 = 0) {
         for (let i = 0; i < blackholesBGD.length; i++) {
           blackholesBGD[i].style.setProperty("display", "block");
         }
-        let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
+        let blackholesBGW = document.body.querySelectorAll(".blackholes-light");
         for (let i = 0; i < blackholesBGW.length; i++) {
           blackholesBGW[i].style.setProperty("display", "none");
         }
@@ -132,7 +148,7 @@ export function BlackholeDarkUpdate(time1 = 0, time2 = 0) {
       for (let i = 0; i < blackholesBGD.length; i++) {
         blackholesBGD[i].style.setProperty("display", "block");
       }
-      let blackholesBGW = document.body.querySelectorAll(".blackholes-white");
+      let blackholesBGW = document.body.querySelectorAll(".blackholes-light");
       for (let i = 0; i < blackholesBGW.length; i++) {
         blackholesBGW[i].style.setProperty("display", "none");
       }
@@ -142,7 +158,7 @@ export function BlackholeDarkUpdate(time1 = 0, time2 = 0) {
       document.body.querySelector("#blackhole-home path").animate([{ fill: "black", stroke: "black" }], { duration: time2, fill: "forwards", easing: "ease-in-out" });
     } else {
       document.body.querySelector("#blackhole-home").style.cssText = "filter: drop-shadow(0px 0px 10px white);";
-      document.body.querySelector("#blackhole-home path").style.cssText = "fill: black;stroke: black;";
+      document.body.querySelector("#blackhole-home path").style.cssText = "fill: black; stroke: black;";
     }
   }
 }
@@ -315,7 +331,7 @@ function DesktopHomeBodyIntro() {
         })
         .add(
           {
-            targets: "#blackhole-bg-1-dark,#blackhole-bg-1-white",
+            targets: "#blackhole-bg-1-dark,#blackhole-bg-1-light",
             scale: [0, animationValues.current.Sc1],
             rotate: [animationValues.current.R1, animationValues.current.R2],
             opacity: [0.2, 0],
@@ -326,7 +342,7 @@ function DesktopHomeBodyIntro() {
         )
         .add(
           {
-            targets: "#blackhole-bg-2-dark,#blackhole-bg-2-white",
+            targets: "#blackhole-bg-2-dark,#blackhole-bg-2-light",
             rotate: [animationValues.current.R3, animationValues.current.R4],
             opacity: [[0.2, 0.4], 0.6],
             skewX: animationValues.current.Sk3,
@@ -336,7 +352,7 @@ function DesktopHomeBodyIntro() {
         )
         .add(
           {
-            targets: "#blackhole-bg-3-dark,#blackhole-bg-3-white",
+            targets: "#blackhole-bg-3-dark,#blackhole-bg-3-light",
             scale: [[1, animationValues.current.Sc2], 0.9],
             rotate: [animationValues.current.R5, animationValues.current.R6],
             opacity: [[1, 0.5], 1],
@@ -447,11 +463,11 @@ function DesktopHomeBodyIntro() {
       <h1 id="home-title-1">Desktop text here</h1>
       <div id="blackhole-div">
         <div id="blackhole-bg-1-dark" className="blackholes-dark" />
-        <div id="blackhole-bg-1-white" className="blackholes-white" />
+        <div id="blackhole-bg-1-light" className="blackholes-light" />
         <div id="blackhole-bg-2-dark" className="blackholes-dark" />
-        <div id="blackhole-bg-2-white" className="blackholes-white" />
+        <div id="blackhole-bg-2-light" className="blackholes-light" />
         <div id="blackhole-bg-3-dark" className="blackholes-dark" />
-        <div id="blackhole-bg-3-white" className="blackholes-white" />
+        <div id="blackhole-bg-3-light" className="blackholes-light" />
         <div id="blackhole-bg-blur" />
         <VectorGraphics.Circle id="blackhole-home" />
       </div>
@@ -501,30 +517,39 @@ export function DesktopHomeBody() {
     lastScroll = 0;
     window.scrollTo(0, 0);
     setTimeout(() => {
-      if (routeLocation.pathname === "/") {
-        setTimeout(() => {
-          const homeBodyResize = new ResizeObserver((entries) => {
-            for (let i of entries) {
-              switch (i.target.id) {
-                case "home-body-intro":
-                  HBIntroH = i.target.clientHeight;
-                  break;
-                case "home-body-projects":
-                  HBProjectsH = i.target.clientHeight;
-                  break;
-                default:
-                  break;
-              }
-            }
-            document.querySelector("#home-body").style.setProperty("--body-height", (HBIntroH + HBProjectsH + 100).toString().concat("px"));
-            document.querySelector("#bg-blur").style.setProperty("--body-height", (HBIntroH + HBProjectsH + 100 + document.querySelector("#footer").clientHeight).toString().concat("px"));
-          });
-          document.querySelectorAll("#home-body-intro,#home-body-projects").forEach((elem) => {
-            homeBodyResize.observe(elem);
-          });
-        }, 100);
+      const homeBodyResize = new ResizeObserver((entries) => {
+        for (let i of entries) {
+          switch (i.target.id) {
+            case "home-body-intro":
+              HBIntroH = i.target.clientHeight;
+              break;
+            case "home-body-projects":
+              HBProjectsH = i.target.clientHeight;
+              break;
+            default:
+              break;
+          }
+        }
+        document.querySelector("#home-body").style.setProperty("--body-height", (HBIntroH + HBProjectsH + 100).toString().concat("px"));
+        document.querySelector("#bg-blur").style.setProperty("--body-height", (HBIntroH + HBProjectsH + 100 + document.querySelector("#footer").clientHeight).toString().concat("px"));
+      });
+      document.querySelectorAll("#home-body>*").forEach((elem) => {
+        homeBodyResize.observe(elem);
+      });
+    }, 200);
+    if (!darkMode) {
+      let tags = document.body.querySelectorAll(".tag");
+      for (let i = 0; i < tags.length; i++) {
+        tags[i].style.setProperty("--tag-bg", tagBgL);
+        tags[i].style.setProperty("--tag-color", tagColorL);
       }
-    }, 100);
+    } else {
+      let tags = document.body.querySelectorAll(".tag");
+      for (let i = 0; i < tags.length; i++) {
+        tags[i].style.setProperty("--tag-bg", tagBgD);
+        tags[i].style.setProperty("--tag-color", tagColorD);
+      }
+    }
     return () => {
       removeBBG = true;
       changeHome = true;
@@ -552,15 +577,128 @@ export function DesktopAboutBody() {
   );
 }
 
+function ProjectsOptions() {
+  const [filterButton, setFilterButton] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      document.querySelector("#projects-filter-search-bar").parentElement.id = "projects-filter-search-bar-parent";
+    }, 100);
+    let existProject = false;
+    let allTags = [];
+    for (let i = 1; existProject === false; i++) {
+      let tempTag = "p".concat(i, "Tags");
+      console.log("main", Content[tempTag]);
+      if (typeof Content[tempTag] === "undefined" || Content[tempTag] === null) {
+        console.log("NOT PRESENT", Content[tempTag]);
+        allTags.forEach((elem) => {
+          if (!fullTagsList.includes(elem)) {
+            fullTagsList.push(elem);
+          }
+        });
+        console.log("FULL", fullTagsList);
+        existProject = true;
+      } else {
+        console.log("PRESENT", Content[tempTag]);
+        allTags = allTags.concat(
+          Content[tempTag].map((elem, ind) => {
+            return elem.name.toLowerCase().replace(/\s|\W/g, "");
+          })
+        );
+        console.log("ALL", allTags);
+      }
+    }
+    // return()=>{
+    //   setFilterButton(false);
+    // }
+  }, []);
+
+  return (
+    <div id="projects-body-bar">
+      <Multiselect avoidHighlightFirstOption id="projects-filter-search-bar" isObject={false} options={fullTagsList} customCloseIcon={<VectorGraphics.ChipClose id="chip-close-icon" />} hidePlaceholder={true} />
+      <button
+        id="projects-body-bar-filter-button"
+        onClick={() => {
+          OpenFilterBar(filterButton, setFilterButton);
+        }}
+      >
+        <VectorGraphics.Filter id="projects-body-bar-filter-icon" />
+      </button>
+      <h2>test</h2>
+    </div>
+  );
+}
+
+function ProjectsList() {
+  return (
+    <div id="projects-body-projects">
+      <h2>list of projects here</h2>
+    </div>
+  );
+}
+function OpenFilterBar(filter, setFilter) {      // MAKE THE ANIMATION AND STUFF FOR THE FILTER BAR   
+  if (!filter) {
+    setFilter(true);
+    console.log("IF", filter);
+  } else {
+    setFilter(!filter);
+    console.log("ELSE", filter);
+  }
+}
+
 export function DesktopProjectsBody() {
   useEffect(() => {
     lastScroll = 0;
     window.scrollTo(0, 0);
+    setTimeout(() => {
+      const homeBodyResize = new ResizeObserver((entries) => {
+        for (let i of entries) {
+          switch (i.target.id) {
+            case "projects-body-bar":
+              PBBarH = i.target.clientHeight;
+              break;
+            case "projects-body-projects":
+              PBProjectsH = i.target.clientHeight;
+              break;
+            default:
+              break;
+          }
+        }
+        document.querySelector("#projects-body").style.setProperty("--body-height", (PBBarH + PBProjectsH + 100).toString().concat("px"));
+        document.querySelector("#bg-blur").style.setProperty("--body-height", (PBBarH + PBProjectsH + 100 + document.querySelector("#footer").clientHeight).toString().concat("px"));
+      });
+      document.querySelectorAll("#projects-body>*").forEach((elem) => {
+        homeBodyResize.observe(elem);
+      });
+      if (!darkMode) {
+        let searchElements = document.body.querySelectorAll("#projects-body-bar,.search-wrapper,.option,.optionListContainer li, .highlightOption, .search-wrapper .chip");
+        for (let i = 0; i < searchElements.length; i++) {
+          searchElements[i].style.setProperty("--input-bg", inputBgL);
+          searchElements[i].style.setProperty("--option-bg", optionBgL);
+          searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgL);
+          searchElements[i].style.setProperty("--chip-text-color", chipTextL);
+          searchElements[i].style.setProperty("--text-color", Content.textBlack);
+        }
+      } else {
+        let searchElements = document.body.querySelectorAll("#projects-body-bar,.search-wrapper,.option,.optionListContainer li, .highlightOption, .search-wrapper .chip");
+        for (let i = 0; i < searchElements.length; i++) {
+          searchElements[i].style.setProperty("--input-bg", inputBgD);
+          searchElements[i].style.setProperty("--option-bg", optionBgD);
+          searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgD);
+          searchElements[i].style.setProperty("--chip-text-color", chipTextD);
+          searchElements[i].style.setProperty("--text-color", Content.textWhite);
+        }
+      }
+      document.body.querySelector(".search-wrapper").addEventListener("click", updateMultiselectUI);
+      document.body.querySelector(".search-wrapper").addEventListener("keydown", updateMultiselectUI);
+    }, 200);
   }, []);
 
   return (
     <div id="projects-body">
+      <ProjectsOptions />
       <h1>Projects here</h1>
+      <ProjectsList />
     </div>
   );
 }
@@ -773,7 +911,7 @@ function MobileHomeBodyIntro() {
         })
         .add(
           {
-            targets: "#blackhole-bg-1-dark,#blackhole-bg-1-white",
+            targets: "#blackhole-bg-1-dark,#blackhole-bg-1-light",
             scale: [0, animationValues.current.Sc1],
             rotate: [animationValues.current.R1, animationValues.current.R2],
             opacity: [0.2, 0],
@@ -784,7 +922,7 @@ function MobileHomeBodyIntro() {
         )
         .add(
           {
-            targets: "#blackhole-bg-2-dark,#blackhole-bg-2-white",
+            targets: "#blackhole-bg-2-dark,#blackhole-bg-2-light",
             rotate: [animationValues.current.R3, animationValues.current.R4],
             scale: 0.6,
             opacity: [[0.2, 0.4], 0.6],
@@ -795,7 +933,7 @@ function MobileHomeBodyIntro() {
         )
         .add(
           {
-            targets: "#blackhole-bg-3-dark,#blackhole-bg-3-white",
+            targets: "#blackhole-bg-3-dark,#blackhole-bg-3-light",
             scale: [[1, animationValues.current.Sc2], 0.9],
             rotate: [animationValues.current.R5, animationValues.current.R6],
             opacity: [[1, 0.5], 1],
@@ -902,11 +1040,11 @@ function MobileHomeBodyIntro() {
       <h1 id="home-title-1">mobile text here</h1>
       <div id="blackhole-div">
         <div id="blackhole-bg-1-dark" className="blackholes-dark" />
-        <div id="blackhole-bg-1-white" className="blackholes-white" />
+        <div id="blackhole-bg-1-light" className="blackholes-light" />
         <div id="blackhole-bg-2-dark" className="blackholes-dark" />
-        <div id="blackhole-bg-2-white" className="blackholes-white" />
+        <div id="blackhole-bg-2-light" className="blackholes-light" />
         <div id="blackhole-bg-3-dark" className="blackholes-dark" />
-        <div id="blackhole-bg-3-white" className="blackholes-white" />
+        <div id="blackhole-bg-3-light" className="blackholes-light" />
         <div id="blackhole-bg-blur" />
         <VectorGraphics.Circle id="blackhole-home" />
       </div>
@@ -929,30 +1067,39 @@ export function MobileHomeBody() {
     lastScroll = 0;
     window.scrollTo(0, 0);
     setTimeout(() => {
-      if (routeLocation.pathname === "/") {
-        setTimeout(() => {
-          const homeBodyResize = new ResizeObserver((entries) => {
-            for (let i of entries) {
-              switch (i.target.id) {
-                case "home-body-intro":
-                  HBIntroH = i.target.clientHeight;
-                  break;
-                case "home-body-projects":
-                  HBProjectsH = i.target.clientHeight;
-                  break;
-                default:
-                  break;
-              }
-            }
-            document.querySelector("#home-body").style.setProperty("--body-height", (HBIntroH + HBProjectsH + 100).toString().concat("px"));
-            document.querySelector("#bg-blur").style.setProperty("--body-height", (HBIntroH + HBProjectsH + 100 + document.querySelector("#footer").clientHeight).toString().concat("px"));
-          });
-          document.querySelectorAll("#home-body-intro,#home-body-projects").forEach((elem) => {
-            homeBodyResize.observe(elem);
-          });
-        }, 100);
+      const homeBodyResize = new ResizeObserver((entries) => {
+        for (let i of entries) {
+          switch (i.target.id) {
+            case "home-body-intro":
+              HBIntroH = i.target.clientHeight;
+              break;
+            case "home-body-projects":
+              HBProjectsH = i.target.clientHeight;
+              break;
+            default:
+              break;
+          }
+        }
+        document.querySelector("#home-body").style.setProperty("--body-height", (HBIntroH + HBProjectsH + 100).toString().concat("px"));
+        document.querySelector("#bg-blur").style.setProperty("--body-height", (HBIntroH + HBProjectsH + 100 + document.querySelector("#footer").clientHeight).toString().concat("px"));
+      });
+      document.querySelectorAll("#home-body-intro,#home-body-projects").forEach((elem) => {
+        homeBodyResize.observe(elem);
+      });
+    }, 200);
+    if (!darkMode) {
+      let tags = document.body.querySelectorAll(".tag");
+      for (let i = 0; i < tags.length; i++) {
+        tags[i].style.setProperty("--tag-bg", tagBgL);
+        tags[i].style.setProperty("--tag-color", tagColorL);
       }
-    }, 100);
+    } else {
+      let tags = document.body.querySelectorAll(".tag");
+      for (let i = 0; i < tags.length; i++) {
+        tags[i].style.setProperty("--tag-bg", tagBgD);
+        tags[i].style.setProperty("--tag-color", tagColorD);
+      }
+    }
     return () => {
       removeBBG = true;
       changeHome = true;
@@ -983,11 +1130,53 @@ export function MobileProjectsBody() {
   useEffect(() => {
     lastScroll = 0;
     window.scrollTo(0, 0);
+    const homeBodyResize = new ResizeObserver((entries) => {
+      for (let i of entries) {
+        switch (i.target.id) {
+          case "projects-body-bar":
+            PBBarH = i.target.clientHeight;
+            break;
+          case "projects-body-projects":
+            PBProjectsH = i.target.clientHeight;
+            break;
+          default:
+            break;
+        }
+      }
+      document.querySelector("#projects-body").style.setProperty("--body-height", (PBBarH + PBProjectsH + 100).toString().concat("px"));
+      document.querySelector("#bg-blur").style.setProperty("--body-height", (PBBarH + PBProjectsH + 100 + document.querySelector("#footer").clientHeight).toString().concat("px"));
+    });
+    document.querySelectorAll("#projects-body>*").forEach((elem) => {
+      homeBodyResize.observe(elem);
+    });
+    if (!darkMode) {
+      let searchElements = document.body.querySelectorAll("#projects-body-bar,.search-wrapper,.option,.optionListContainer li, .highlightOption, .search-wrapper .chip");
+      for (let i = 0; i < searchElements.length; i++) {
+        searchElements[i].style.setProperty("--input-bg", inputBgL);
+        searchElements[i].style.setProperty("--option-bg", optionBgL);
+        searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgL);
+        searchElements[i].style.setProperty("--chip-text-color", chipTextL);
+        searchElements[i].style.setProperty("--text-color", Content.textBlack);
+      }
+    } else {
+      let searchElements = document.body.querySelectorAll("#projects-body-bar,.search-wrapper,.option,.optionListContainer li, .highlightOption, .search-wrapper .chip");
+      for (let i = 0; i < searchElements.length; i++) {
+        searchElements[i].style.setProperty("--input-bg", inputBgD);
+        searchElements[i].style.setProperty("--option-bg", optionBgD);
+        searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgD);
+        searchElements[i].style.setProperty("--chip-text-color", chipTextD);
+        searchElements[i].style.setProperty("--text-color", Content.textWhite);
+      }
+    }
+    document.body.querySelector(".search-wrapper").addEventListener("click", updateMultiselectUI);
+    document.body.querySelector(".search-wrapper").addEventListener("keydown", updateMultiselectUI);
   }, []);
 
   return (
     <div id="projects-body">
+      <ProjectsOptions />
       <h1>Projects here</h1>
+      <ProjectsList />
     </div>
   );
 }
@@ -1001,6 +1190,32 @@ function useStickyState(defaultValue, key) {
     localStorage.setItem(key, JSON.stringify(value));
   }, [key, value]);
   return [value, setValue];
+}
+function updateMultiselectUI(e) {
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+    setTimeout(() => {
+      document.getElementsByClassName("option highlightOption highlight")[0].scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
+    }, 1);
+  }
+  setTimeout(() => {
+    if (localStorage.getItem("dark") === "false") {
+      let searchElements = document.body.querySelectorAll(".search-wrapper,.option,.optionListContainer li, .highlightOption, .search-wrapper .chip, .optionListContainer .notFound");
+      for (let i = 0; i < searchElements.length; i++) {
+        searchElements[i].style.setProperty("--input-bg", inputBgL);
+        searchElements[i].style.setProperty("--option-bg", optionBgL);
+        searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgL);
+        searchElements[i].style.setProperty("--chip-text-color", chipTextL);
+      }
+    } else {
+      let searchElements = document.body.querySelectorAll(".search-wrapper,.option,.optionListContainer li, .highlightOption, .search-wrapper .chip, .optionListContainer .notFound");
+      for (let i = 0; i < searchElements.length; i++) {
+        searchElements[i].style.setProperty("--input-bg", inputBgD);
+        searchElements[i].style.setProperty("--option-bg", optionBgD);
+        searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgD);
+        searchElements[i].style.setProperty("--chip-text-color", chipTextD);
+      }
+    }
+  }, 1);
 }
 
 function changeBackground(event, dark, desktop) {
@@ -1037,18 +1252,140 @@ function changeBackground(event, dark, desktop) {
       bodyColor = [{ color: Content.textBlack }];
       svgColor = [{ fill: Content.textBlack }];
       BlackholeWhiteUpdate(250, 500);
-      let tags = document.body.querySelectorAll(".tag");
-      for (let i = 0; i < tags.length; i++) {
-        tags[i].style.setProperty("--blackhole-color", Content.textBlack);
-      }
+      const modeChangeAnim = anime
+        .timeline({
+          easing: "easeInOutQuad",
+          loop: false,
+          autoplay: false,
+          direction: "normal",
+          complete: (anim) => {
+            let tags = document.body.querySelectorAll(".tag");
+            for (let i = 0; i < tags.length; i++) {
+              tags[i].style.setProperty("--tag-bg", tagBgL); //#2191FB
+              tags[i].style.setProperty("--tag-color", tagColorL);
+              tags[i].style.color = null;
+              tags[i].style.borderColor = null;
+            }
+            let searchElements = document.body.querySelectorAll("#projects-body-bar,.search-wrapper,.option,.optionListContainer li, .highlightOption, .search-wrapper .chip, .optionListContainer .notFound");
+            for (let i = 0; i < searchElements.length; i++) {
+              searchElements[i].style.setProperty("--input-bg", inputBgL);
+              searchElements[i].style.setProperty("--option-bg", optionBgL);
+              searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgL);
+              searchElements[i].style.setProperty("--chip-text-color", chipTextL);
+              searchElements[i].style.setProperty("--text-color", Content.textBlack);
+              searchElements[i].style.background = null;
+            }
+          },
+        })
+        .add(
+          {
+            targets: ".tag",
+            color: tagBgL,
+            borderColor: tagBgL,
+            duration: 500,
+            direction: "normal",
+          },
+          0
+        )
+        .add(
+          {
+            targets: ".search-wrapper",
+            background: inputBgL,
+            duration: 500,
+            direction: "normal",
+          },
+          0
+        )
+        .add(
+          {
+            targets: ".search-wrapper .chip,#chip-close-icon path",
+            background: optionHighlightBgL,
+            fill: chipTextL,
+            color: chipTextL,
+            duration: 500,
+            direction: "normal",
+          },
+          0
+        )
+        .add(
+          {
+            targets: "#projects-body-bar",
+            fill: Content.textBlack,
+            duration: 500,
+            direction: "normal",
+          },
+          0
+        );
+      modeChangeAnim.play();
     } else {
       bodyColor = [{ color: Content.textWhite }];
       svgColor = [{ fill: Content.textWhite }];
       BlackholeDarkUpdate(250, 500);
-      let tags = document.body.querySelectorAll(".tag");
-      for (let i = 0; i < tags.length; i++) {
-        tags[i].style.setProperty("--blackhole-color", Content.textWhite);
-      }
+      const modeChangeAnim = anime
+        .timeline({
+          easing: "easeInOutQuad",
+          loop: false,
+          autoplay: false,
+          direction: "normal",
+          complete: (anim) => {
+            let tags = document.body.querySelectorAll(".tag");
+            for (let i = 0; i < tags.length; i++) {
+              tags[i].style.setProperty("--tag-bg", tagBgD);
+              tags[i].style.setProperty("--tag-color", tagColorD);
+              tags[i].style.color = null;
+              tags[i].style.borderColor = null;
+            }
+            let searchElements = document.body.querySelectorAll("#projects-body-bar,.search-wrapper,.option,.optionListContainer li, .highlightOption, .search-wrapper .chip, .optionListContainer .notFound");
+            for (let i = 0; i < searchElements.length; i++) {
+              searchElements[i].style.setProperty("--input-bg", inputBgD);
+              searchElements[i].style.setProperty("--option-bg", optionBgD);
+              searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgD);
+              searchElements[i].style.setProperty("--chip-text-color", chipTextD);
+              searchElements[i].style.setProperty("--text-color", Content.textWhite);
+              searchElements[i].style.background = null;
+            }
+          },
+        })
+        .add(
+          {
+            targets: ".tag",
+            color: tagBgD,
+            borderColor: tagBgD,
+            duration: 500,
+            direction: "normal",
+          },
+          0
+        )
+        .add(
+          {
+            targets: ".search-wrapper",
+            background: inputBgD,
+            duration: 500,
+            direction: "normal",
+          },
+          0
+        )
+        .add(
+          {
+            targets: ".search-wrapper .chip",
+            background: optionHighlightBgD,
+            fill: chipTextD,
+            color: chipTextD,
+            duration: 500,
+            direction: "normal",
+          },
+          0
+        )
+        .add(
+          {
+            targets: "#projects-body-bar",
+            fill: Content.textWhite,
+            duration: 500,
+            direction: "normal",
+          },
+          0
+        );
+      modeChangeAnim.play();
     }
     document.body.animate(bodyColor, { duration: 500, fill: "forwards", easing: "ease-in-out" });
     if (!desktop) {

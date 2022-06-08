@@ -42,6 +42,33 @@ export const Arrow = (props) => {
   );
 };
 
+export const ChipClose =(props)=>{
+  return (
+    <svg id={props.id} className = {props.class} width="48" height="48" viewBox="0 0 48 48" fill="inherit" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M16.5 33.6L24 26.1L31.5 33.6L33.6 31.5L26.1 24L33.6 16.5L31.5 14.4L24 21.9L16.5 14.4L14.4 16.5L21.9 24L14.4 31.5L16.5 33.6ZM24 44C21.1667 44 18.5333 43.4917 16.1 42.475C13.6667 41.4583 11.55 40.05 9.75 38.25C7.95 36.45 6.54167 34.3333 5.525 31.9C4.50833 29.4667 4 26.8333 4 24C4 21.2 4.50833 18.5833 5.525 16.15C6.54167 13.7167 7.95 11.6 9.75 9.8C11.55 8 13.6667 6.58333 16.1 5.55C18.5333 4.51667 21.1667 4 24 4C26.8 4 29.4167 4.51667 31.85 5.55C34.2833 6.58333 36.4 8 38.2 9.8C40 11.6 41.4167 13.7167 42.45 16.15C43.4833 18.5833 44 21.2 44 24C44 26.8333 43.4833 29.4667 42.45 31.9C41.4167 34.3333 40 36.45 38.2 38.25C36.4 40.05 34.2833 41.4583 31.85 42.475C29.4167 43.4917 26.8 44 24 44ZM24 41C28.6667 41 32.6667 39.3333 36 36C39.3333 32.6667 41 28.6667 41 24C41 19.3333 39.3333 15.3333 36 12C32.6667 8.66667 28.6667 7 24 7C19.3333 7 15.3333 8.66667 12 12C8.66667 15.3333 7 19.3333 7 24C7 28.6667 8.66667 32.6667 12 36C15.3333 39.3333 19.3333 41 24 41Z"
+        fill="inherit"
+      />
+    </svg>
+  );
+}
+
+export const Filter =(props)=>{
+  return (
+    <svg id={props.id} className={props.class} width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 36V33H28V36H20ZM6 15V12H42V15H6ZM12 25.5V22.5H36V25.5H12Z" fill="inherit" />
+    </svg>
+  );
+}
+
+export const Sort = (props)=>{
+  return (
+    <svg id={props.id} className={props.class} width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 36V33H18V36H6ZM6 15V12H42V15H6ZM6 25.5V22.5H30V25.5H6Z" fill="inherit" />
+    </svg>
+  );
+}
+
 export const LongName = (props) => {
   return (
     <svg id={props.id} width="117" height="9" viewBox="-4 0 130 9" fill="none" xmlns="http://www.w3.org/2000/svg">

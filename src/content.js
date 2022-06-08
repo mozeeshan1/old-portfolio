@@ -6,3 +6,4 @@ export const p1ImgAlt = "some react image here";
 export const p1Title = "React application test";
 export const p1Summary = "Made a React application for fun. This is another line to check for spacing";
 export const p1Tags = [ {name:"React"},{name:"Web Design"},{name:"CSS"},{name:"UI/UX Design"},{name:"HTML5"}];
+export const p2Tags = [{ name: "Not React" }, { name: "!@Web% /Design 1" }, { name: "UI/UX Design"},{name:"test1"},{name:"test# 1"}, {name:"test 2"}];
