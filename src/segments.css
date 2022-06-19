@@ -436,26 +436,32 @@ div.ripple {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: flex-start;
+  justify-content: flex-end;
   align-items: center;
   top: 8vh;
   fill:var(--text-color);
+  stroke: var(--text-color);
 }
-#projects-filter-search-bar-parent {
-  width: 50%;
-  min-width: 300px;
-  max-width: 40vw;
-  margin-right: 0;
+#projects-body-filter-search-bar {
+  opacity: 0;
 }
 .search-wrapper {
+  max-width: 60vw !important;
+  min-height: 2.5em !important;
   background: var(--input-bg);
   border: none !important;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap ;
+  justify-content: flex-start;
+  align-items: center;
 }
 .search-wrapper .chip {
   background: var(--option-highlight-bg);
   color: var(--chip-text-color);
   fill: var(--chip-text-color);
   white-space: normal;
+  margin-bottom:0;
 }
 #chip-close-icon {
   height: 24px;
@@ -466,6 +472,7 @@ div.ripple {
 }
 .search-wrapper input {
   color: inherit !important;
+  width:100%;
 }
 .optionContainer,
 .optionListContainer {
@@ -491,9 +498,23 @@ div.ripple {
   border: none;
 }
 #projects-body-bar-filter-icon{
-  fill: inherit;
+  fill:inherit;
+  stroke: none !important;
 }
 
+#projects-body-bar-view-button{
+  background: transparent;
+  border: none;
+}
+
+#projects-body-bar-list-icon{
+  fill:inherit;
+  stroke: inherit !important;
+}
+#projects-body-bar-view-icon{
+  fill:inherit;
+  stroke: inherit !important;
+}
 
 #projects-filter-search-bar {
 }

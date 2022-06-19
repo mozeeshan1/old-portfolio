@@ -30,6 +30,9 @@ export let optionBgL = "#F7F7F7";
 export let chipTextL = "#FFFFFF";
 export let chipTextD = "#FFFFFF";
 export let fullTagsList = [];
+export let textColor = "";
+export let bgColor = "";
+export let sortAnimProgress = 0;
 
 export function UpdateRoute(dark) {
   let location = useLocation();
@@ -223,6 +226,27 @@ export function DesktopNavBar() {
   const navAnimation = useRef(null);
 
   useEffect(() => {
+    var originalSetItem = localStorage.setItem;
+    localStorage.setItem = function () {
+      const event = new CustomEvent("storageupdated", { detail: arguments, bubbles: true, cancelable: true });
+      originalSetItem.apply(this, arguments);
+      document.dispatchEvent(event);
+    };
+    window.addEventListener(
+      "storageupdated",
+      (e) => {
+        console.log("ITEM INSERTED IN STORAGE", e.detail);
+      },
+      false
+    );
+
+    if (dark) {
+      textColor = Content.textWhite;
+      bgColor = Content.textBlack;
+    } else {
+      textColor = Content.textBlack;
+      bgColor = Content.textWhite;
+    }
     var textWrapper = document.querySelector("#desktop-nav-bar h1");
     textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
     navAnimation.current = anime
@@ -579,13 +603,161 @@ export function DesktopAboutBody() {
 
 function ProjectsOptions() {
   const [filterButton, setFilterButton] = useState(false);
+  const filterAnimation = useRef(null);
+  const filterAnimationVariables = useRef({});
+  const [viewButton, setViewButton] = useStickyState("list", "viewType");
+  const viewAnimation = useRef(null);
+  const viewAnimationVariables = useRef({});
+  //   const [darkModeProects,setDarkModeProjects]=useState(darkMode);
+
+  // useEffect(() => {
+  //   console.log("DARK MODE CHANGED IN PROJECTS");
+  // }, [darkModeProects]);
 
   useEffect(() => {
-    setTimeout(() => {
-      document.querySelector("#projects-filter-search-bar").parentElement.id = "projects-filter-search-bar-parent";
-    }, 100);
+    viewAnimationVariables.current.viewButton = viewButton;
+    if (viewAnimationVariables.current.mounted) {
+      if (viewAnimationVariables.current.played) {
+        viewAnimation.current.reverse();
+        viewAnimation.current.play();
+      } else {
+        viewAnimation.current.play();
+        viewAnimationVariables.current.played = true;
+      }
+    } else {
+      viewAnimationVariables.current.mounted = true;
+      viewAnimation.current = anime
+        .timeline({
+          easing: "easeInOutQuad",
+          loop: false,
+          autoplay: false,
+          direction: "normal",
+          duration: 500,
+          update: (anim) => {
+            sortAnimProgress = Math.round(anim.progress);
+            if (sortAnimProgress > 0 && sortAnimProgress < 100) {
+              document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+                elem.style.fill = null;
+                elem.style.stroke = null;
+              });
+            }
+          },
+          complete: (anim) => {
+            if (localStorage.getItem("viewType") === '"list"') {
+              document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+                elem.style.setProperty("fill", "none");
+                elem.style.setProperty("stroke", "inherit");
+              });
+            } else if (localStorage.getItem("viewType") === '"grid"') {
+              document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+                elem.style.setProperty("fill", "inherit");
+                elem.style.setProperty("stroke", "none");
+              });
+            }
+          },
+        })
+        .add(
+          {
+            targets: "#projects-body-bar-view-icon #top-1, #projects-body-bar-view-icon #top-2, #projects-body-bar-view-icon #middle-1, #projects-body-bar-view-icon #middle-2",
+            translateY: () => {
+              if (localStorage.getItem("viewType") === '"grid"') {
+                return [0, "-20px"];
+              } else {
+                return ["-20px", 0];
+              }
+            },
+            opacity: () => {
+              if (localStorage.getItem("viewType") === '"grid"') {
+                return [1, 0];
+              } else {
+                return [0, 1];
+              }
+            },
+          },
+          0
+        )
+        .add(
+          {
+            targets: "#projects-body-bar-view-icon #bottom-1",
+            d: () => {
+              if (localStorage.getItem("viewType") === '"grid"') {
+                return [`M25 19C25 18.448 25.448 18 26 18H40.998C41.552 18 42 18.448 42 19 42 19 42 19 42 19 42 19.552 41.552 20 41 20H26C25.448 20.001 25.001 19.554 25 19Z`, `M25 12C25 9 27 7 30 7H34C37 7 39 9 39 12 39 12 39 16 39 16 39 19 37 21 34 21H30C27 21 25 19 25 16Z`];
+              } else {
+                return [`M25 12C25 9 27 7 30 7H34C37 7 39 9 39 12 39 12 39 16 39 16 39 19 37 21 34 21H30C27 21 25 19 25 16Z`, `M25 19C25 18.448 25.448 18 26 18H40.998C41.552 18 42 18.448 42 19 42 19 42 19 42 19 42 19.552 41.552 20 41 20H26C25.448 20.001 25.001 19.554 25 19Z`];
+              }
+            },
+            fill: () => {
+              if (localStorage.getItem("viewType") === '"grid"') {
+                return [textColor, "rgba(0,0,0,0)"];
+              } else {
+                return ["rgba(0,0,0,0)", textColor];
+              }
+            },
+            stroke: () => {
+              if (localStorage.getItem("viewType") === '"grid"') {
+                return ["rgba(0,0,0,0)", textColor];
+              } else {
+                return [textColor, "rgba(0,0,0,0)"];
+              }
+            },
+            strokeWidth: () => {
+              if (localStorage.getItem("viewType") === '"grid"') {
+                return [0.5, 2];
+              } else {
+                return [2, 0.5];
+              }
+            },
+          },
+          0
+        )
+        .add(
+          {
+            targets: "#projects-body-bar-view-icon #bottom-2",
+            d: () => {
+              if (localStorage.getItem("viewType") === '"grid"') {
+                return [`M42 39C42 38.448 41.552 38 41 38H26C25.448 38 25 38.448 25 39V39C25 39.552 25.448 40 26 40H41c.552 0 1-.448 1-1Z`, `M39 32C39 29 37 27 34 27H30C27 27 25 29 25 32V36C25 39 27 41 30 41H34c3 0 5-2 5-5Z`];
+              } else {
+                return [`M39 32C39 29 37 27 34 27H30C27 27 25 29 25 32V36C25 39 27 41 30 41H34c3 0 5-2 5-5Z`, `M42 39C42 38.448 41.552 38 41 38H26C25.448 38 25 38.448 25 39V39C25 39.552 25.448 40 26 40H41c.552 0 1-.448 1-1Z`];
+              }
+            },
+            fill: () => {
+              if (localStorage.getItem("viewType") === '"grid"') {
+                return [textColor, "rgba(0,0,0,0)"];
+              } else {
+                return ["rgba(0,0,0,0)", textColor];
+              }
+            },
+            stroke: () => {
+              if (localStorage.getItem("viewType") === '"grid"') {
+                return ["rgba(0,0,0,0)", textColor];
+              } else {
+                return [textColor, "rgba(0,0,0,0)"];
+              }
+            },
+            strokeWidth: () => {
+              if (localStorage.getItem("viewType") === '"grid"') {
+                return [0.5, 2];
+              } else {
+                return [2, 0.5];
+              }
+            },
+          },
+          0
+        );
+      // viewAnimation.current.play();
+    }
+    console.log(textColor);
+  }, [viewButton]);
+
+  useEffect(() => {
+    // setTimeout(() => {
+    //   document.querySelector("#projects-body-filter-search-bar").parentElement.id = "projects-body-bar-filter-search-bar-parent";
+    // }, 100);
     let existProject = false;
     let allTags = [];
+    filterAnimationVariables.current.filterPlayedOnce = false;
+    filterAnimationVariables.current.mounted = false;
+
     for (let i = 1; existProject === false; i++) {
       let tempTag = "p".concat(i, "Tags");
       console.log("main", Content[tempTag]);
@@ -608,27 +780,236 @@ function ProjectsOptions() {
         console.log("ALL", allTags);
       }
     }
+    if (localStorage.getItem("viewType") === '"list"') {
+      document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+        elem.style.setProperty("fill", "none");
+        elem.style.setProperty("stroke", "inherit");
+      });
+      console.log("IF LOCAL THING ");
+    } else if (localStorage.getItem("viewType") === '"grid"') {
+      document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+        elem.style.setProperty("fill", "inherit");
+        elem.style.setProperty("stroke", "none");
+      });
+    }
+    window.addEventListener(
+      "storageupdated",
+      (e) => {
+        if (e.detail[0] === "dark") {
+          viewAnimationVariables.current.played = false;
+          viewAnimation.current = ChangeSortAnimation(e.detail);
+        }
+      },
+      false
+    );
+    
+    document.querySelector("#projects-body-filter-search-bar").style.clipPath = "inset(0 0 0 100%)";
+
     // return()=>{
     //   setFilterButton(false);
     // }
   }, []);
 
+  useEffect(() => {
+    if (filterButton && filterAnimationVariables.current.filterPlayedOnce) {
+      filterAnimation.current.reverse();
+      filterAnimation.current.play();
+      document.querySelector("#projects-body-filter-search-bar").style.display = "block";
+    } else if (!filterButton && filterAnimationVariables.current.filterPlayedOnce) {
+      filterAnimation.current.reverse();
+      filterAnimation.current.play();
+    } else if (filterButton && !filterAnimationVariables.current.filterPlayedOnce && filterAnimationVariables.current.mounted) {
+      // filterAnimation.current.play();
+      filterAnimationVariables.current.filterPlayedOnce = true;
+      filterAnimation.current = anime
+        .timeline({
+          easing: "easeInOutQuad",
+          autoplay: true,
+          direction: "reverse",
+          complete:(anim)=>{
+            if(document.querySelector("#projects-body-filter-search-bar").style.clipPath==="inset(0px)"){
+              document.querySelector("#projects-body-filter-search-bar").style.clipPath=null;
+            }
+          }
+        })
+        .add(
+          {
+            targets: "#projects-body-bar-filter-icon path",
+            duration: 1500,
+            rotate: [0, -36, 0],
+            autoplay: true,
+          },
+          0
+        )
+        .add(
+          {
+            targets: "#projects-body-filter-search-bar",
+            keyframes: [
+              { clipPath: "inset(0)" }, // start frame
+              { clipPath: "inset(0 0 0 100%)" }, // end frame
+            ],
+            opacity: [1, 0],
+            duration: 1500,
+            autoplay: true,
+          },
+          0
+        );
+      // setTimeout(() => {
+      //   document.querySelector("#projects-body-filter-search-bar").style.display = "none";
+      // }, 2000);
+    } else {
+      console.log("ELSE", filterButton, filterAnimationVariables.current.filterPlayedOnce, filterAnimationVariables.current.mounted);
+      filterAnimationVariables.current.mounted = true;
+    }
+  }, [filterButton]);
+
   return (
+    // more or less done, just add the animations and view changing shit PLEASE
     <div id="projects-body-bar">
-      <Multiselect avoidHighlightFirstOption id="projects-filter-search-bar" isObject={false} options={fullTagsList} customCloseIcon={<VectorGraphics.ChipClose id="chip-close-icon" />} hidePlaceholder={true} />
+      <h2>test one</h2>
+      <Multiselect avoidHighlightFirstOption id="projects-body-filter-search-bar" isObject={false} options={fullTagsList} customCloseIcon={<VectorGraphics.ChipClose id="chip-close-icon" />} hidePlaceholder={true} />
       <button
         id="projects-body-bar-filter-button"
         onClick={() => {
-          OpenFilterBar(filterButton, setFilterButton);
+          setFilterButton(!filterButton);
         }}
       >
         <VectorGraphics.Filter id="projects-body-bar-filter-icon" />
       </button>
-      <h2>test</h2>
+      <button
+        id="projects-body-bar-view-button"
+        onClick={() => {
+          viewButton === "list" ? setViewButton("grid") : setViewButton("list");
+        }}
+      >
+        {/* {viewButton?<VectorGraphics.GridView id="projects-body-bar-grid-icon"/>:<VectorGraphics.ListView id="projects-body-bar-list-icon" />} */}
+        <VectorGraphics.ViewIcon id="projects-body-bar-view-icon" />
+      </button>
     </div>
   );
 }
-
+function ChangeSortAnimation(storageArr, sortAnim) {
+  if (storageArr[0] === "dark") {
+    return anime
+      .timeline({
+        easing: "easeInOutQuad",
+        loop: false,
+        autoplay: false,
+        direction: "normal",
+        duration: 500,
+        update: (anim) => {
+          sortAnimProgress = Math.round(anim.progress);
+          if (sortAnimProgress > 0 && sortAnimProgress < 100) {
+            document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+              elem.style.fill = null;
+              elem.style.stroke = null;
+            });
+          }
+        },
+        complete: (anim) => {
+          if (localStorage.getItem("viewType") === '"list"') {
+            document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+              elem.style.setProperty("fill", "none");
+              elem.style.setProperty("stroke", "inherit");
+            });
+          } else if (localStorage.getItem("viewType") === '"grid"') {
+            document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+              elem.style.setProperty("fill", "inherit");
+              elem.style.setProperty("stroke", "none");
+            });
+          }
+        },
+      })
+      .add(
+        {
+          targets: "#projects-body-bar-view-icon #top-1, #projects-body-bar-view-icon #top-2, #projects-body-bar-view-icon #middle-1, #projects-body-bar-view-icon #middle-2",
+          translateY: () => {
+            if (localStorage.getItem("viewType") === '"grid"') {
+              return [0, "-20px"];
+            } else {
+              return ["-20px", 0];
+            }
+          },
+          opacity: () => {
+            if (localStorage.getItem("viewType") === '"grid"') {
+              return [1, 0];
+            } else {
+              return [0, 1];
+            }
+          },
+        },
+        0
+      )
+      .add(
+        {
+          targets: "#projects-body-bar-view-icon #bottom-1",
+          d: () => {
+            if (localStorage.getItem("viewType") === '"grid"') {
+              return [`M25 19C25 18.448 25.448 18 26 18H40.998C41.552 18 42 18.448 42 19 42 19 42 19 42 19 42 19.552 41.552 20 41 20H26C25.448 20.001 25.001 19.554 25 19Z`, `M25 12C25 9 27 7 30 7H34C37 7 39 9 39 12 39 12 39 16 39 16 39 19 37 21 34 21H30C27 21 25 19 25 16Z`];
+            } else {
+              return [`M25 12C25 9 27 7 30 7H34C37 7 39 9 39 12 39 12 39 16 39 16 39 19 37 21 34 21H30C27 21 25 19 25 16Z`, `M25 19C25 18.448 25.448 18 26 18H40.998C41.552 18 42 18.448 42 19 42 19 42 19 42 19 42 19.552 41.552 20 41 20H26C25.448 20.001 25.001 19.554 25 19Z`];
+            }
+          },
+          fill: () => {
+            if (localStorage.getItem("viewType") === '"grid"') {
+              return [textColor, "rgba(0,0,0,0)"];
+            } else {
+              return ["rgba(0,0,0,0)", textColor];
+            }
+          },
+          stroke: () => {
+            if (localStorage.getItem("viewType") === '"grid"') {
+              return ["rgba(0,0,0,0)", textColor];
+            } else {
+              return [textColor, "rgba(0,0,0,0)"];
+            }
+          },
+          strokeWidth: () => {
+            if (localStorage.getItem("viewType") === '"grid"') {
+              return [0.5, 2];
+            } else {
+              return [2, 0.5];
+            }
+          },
+        },
+        0
+      )
+      .add(
+        {
+          targets: "#projects-body-bar-view-icon #bottom-2",
+          d: () => {
+            if (localStorage.getItem("viewType") === '"grid"') {
+              return [`M42 39C42 38.448 41.552 38 41 38H26C25.448 38 25 38.448 25 39V39C25 39.552 25.448 40 26 40H41c.552 0 1-.448 1-1Z`, `M39 32C39 29 37 27 34 27H30C27 27 25 29 25 32V36C25 39 27 41 30 41H34c3 0 5-2 5-5Z`];
+            } else {
+              return [`M39 32C39 29 37 27 34 27H30C27 27 25 29 25 32V36C25 39 27 41 30 41H34c3 0 5-2 5-5Z`, `M42 39C42 38.448 41.552 38 41 38H26C25.448 38 25 38.448 25 39V39C25 39.552 25.448 40 26 40H41c.552 0 1-.448 1-1Z`];
+            }
+          },
+          fill: () => {
+            if (localStorage.getItem("viewType") === '"grid"') {
+              return [textColor, "rgba(0,0,0,0)"];
+            } else {
+              return ["rgba(0,0,0,0)", textColor];
+            }
+          },
+          stroke: () => {
+            if (localStorage.getItem("viewType") === '"grid"') {
+              return ["rgba(0,0,0,0)", textColor];
+            } else {
+              return [textColor, "rgba(0,0,0,0)"];
+            }
+          },
+          strokeWidth: () => {
+            if (localStorage.getItem("viewType") === '"grid"') {
+              return [0.5, 2];
+            } else {
+              return [2, 0.5];
+            }
+          },
+        },
+        0
+      );
+  }
+}
 function ProjectsList() {
   return (
     <div id="projects-body-projects">
@@ -636,15 +1017,14 @@ function ProjectsList() {
     </div>
   );
 }
-function OpenFilterBar(filter, setFilter) {      // MAKE THE ANIMATION AND STUFF FOR THE FILTER BAR   
-  if (!filter) {
-    setFilter(true);
-    console.log("IF", filter);
-  } else {
-    setFilter(!filter);
-    console.log("ELSE", filter);
-  }
-}
+// function OpenFilterBar(filter, setFilter) {
+//   // MAKE THE ANIMATION AND STUFF FOR THE FILTER BAR
+//   if (!filter) {
+//     setFilter(!filter);
+//   } else {
+//     setFilter(!filter);
+//   }
+// }
 
 export function DesktopProjectsBody() {
   useEffect(() => {
@@ -717,6 +1097,13 @@ export function MobileNavBar() {
   const hamburgerAnimation = useRef(null);
 
   const hamburgerClick = () => {
+    if (darkMode) {
+      textColor = Content.textWhite;
+      bgColor = Content.textBlack;
+    } else {
+      textColor = Content.textBlack;
+      bgColor = Content.textWhite;
+    }
     setMenu(!menu);
     if (!menu && !hamburgerAnimation.current.began && !hamburgerAnimation.current.completed) {
       hamburgerAnimation.current.play();
@@ -1232,8 +1619,12 @@ function changeBackground(event, dark, desktop) {
   const ripples = document.body.getElementsByClassName("ripple");
   if (dark) {
     circle.style.backgroundColor = Content.textWhite;
+    textColor = Content.textBlack;
+    bgColor = Content.textWhite;
   } else {
     circle.style.backgroundColor = Content.textBlack;
+    textColor = Content.textWhite;
+    bgColor = Content.textBlack;
   }
   if (ripples.length > 2) {
     ripples[0].remove();
@@ -1311,6 +1702,7 @@ function changeBackground(event, dark, desktop) {
           {
             targets: "#projects-body-bar",
             fill: Content.textBlack,
+            stroke: Content.textBlack,
             duration: 500,
             direction: "normal",
           },
@@ -1380,6 +1772,7 @@ function changeBackground(event, dark, desktop) {
           {
             targets: "#projects-body-bar",
             fill: Content.textWhite,
+            stroke: Content.textWhite,
             duration: 500,
             direction: "normal",
           },
