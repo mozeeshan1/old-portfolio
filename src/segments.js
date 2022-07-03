@@ -29,10 +29,12 @@ export let optionBgD = "#282828";
 export let optionBgL = "#F7F7F7";
 export let chipTextL = "#FFFFFF";
 export let chipTextD = "#FFFFFF";
-export let fullTagsList = [];
+export let fullTagsList = {};
 export let textColor = "";
 export let bgColor = "";
-export let sortAnimProgress = 0;
+export let viewAnimProgress = 0;
+export let homeProjectCount = 3;
+export let projectListCount = 10;
 
 export function UpdateRoute(dark) {
   let location = useLocation();
@@ -500,42 +502,177 @@ function DesktopHomeBodyIntro() {
   );
 }
 
-export function LargeProject(props) {
+export function GridProject(props) {
   const pTags = props.tags.map((elem, ind) => {
-    return (
-      <Link
-        to="/projects"
-        onClick={() => {
-          selectedTags.push(elem.name);
-          console.log(selectedTags);
-        }}
-        className={"tag ".concat(elem.name.toLowerCase().replace(/\s|\W/g, ""))}
-        key={ind}
-      >
-        {elem.name}
-      </Link>
-    );
+    if (props.tagToProject === true) {
+      return (
+        <Link
+          to="/projects"
+          onClick={() => {
+            selectedTags.push(elem.name);
+            console.log("Selected tags", selectedTags);
+          }}
+          className={"tag ".concat(elem.name.toLowerCase().replace(/\s|\W/g, ""))}
+          key={ind}
+        >
+          {elem.name}
+        </Link>
+      );
+    } else {
+      return (
+        <button className={"tag ".concat(elem.name.toLowerCase().replace(/\s|\W/g, ""))} key={ind}>
+          {elem.name}
+        </button>
+      );
+    }
   });
 
   return (
-    <div className={"large-project-".concat(props.pClass)}>
-      <img src={props.imageLocation} alt={props.imageAlt} className="large-project-img" />
-      <div className="large-project-text">
-        <h2>{props.title}</h2>
-        <p>{props.summary}</p>
-        <div className="large-project-tags">{pTags}</div>
+    <div className={"grid-project-".concat(props.pClass)} data-key={props.pNumber}>
+      <div className="grid-project-img">
+        <img src={props.imageLocation} alt={props.imageAlt} />
+        <div className="grid-project-text">
+          <h2>{props.title}</h2>
+          <p>{props.summary}</p>
+          <div className="grid-project-tags">{pTags}</div>
+        </div>
       </div>
     </div>
   );
 }
-function DesktopHomeBodyProjects() {
+
+export function ListProject(props) {
+  const pTags = props.tags.map((elem, ind) => {
+    if (props.tagToProject === true) {
+      return (
+        <Link
+          to="/projects"
+          onClick={() => {
+            selectedTags.push(elem.name);
+            console.log("Selected tags", selectedTags);
+          }}
+          className={"tag ".concat(elem.name.toLowerCase().replace(/\s|\W/g, ""))}
+          key={ind}
+        >
+          {elem.name}
+        </Link>
+      );
+    } else {
+      return (
+        <button className={"tag ".concat(elem.name.toLowerCase().replace(/\s|\W/g, ""))} key={ind}>
+          {elem.name}
+        </button>
+      );
+    }
+  });
+
   return (
-    <div id="home-body-projects">
-      <h1>Projects</h1>
-      <LargeProject pClass="l" imageLocation={Content.p1ImgLoc} imageAlt={Content.p1ImgAlt} title={Content.p1Title} summary={Content.p1Summary} tags={Content.p1Tags} />
+    <div className={"list-project-".concat(props.pClass)} data-key={props.pNumber}>
+      <div className="list-project-img">
+        <img src={props.imageLocation} alt={props.imageAlt} />
+      </div>
+      <div className="list-project-text">
+        <h2>{props.title}</h2>
+        <p>{props.summary}</p>
+        <div className="list-project-tags">{pTags}</div>
+      </div>
     </div>
   );
 }
+
+function DesktopProjects(props) {
+  const [projectList, setProjectList] = useState({});
+  const [changedProjectList, setChangedProjectList] = useState(0);
+  const tempVariables = useRef({});
+
+  useEffect(() => {
+    tempVariables.current.startedOnce = true;
+    let existProject = true;
+    for (let i = 1; existProject === true && i <= props.projectCount; i++) {
+      let tempTitle = "p".concat(i, "Title");
+      let tempSummary = "p".concat(i, "Summary");
+      let tempImg = "p".concat(i, "ImgLoc");
+      let tempImgAlt = "p".concat(i, "ImgAlt");
+      let tempTags = "p".concat(i, "Tags");
+      if (typeof Content[tempTitle] !== "undefined" && Content[tempTitle] !== null && typeof Content[tempSummary] !== "undefined" && Content[tempSummary] !== null && typeof Content[tempImg] !== "undefined" && Content[tempImg] !== null && typeof Content[tempImgAlt] !== "undefined" && Content[tempImgAlt] !== null && typeof Content[tempTags] !== "undefined" && Content[tempTags] !== null) {
+        let tempId = "l";
+        if (document.querySelector(`#${props.divId}`).childNodes.length === 0 && i % 2 === 0) {
+          tempId = "r";
+        } else if (document.querySelector(`#${props.divId}`).childNodes.length > 0 && i % 2 === 0) {
+          tempId = "r";
+        }
+        if (props.filterProjects === 0) {
+          if (routeLocation.pathname === "/projects" && localStorage.getItem("viewType") === '"grid"') {
+            setProjectList((current) => {
+              return { ...current, [i]: <GridProject tagToProject={false} key={i} pNumber={i} pClass={tempId} imageLocation={Content[tempImg]} imageAlt={Content[tempImgAlt]} title={Content[tempTitle]} summary={Content[tempSummary]} tags={Content[tempTags]} /> };
+            });
+          } else if (routeLocation.pathname === "/projects" && localStorage.getItem("viewType") === '"list"') {
+            setProjectList((current) => {
+              return { ...current, [i]: <ListProject tagToProject={false} key={i} pNumber={i} pClass={tempId} imageLocation={Content[tempImg]} imageAlt={Content[tempImgAlt]} title={Content[tempTitle]} summary={Content[tempSummary]} tags={Content[tempTags]} /> };
+            });
+          }
+        } else if (props.filterProjects > 0) {
+          let filterPTags = Content[tempTags].map((elem) => {
+            return elem.name;
+          });
+          let fTagsPresent = selectedTags.every((v) => filterPTags.includes(v));
+          if (!fTagsPresent && Object.keys(projectList).includes(i.toString())) {
+            const newPList = { ...projectList };
+            delete newPList[i];
+            setProjectList(newPList);
+          } else if (fTagsPresent && !Object.keys(projectList).includes(i.toString())) {
+            if (routeLocation.pathname === "/projects" && localStorage.getItem("viewType") === '"grid"') {
+              setProjectList((current) => {
+                return { ...current, [i]: <GridProject tagToProject={false} key={i} pNumber={i} pClass={tempId} imageLocation={Content[tempImg]} imageAlt={Content[tempImgAlt]} title={Content[tempTitle]} summary={Content[tempSummary]} tags={Content[tempTags]} /> };
+              });
+            } else if (routeLocation.pathname === "/projects" && localStorage.getItem("viewType") === '"list"') {
+              setProjectList((current) => {
+                return { ...current, [i]: <ListProject tagToProject={false} key={i} pNumber={i} pClass={tempId} imageLocation={Content[tempImg]} imageAlt={Content[tempImgAlt]} title={Content[tempTitle]} summary={Content[tempSummary]} tags={Content[tempTags]} /> };
+              });
+            }
+          }
+        } else {
+          setProjectList((current) => {
+            return { ...current, [i]: <ListProject tagToProject={true} key={i} pNumber={i} pClass={tempId} imageLocation={Content[tempImg]} imageAlt={Content[tempImgAlt]} title={Content[tempTitle]} summary={Content[tempSummary]} tags={Content[tempTags]} /> };
+          });
+        }
+      } else if ((typeof Content[tempTitle] !== "undefined" && Content[tempTitle] !== null) || (typeof Content[tempSummary] !== "undefined" && Content[tempSummary] !== null) || (typeof Content[tempImg] !== "undefined" && Content[tempImg] !== null) || (typeof Content[tempImgAlt] !== "undefined" && Content[tempImgAlt] !== null) || (typeof Content[tempTags] !== "undefined" && Content[tempTags] !== null)) {
+      } else {
+        existProject = false;
+      }
+    }
+  }, [props.filterProjects, changedProjectList]);
+
+  useEffect(() => {
+    if (Object.keys(projectList).length !== changedProjectList) {
+      setChangedProjectList(Object.keys(projectList).length);
+    }
+    setTimeout(() => {
+      if (localStorage.getItem("dark") === "false") {
+        let tags = document.body.querySelectorAll(".tag");
+        for (let i = 0; i < tags.length; i++) {
+          tags[i].style.setProperty("--tag-bg", tagBgL);
+          tags[i].style.setProperty("--tag-color", tagColorL);
+        }
+      } else {
+        let tags = document.body.querySelectorAll(".tag");
+        for (let i = 0; i < tags.length; i++) {
+          tags[i].style.setProperty("--tag-bg", tagBgD);
+          tags[i].style.setProperty("--tag-color", tagColorD);
+        }
+      }
+    }, 10);
+  }, [projectList]);
+  return (
+    <div id={props.divId}>
+      {props.headingPresent && <h1 id={props.headingId}>Projects</h1>}
+      {Object.keys(projectList).map((key, ind) => {
+        return projectList[key];
+      })}
+    </div>
+  );
+}
+
 export function DesktopHomeBody() {
   useEffect(() => {
     lastScroll = 0;
@@ -561,19 +698,7 @@ export function DesktopHomeBody() {
         homeBodyResize.observe(elem);
       });
     }, 200);
-    if (!darkMode) {
-      let tags = document.body.querySelectorAll(".tag");
-      for (let i = 0; i < tags.length; i++) {
-        tags[i].style.setProperty("--tag-bg", tagBgL);
-        tags[i].style.setProperty("--tag-color", tagColorL);
-      }
-    } else {
-      let tags = document.body.querySelectorAll(".tag");
-      for (let i = 0; i < tags.length; i++) {
-        tags[i].style.setProperty("--tag-bg", tagBgD);
-        tags[i].style.setProperty("--tag-color", tagColorD);
-      }
-    }
+
     return () => {
       removeBBG = true;
       changeHome = true;
@@ -583,7 +708,7 @@ export function DesktopHomeBody() {
   return (
     <div id="home-body">
       <DesktopHomeBodyIntro />
-      <DesktopHomeBodyProjects />
+      <DesktopProjects headingPresent={true} divId="home-body-projects" projectCount={homeProjectCount} />
     </div>
   );
 }
@@ -601,214 +726,688 @@ export function DesktopAboutBody() {
   );
 }
 
-function ProjectsOptions() {
+function DesktopProjectsList() {
   const [filterButton, setFilterButton] = useState(false);
   const filterAnimation = useRef(null);
   const filterAnimationVariables = useRef({});
   const [viewButton, setViewButton] = useStickyState("list", "viewType");
-  const viewAnimation = useRef(null);
+  const viewAnimation = useRef({});
   const viewAnimationVariables = useRef({});
-  //   const [darkModeProects,setDarkModeProjects]=useState(darkMode);
+  const [viewButtonDisabled, setViewButtonDisabled] = useState(false);
+  const [filterSelectedTags, setFilterSelectedTags] = useState([]);
+  const filterSelectRef = useRef();
+  const tagClickFunc = useRef((e) => {
+    filterSelect([], e.currentTarget.innerText, true);
+  });
+  const tagButtonVariables = useRef({});
+  const [filterList, setFilterList] = useState(0);
 
-  // useEffect(() => {
-  //   console.log("DARK MODE CHANGED IN PROJECTS");
-  // }, [darkModeProects]);
+  function filterSelect(array, item, tagClick = false) {
+    if (!selectedTags.includes(item)) {
+      selectedTags.push(item);
+      if ((selectedTags.length === 1 || (selectedTags.length === 2 && tagButtonVariables.current.PreExistSelectedTags)) && tagClick) {
+        setFilterSelectedTags([...selectedTags, null]);
+        setFilterButton(!filterButton);
+        if (tagButtonVariables.current.PreExistSelectedTags) {
+          tagButtonVariables.current.PreExistSelectedTags = false;
+        }
+      }
+    }
+
+    setTimeout(() => {
+      setFilterSelectedTags([...selectedTags]);
+    }, 1);
+  }
+  function filterRemove(array, item) {
+    if (typeof item !== "number") {
+      var index = selectedTags.indexOf(item);
+      if (index !== -1) {
+        selectedTags.splice(index, 1);
+      }
+    } else {
+      selectedTags.pop();
+    }
+    setFilterSelectedTags([...selectedTags]);
+  }
+  useEffect(() => {
+    if (selectedTags.length > 0) {
+      setFilterList((numb) => numb + 1);
+    } else {
+      setFilterList(0);
+    }
+    setTimeout(() => {
+      document.querySelectorAll(".tag").forEach((elem) => {
+        elem.addEventListener("click", tagClickFunc.current, false);
+      });
+    }, 10);
+  }, [filterSelectedTags]);
 
   useEffect(() => {
     viewAnimationVariables.current.viewButton = viewButton;
     if (viewAnimationVariables.current.mounted) {
-      if (viewAnimationVariables.current.played) {
-        viewAnimation.current.reverse();
-        viewAnimation.current.play();
-      } else {
-        viewAnimation.current.play();
-        viewAnimationVariables.current.played = true;
-      }
-    } else {
-      viewAnimationVariables.current.mounted = true;
-      viewAnimation.current = anime
-        .timeline({
-          easing: "easeInOutQuad",
-          loop: false,
-          autoplay: false,
-          direction: "normal",
-          duration: 500,
-          update: (anim) => {
-            sortAnimProgress = Math.round(anim.progress);
-            if (sortAnimProgress > 0 && sortAnimProgress < 100) {
-              document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
-                elem.style.fill = null;
-                elem.style.stroke = null;
+      if (localStorage.getItem("viewType") === `"grid"`) {
+        viewAnimation.current.gridAnimation = anime
+          .timeline({
+            easing: "easeInOutQuad",
+            loop: false,
+            autoplay: false,
+            direction: "normal",
+            duration: 500,
+            begin: (anim) => {
+              document.querySelectorAll(".list-project-l .list-project-text,.list-project-r .list-project-text").forEach((elem) => {
+                elem.style.flexShrink = "1000";
+                if (localStorage.getItem("viewType") === '"grid"') {
+                  elem.style.overflow = "hidden";
+                  elem.style.whiteSpace = "nowrap";
+                  elem.querySelector(".list-project-tags").style.flexWrap = "nowrap";
+                } else {
+                  elem.style.overflow = "visible";
+                  elem.style.whiteSpace = "normal";
+                  elem.querySelector(".list-project-tags").style.flexWrap = "wrap";
+                }
               });
-            }
-          },
-          complete: (anim) => {
-            if (localStorage.getItem("viewType") === '"list"') {
-              document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
-                elem.style.setProperty("fill", "none");
-                elem.style.setProperty("stroke", "inherit");
-              });
-            } else if (localStorage.getItem("viewType") === '"grid"') {
+              viewAnimationVariables.current.progressFull = false;
+            },
+            update: (anim) => {
+              viewAnimProgress = Math.round(anim.progress);
+              if (viewAnimProgress > 0 && viewAnimProgress < 100) {
+                document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+                  elem.style.fill = null;
+                  elem.style.stroke = null;
+                });
+                document.querySelectorAll(".list-project-l .list-project-img").forEach((elem) => {
+                  elem.style.marginLeft = "5vw";
+                });
+                document.querySelectorAll(".list-project-r .list-project-img").forEach((elem) => {
+                  //change all the code to make grid class change to list class and vice versa
+                  elem.style.marginRight = "5vw";
+                });
+              }
+              if (viewAnimProgress === 100 && !viewAnimationVariables.current.progressFull) {
+                setTimeout(() => {
+                  document.querySelectorAll(".list-project-l,.list-project-r").forEach((elem) => {
+                    elem.removeAttribute("style");
+                    elem.querySelectorAll(".list-project-img,.list-project-text,.list-project-tags").forEach((child) => {
+                      child.removeAttribute("style");
+                    });
+                    if (elem.classList.contains("list-project-l")) {
+                      elem.classList.add("grid-project-l");
+                      elem.querySelector(".list-project-img").classList.add("grid-project-img");
+                      elem.querySelector(".list-project-text").classList.add("grid-project-text");
+                      elem.querySelector(".list-project-tags").classList.add("grid-project-tags");
+                      elem.classList.remove("list-project-l");
+                      elem.querySelector(".list-project-img").classList.remove("list-project-img");
+                      elem.querySelector(".list-project-text").classList.remove("list-project-text");
+                      elem.querySelector(".list-project-tags").classList.remove("list-project-tags");
+                      let gText = elem.querySelector(".grid-project-text");
+                      elem.querySelector(".grid-project-img").appendChild(gText);
+                    } else if (elem.classList.contains("list-project-r")) {
+                      elem.classList.add("grid-project-r");
+                      elem.querySelector(".list-project-img").classList.add("grid-project-img");
+                      elem.querySelector(".list-project-text").classList.add("grid-project-text");
+                      elem.querySelector(".list-project-tags").classList.add("grid-project-tags");
+                      elem.classList.remove("list-project-r");
+                      elem.querySelector(".list-project-img").classList.remove("list-project-img");
+                      elem.querySelector(".list-project-text").classList.remove("list-project-text");
+                      elem.querySelector(".list-project-tags").classList.remove("list-project-tags");
+                      let gText = elem.querySelector(".grid-project-text");
+                      elem.querySelector(".grid-project-img").appendChild(gText);
+                    }
+                  });
+                }, 100);
+                viewAnimationVariables.current.progressFull = true;
+              }
+            },
+            complete: (anim) => {
               document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
                 elem.style.setProperty("fill", "inherit");
                 elem.style.setProperty("stroke", "none");
               });
-            }
-          },
-        })
-        .add(
-          {
-            targets: "#projects-body-bar-view-icon #top-1, #projects-body-bar-view-icon #top-2, #projects-body-bar-view-icon #middle-1, #projects-body-bar-view-icon #middle-2",
-            translateY: () => {
-              if (localStorage.getItem("viewType") === '"grid"') {
-                return [0, "-20px"];
-              } else {
-                return ["-20px", 0];
-              }
+              document.querySelectorAll(".list-project-l .list-project-text,.list-project-r .list-project-text").forEach((elem) => {
+                elem.style.overflow = "hidden";
+                elem.style.whiteSpace = "nowrap";
+                elem.querySelector(".list-project-tags").style.flexWrap = "nowrap";
+              });
             },
-            opacity: () => {
-              if (localStorage.getItem("viewType") === '"grid"') {
-                return [1, 0];
-              } else {
-                return [0, 1];
-              }
-            },
-          },
-          0
-        )
-        .add(
-          {
-            targets: "#projects-body-bar-view-icon #bottom-1",
-            d: () => {
-              if (localStorage.getItem("viewType") === '"grid"') {
-                return [`M25 19C25 18.448 25.448 18 26 18H40.998C41.552 18 42 18.448 42 19 42 19 42 19 42 19 42 19.552 41.552 20 41 20H26C25.448 20.001 25.001 19.554 25 19Z`, `M25 12C25 9 27 7 30 7H34C37 7 39 9 39 12 39 12 39 16 39 16 39 19 37 21 34 21H30C27 21 25 19 25 16Z`];
-              } else {
-                return [`M25 12C25 9 27 7 30 7H34C37 7 39 9 39 12 39 12 39 16 39 16 39 19 37 21 34 21H30C27 21 25 19 25 16Z`, `M25 19C25 18.448 25.448 18 26 18H40.998C41.552 18 42 18.448 42 19 42 19 42 19 42 19 42 19.552 41.552 20 41 20H26C25.448 20.001 25.001 19.554 25 19Z`];
-              }
-            },
-            fill: () => {
-              if (localStorage.getItem("viewType") === '"grid"') {
-                return [textColor, "rgba(0,0,0,0)"];
-              } else {
-                return ["rgba(0,0,0,0)", textColor];
-              }
-            },
-            stroke: () => {
-              if (localStorage.getItem("viewType") === '"grid"') {
-                return ["rgba(0,0,0,0)", textColor];
-              } else {
-                return [textColor, "rgba(0,0,0,0)"];
-              }
-            },
-            strokeWidth: () => {
-              if (localStorage.getItem("viewType") === '"grid"') {
-                return [0.5, 2];
-              } else {
-                return [2, 0.5];
-              }
-            },
-          },
-          0
-        )
-        .add(
-          {
-            targets: "#projects-body-bar-view-icon #bottom-2",
-            d: () => {
-              if (localStorage.getItem("viewType") === '"grid"') {
-                return [`M42 39C42 38.448 41.552 38 41 38H26C25.448 38 25 38.448 25 39V39C25 39.552 25.448 40 26 40H41c.552 0 1-.448 1-1Z`, `M39 32C39 29 37 27 34 27H30C27 27 25 29 25 32V36C25 39 27 41 30 41H34c3 0 5-2 5-5Z`];
-              } else {
-                return [`M39 32C39 29 37 27 34 27H30C27 27 25 29 25 32V36C25 39 27 41 30 41H34c3 0 5-2 5-5Z`, `M42 39C42 38.448 41.552 38 41 38H26C25.448 38 25 38.448 25 39V39C25 39.552 25.448 40 26 40H41c.552 0 1-.448 1-1Z`];
-              }
-            },
-            fill: () => {
-              if (localStorage.getItem("viewType") === '"grid"') {
-                return [textColor, "rgba(0,0,0,0)"];
-              } else {
-                return ["rgba(0,0,0,0)", textColor];
-              }
-            },
-            stroke: () => {
-              if (localStorage.getItem("viewType") === '"grid"') {
-                return ["rgba(0,0,0,0)", textColor];
-              } else {
-                return [textColor, "rgba(0,0,0,0)"];
-              }
-            },
-            strokeWidth: () => {
-              if (localStorage.getItem("viewType") === '"grid"') {
-                return [0.5, 2];
-              } else {
-                return [2, 0.5];
-              }
-            },
-          },
-          0
-        );
-      // viewAnimation.current.play();
-    }
-    console.log(textColor);
-  }, [viewButton]);
-
-  useEffect(() => {
-    // setTimeout(() => {
-    //   document.querySelector("#projects-body-filter-search-bar").parentElement.id = "projects-body-bar-filter-search-bar-parent";
-    // }, 100);
-    let existProject = false;
-    let allTags = [];
-    filterAnimationVariables.current.filterPlayedOnce = false;
-    filterAnimationVariables.current.mounted = false;
-
-    for (let i = 1; existProject === false; i++) {
-      let tempTag = "p".concat(i, "Tags");
-      console.log("main", Content[tempTag]);
-      if (typeof Content[tempTag] === "undefined" || Content[tempTag] === null) {
-        console.log("NOT PRESENT", Content[tempTag]);
-        allTags.forEach((elem) => {
-          if (!fullTagsList.includes(elem)) {
-            fullTagsList.push(elem);
-          }
-        });
-        console.log("FULL", fullTagsList);
-        existProject = true;
-      } else {
-        console.log("PRESENT", Content[tempTag]);
-        allTags = allTags.concat(
-          Content[tempTag].map((elem, ind) => {
-            return elem.name.toLowerCase().replace(/\s|\W/g, "");
           })
-        );
-        console.log("ALL", allTags);
-      }
-    }
-    if (localStorage.getItem("viewType") === '"list"') {
-      document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
-        elem.style.setProperty("fill", "none");
-        elem.style.setProperty("stroke", "inherit");
-      });
-      console.log("IF LOCAL THING ");
-    } else if (localStorage.getItem("viewType") === '"grid"') {
-      document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
-        elem.style.setProperty("fill", "inherit");
-        elem.style.setProperty("stroke", "none");
-      });
-    }
-    window.addEventListener(
-      "storageupdated",
-      (e) => {
-        if (e.detail[0] === "dark") {
-          viewAnimationVariables.current.played = false;
-          viewAnimation.current = ChangeSortAnimation(e.detail);
-        }
-      },
-      false
-    );
-    
-    document.querySelector("#projects-body-filter-search-bar").style.clipPath = "inset(0 0 0 100%)";
+          .add(
+            {
+              targets: "#projects-body-bar-view-icon #top-1, #projects-body-bar-view-icon #top-2, #projects-body-bar-view-icon #middle-1, #projects-body-bar-view-icon #middle-2",
+              translateY: ["-20px", 0],
+              opacity: [0, 1],
+            },
+            0
+          )
+          .add(
+            {
+              targets: "#projects-body-bar-view-icon #bottom-1",
+              d: [`M25 12C25 9 27 7 30 7H34C37 7 39 9 39 12 39 12 39 16 39 16 39 19 37 21 34 21H30C27 21 25 19 25 16Z`, `M25 19C25 18.448 25.448 18 26 18H40.998C41.552 18 42 18.448 42 19 42 19 42 19 42 19 42 19.552 41.552 20 41 20H26C25.448 20.001 25.001 19.554 25 19Z`],
+              fill: ["rgba(0,0,0,0)", textColor],
+              stroke: [textColor, "rgba(0,0,0,0)"],
+              strokeWidth: [2, 0.5],
+            },
+            0
+          )
+          .add(
+            {
+              targets: "#projects-body-bar-view-icon #bottom-2",
+              d: [`M39 32C39 29 37 27 34 27H30C27 27 25 29 25 32V36C25 39 27 41 30 41H34c3 0 5-2 5-5Z`, `M42 39C42 38.448 41.552 38 41 38H26C25.448 38 25 38.448 25 39V39C25 39.552 25.448 40 26 40H41c.552 0 1-.448 1-1Z`],
+              fill: ["rgba(0,0,0,0)", textColor],
+              stroke: [textColor, "rgba(0,0,0,0)"],
+              strokeWidth: [2, 0.5],
+            },
+            0
+          )
+          .add(
+            {
+              targets: ".list-project-l .list-project-text",
+              opacity: [1, 0],
+              delay: anime.stagger(300),
+            },
+            0
+          )
+          .add(
+            {
+              targets: ".list-project-r .list-project-text",
+              opacity: [1, 0],
+              delay: anime.stagger(300),
+            },
+            150
+          )
+          .add(
+            {
+              targets: ".list-project-l",
+              width: ["100%", "50%"],
+              delay: anime.stagger(300),
+            },
+            0
+          )
+          .add(
+            {
+              targets: ".list-project-r",
+              width: ["100%", "50%"],
+              delay: anime.stagger(300),
+            },
+            150
+          )
+          .add(
+            {
+              targets: ".list-project-img",
+              width: ["30vw", "40vw"],
+              height: ["30vh", "35vh"],
+            },
+            0
+          );
 
-    // return()=>{
-    //   setFilterButton(false);
-    // }
-  }, []);
+        viewAnimation.current.gridAnimation.play();
+      } else if (localStorage.getItem("viewType") === `"list"`) {
+        viewAnimation.current.listAnimation = anime
+          .timeline({
+            easing: "easeInOutQuad",
+            loop: false,
+            autoplay: false,
+            direction: "normal",
+            duration: 500,
+            begin: (anim) => {
+              document.querySelectorAll(".grid-project-l,.grid-project-r").forEach((elem) => {
+                if (elem.classList.contains("grid-project-l")) {
+                  elem.querySelector(".grid-project-img").classList.add("list-project-img");
+                  elem.querySelector(".grid-project-text").classList.add("list-project-text");
+                  elem.querySelector(".grid-project-tags").classList.add("list-project-tags");
+                  elem.querySelector(".grid-project-img").classList.remove("grid-project-img");
+                  elem.querySelector(".grid-project-text").classList.remove("grid-project-text");
+                  elem.querySelector(".grid-project-tags").classList.remove("grid-project-tags");
+                  let lText = elem.querySelector(".list-project-text");
+                  elem.appendChild(lText);
+                } else if (elem.classList.contains("grid-project-r")) {
+                  elem.querySelector(".grid-project-img").classList.add("list-project-img");
+                  elem.querySelector(".grid-project-text").classList.add("list-project-text");
+                  elem.querySelector(".grid-project-tags").classList.add("list-project-tags");
+                  elem.querySelector(".grid-project-img").classList.remove("grid-project-img");
+                  elem.querySelector(".grid-project-text").classList.remove("grid-project-text");
+                  elem.querySelector(".grid-project-tags").classList.remove("grid-project-tags");
+                  let lText = elem.querySelector(".list-project-text");
+                  elem.appendChild(lText);
+                }
+              });
+              document.querySelectorAll(".grid-project-l .list-project-text,.grid-project-r .list-project-text").forEach((elem) => {
+                elem.style.flexShrink = "0";
+                setTimeout(() => {
+                  elem.style.whiteSpace = "normal";
+                }, 300);
+              });
+              viewAnimationVariables.current.progressFull = false;
+            },
+            update: (anim) => {
+              viewAnimProgress = Math.round(anim.progress);
+              if (viewAnimProgress > 0 && viewAnimProgress < 100) {
+                document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+                  elem.style.fill = null;
+                  elem.style.stroke = null;
+                });
+                document.querySelectorAll(".grid-project-l .list-project-img").forEach((elem) => {
+                  elem.style.marginLeft = "10vw";
+                });
+                document.querySelectorAll(".grid-project-r .list-project-img").forEach((elem) => {
+                  elem.style.marginRight = "10vw";
+                });
+              }
+              if (viewAnimProgress === 100 && !viewAnimationVariables.current.progressFull) {
+                setTimeout(() => {
+                  document.querySelectorAll(".grid-project-l,.grid-project-r").forEach((elem) => {
+                    elem.removeAttribute("style");
+                    elem.querySelectorAll(".list-project-img,.list-project-text,.list-project-tags").forEach((child) => {
+                      child.removeAttribute("style");
+                    });
+                    if (elem.classList.contains("grid-project-l")) {
+                      elem.classList.add("list-project-l");
+                      elem.classList.remove("grid-project-l");
+                    } else if (elem.classList.contains("grid-project-r")) {
+                      elem.classList.add("list-project-r");
+                      elem.classList.remove("grid-project-r");
+                    }
+                  });
+                }, 100);
+                viewAnimationVariables.current.progressFull = true;
+              }
+            },
+            complete: (anim) => {
+              document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+                elem.style.setProperty("fill", "none");
+                elem.style.setProperty("stroke", "inherit");
+              });
+              document.querySelectorAll(".list-project-l .list-project-text,.list-project-r .list-project-text").forEach((elem) => {
+                elem.style.overflow = "visible";
+                elem.style.whiteSpace = "normal";
+                elem.querySelector(".list-project-tags").style.flexWrap = "wrap";
+              });
+              //ADD NEW CLASSES TO THE THING HERE AND SEE IF U HAVE TO REMOVE OLD ONES OR NOT. IF U HAVE TO REMOVE OLD ONES THEN IDK MAKE IT WORK 25/06/2022
+            },
+          })
+          .add(
+            {
+              targets: "#projects-body-bar-view-icon #top-1, #projects-body-bar-view-icon #top-2, #projects-body-bar-view-icon #middle-1, #projects-body-bar-view-icon #middle-2",
+              translateY: [0, "-20px"],
+              opacity: [1, 0],
+            },
+            0
+          )
+          .add(
+            {
+              targets: "#projects-body-bar-view-icon #bottom-1",
+              d: [`M25 19C25 18.448 25.448 18 26 18H40.998C41.552 18 42 18.448 42 19 42 19 42 19 42 19 42 19.552 41.552 20 41 20H26C25.448 20.001 25.001 19.554 25 19Z`, `M25 12C25 9 27 7 30 7H34C37 7 39 9 39 12 39 12 39 16 39 16 39 19 37 21 34 21H30C27 21 25 19 25 16Z`],
+              fill: [textColor, "rgba(0,0,0,0)"],
+              stroke: ["rgba(0,0,0,0)", textColor],
+              strokeWidth: [0.5, 2],
+            },
+            0
+          )
+          .add(
+            {
+              targets: "#projects-body-bar-view-icon #bottom-2",
+              d: [`M42 39C42 38.448 41.552 38 41 38H26C25.448 38 25 38.448 25 39V39C25 39.552 25.448 40 26 40H41c.552 0 1-.448 1-1Z`, `M39 32C39 29 37 27 34 27H30C27 27 25 29 25 32V36C25 39 27 41 30 41H34c3 0 5-2 5-5Z`],
+              fill: [textColor, "rgba(0,0,0,0)"],
+              stroke: ["rgba(0,0,0,0)", textColor],
+              strokeWidth: [0.5, 2],
+            },
+            0
+          )
+
+          .add(
+            {
+              targets: ".grid-project-l .grid-project-text", // COMPETE THE ANIMATION 22/06/2022
+              opacity: [0, 1],
+              delay: anime.stagger(300),
+            },
+            0
+          )
+          .add(
+            {
+              targets: ".grid-project-r .grid-project-text",
+              opacity: [0, 1],
+              delay: anime.stagger(300),
+            },
+            150
+          )
+          .add(
+            {
+              targets: ".grid-project-l",
+              width: ["50%", "100%"],
+              delay: anime.stagger(300),
+            },
+            0
+          )
+          .add(
+            {
+              targets: ".grid-project-r",
+              width: ["50%", "100%"],
+              delay: anime.stagger(300),
+            },
+            150
+          )
+          .add(
+            {
+              targets: ".grid-project-img",
+              width: ["40vw", "30vw"],
+              height: ["35vh", "30vh"],
+            },
+            0
+          );
+        viewAnimation.current.listAnimation.play();
+      }
+    } else {
+      viewAnimationVariables.current.mounted = true;
+      setTimeout(() => {
+        if (localStorage.getItem("viewType") === `"grid"`) {
+          viewAnimation.current.gridAnimation = anime
+            .timeline({
+              easing: "easeInOutQuad",
+              loop: false,
+              autoplay: false,
+              direction: "normal",
+              duration: 500,
+              begin: (anim) => {
+                document.querySelectorAll(".list-project-l .list-project-text,.list-project-r .list-project-text").forEach((elem) => {
+                  elem.style.flexShrink = "1000";
+                  if (localStorage.getItem("viewType") === '"grid"') {
+                    elem.style.overflow = "hidden";
+                    elem.style.whiteSpace = "nowrap";
+                    elem.querySelector(".list-project-tags").style.flexWrap = "nowrap";
+                  } else {
+                    elem.style.overflow = "visible";
+                    elem.style.whiteSpace = "normal";
+                    elem.querySelector(".list-project-tags").style.flexWrap = "wrap";
+                  }
+                });
+                viewAnimationVariables.current.progressFull = false;
+              },
+              update: (anim) => {
+                viewAnimProgress = Math.round(anim.progress);
+                if (viewAnimProgress > 0 && viewAnimProgress < 100) {
+                  document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+                    elem.style.fill = null;
+                    elem.style.stroke = null;
+                  });
+                  document.querySelectorAll(".list-project-l .list-project-img").forEach((elem) => {
+                    elem.style.marginLeft = "5vw";
+                  });
+                  document.querySelectorAll(".list-project-r .list-project-img").forEach((elem) => {
+                    elem.style.marginRight = "5vw";
+                  });
+                }
+                if (viewAnimProgress === 100 && !viewAnimationVariables.current.progressFull) {
+                  setTimeout(() => {
+                    document.querySelectorAll(".list-project-l,.list-project-r").forEach((elem) => {
+                      elem.removeAttribute("style");
+                      elem.querySelectorAll(".list-project-img,.list-project-text,.list-project-tags").forEach((child) => {
+                        child.removeAttribute("style");
+                      });
+                      if (elem.classList.contains("list-project-l")) {
+                        elem.classList.add("grid-project-l");
+                        elem.querySelector(".list-project-img").classList.add("grid-project-img");
+                        elem.querySelector(".list-project-text").classList.add("grid-project-text");
+                        elem.querySelector(".list-project-tags").classList.add("grid-project-tags");
+                        elem.classList.remove("list-project-l");
+                        elem.querySelector(".list-project-img").classList.remove("list-project-img");
+                        elem.querySelector(".list-project-text").classList.remove("list-project-text");
+                        elem.querySelector(".list-project-tags").classList.remove("list-project-tags");
+                        let gText = elem.querySelector(".grid-project-text");
+                        elem.querySelector(".grid-project-img").appendChild(gText);
+                      } else if (elem.classList.contains("list-project-r")) {
+                        elem.classList.add("grid-project-r");
+                        elem.querySelector(".list-project-img").classList.add("grid-project-img");
+                        elem.querySelector(".list-project-text").classList.add("grid-project-text");
+                        elem.querySelector(".list-project-tags").classList.add("grid-project-tags");
+                        elem.classList.remove("list-project-r");
+                        elem.querySelector(".list-project-img").classList.remove("list-project-img");
+                        elem.querySelector(".list-project-text").classList.remove("list-project-text");
+                        elem.querySelector(".list-project-tags").classList.remove("list-project-tags");
+                        let gText = elem.querySelector(".grid-project-text");
+                        elem.querySelector(".grid-project-img").appendChild(gText);
+                      }
+                    });
+                  }, 100);
+                  viewAnimationVariables.current.progressFull = true;
+                }
+              },
+              complete: (anim) => {
+                document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+                  elem.style.setProperty("fill", "inherit");
+                  elem.style.setProperty("stroke", "none");
+                });
+                document.querySelectorAll(".list-project-l .list-project-text,.list-project-r .list-project-text").forEach((elem) => {
+                  elem.style.overflow = "hidden";
+                  elem.style.whiteSpace = "nowrap";
+                  elem.querySelector(".list-project-tags").style.flexWrap = "nowrap";
+                });
+              },
+            })
+            .add(
+              {
+                targets: "#projects-body-bar-view-icon #top-1, #projects-body-bar-view-icon #top-2, #projects-body-bar-view-icon #middle-1, #projects-body-bar-view-icon #middle-2",
+                translateY: [0, "-20px"],
+                opacity: [1, 0],
+              },
+              0
+            )
+            .add(
+              {
+                targets: "#projects-body-bar-view-icon #bottom-1",
+                d: [`M25 19C25 18.448 25.448 18 26 18H40.998C41.552 18 42 18.448 42 19 42 19 42 19 42 19 42 19.552 41.552 20 41 20H26C25.448 20.001 25.001 19.554 25 19Z`, `M25 12C25 9 27 7 30 7H34C37 7 39 9 39 12 39 12 39 16 39 16 39 19 37 21 34 21H30C27 21 25 19 25 16Z`],
+                fill: [textColor, "rgba(0,0,0,0)"],
+                stroke: ["rgba(0,0,0,0)", textColor],
+                strokeWidth: [0.5, 2],
+              },
+              0
+            )
+            .add(
+              {
+                targets: "#projects-body-bar-view-icon #bottom-2",
+                d: [`M42 39C42 38.448 41.552 38 41 38H26C25.448 38 25 38.448 25 39V39C25 39.552 25.448 40 26 40H41c.552 0 1-.448 1-1Z`, `M39 32C39 29 37 27 34 27H30C27 27 25 29 25 32V36C25 39 27 41 30 41H34c3 0 5-2 5-5Z`],
+                fill: [textColor, "rgba(0,0,0,0)"],
+                stroke: ["rgba(0,0,0,0)", textColor],
+                strokeWidth: [0.5, 2],
+              },
+              0
+            )
+
+            .add(
+              {
+                targets: ".list-project-l .list-project-text",
+                opacity: [1, 0],
+                delay: anime.stagger(300),
+              },
+              0
+            )
+            .add(
+              {
+                targets: ".list-project-r .list-project-text",
+                opacity: [1, 0],
+                delay: anime.stagger(300),
+              },
+              150
+            )
+            .add(
+              {
+                targets: ".list-project-l",
+                width: ["100%", "50%"],
+                delay: anime.stagger(300),
+              },
+              0
+            )
+            .add(
+              {
+                targets: ".list-project-r",
+                width: ["100%", "50%"],
+                delay: anime.stagger(300),
+              },
+              150
+            )
+            .add(
+              {
+                targets: ".list-project-img",
+                width: ["30vw", "40vw"],
+                height: ["30vh", "35vh"],
+              },
+              0
+            );
+        } else if (localStorage.getItem("viewType") === `"list"`) {
+          viewAnimation.current.listAnimation = anime
+            .timeline({
+              easing: "easeInOutQuad",
+              loop: false,
+              autoplay: false,
+              direction: "normal",
+              duration: 500,
+              begin: (anim) => {
+                document.querySelectorAll(".grid-project-l,.grid-project-r").forEach((elem) => {
+                  if (elem.classList.contains("grid-project-l")) {
+                    elem.querySelector(".grid-project-img").classList.add("list-project-img");
+                    elem.querySelector(".grid-project-text").classList.add("list-project-text");
+                    elem.querySelector(".grid-project-tags").classList.add("list-project-tags");
+                    elem.querySelector(".grid-project-img").classList.remove("grid-project-img");
+                    elem.querySelector(".grid-project-text").classList.remove("grid-project-text");
+                    elem.querySelector(".grid-project-tags").classList.remove("grid-project-tags");
+                    let lText = elem.querySelector(".list-project-text");
+                    elem.appendChild(lText);
+                  } else if (elem.classList.contains("grid-project-r")) {
+                    elem.querySelector(".grid-project-img").classList.add("list-project-img");
+                    elem.querySelector(".grid-project-text").classList.add("list-project-text");
+                    elem.querySelector(".grid-project-tags").classList.add("list-project-tags");
+                    elem.querySelector(".grid-project-img").classList.remove("grid-project-img");
+                    elem.querySelector(".grid-project-text").classList.remove("grid-project-text");
+                    elem.querySelector(".grid-project-tags").classList.remove("grid-project-tags");
+                    let lText = elem.querySelector(".list-project-text");
+                    elem.appendChild(lText);
+                  }
+                });
+                document.querySelectorAll(".grid-project-l .list-project-text,.grid-project-r .list-project-text").forEach((elem) => {
+                  elem.style.flexShrink = "0";
+                  setTimeout(() => {
+                    elem.style.whiteSpace = "normal";
+                  }, 300);
+                });
+                viewAnimationVariables.current.progressFull = false;
+              },
+              update: (anim) => {
+                viewAnimProgress = Math.round(anim.progress);
+                if (viewAnimProgress > 0 && viewAnimProgress < 100) {
+                  document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+                    elem.style.fill = null;
+                    elem.style.stroke = null;
+                  });
+                  document.querySelectorAll(".grid-project-l .list-project-img").forEach((elem) => {
+                    elem.style.marginLeft = "10vw";
+                  });
+                  document.querySelectorAll(".grid-project-r .list-project-img").forEach((elem) => {
+                    elem.style.marginRight = "10vw";
+                  });
+                }
+                if (viewAnimProgress === 100 && !viewAnimationVariables.current.progressFull) {
+                  setTimeout(() => {
+                    document.querySelectorAll(".grid-project-l,.grid-project-r").forEach((elem) => {
+                      elem.removeAttribute("style");
+                      elem.querySelectorAll(".list-project-img,.list-project-text,.list-project-tags").forEach((child) => {
+                        child.removeAttribute("style");
+                      });
+                      if (elem.classList.contains("grid-project-l")) {
+                        elem.classList.add("list-project-l");
+                        elem.classList.remove("grid-project-l");
+                      } else if (elem.classList.contains("grid-project-r")) {
+                        elem.classList.add("list-project-r");
+                        elem.classList.remove("grid-project-r");
+                      }
+                    });
+                  }, 100);
+                  viewAnimationVariables.current.progressFull = true;
+                }
+              },
+              complete: (anim) => {
+                document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+                  elem.style.setProperty("fill", "none");
+                  elem.style.setProperty("stroke", "inherit");
+                });
+                document.querySelectorAll(".list-project-l .list-project-text,.list-project-r .list-project-text").forEach((elem) => {
+                  elem.style.overflow = "visible";
+                  elem.style.whiteSpace = "normal";
+                  elem.querySelector(".list-project-tags").style.flexWrap = "wrap";
+                });
+                //ADD NEW CLASSES TO THE THING HERE AND SEE IF U HAVE TO REMOVE OLD ONES OR NOT. IF U HAVE TO REMOVE OLD ONES THEN IDK MAKE IT WORK 25/06/2022
+              },
+            })
+            .add(
+              {
+                targets: "#projects-body-bar-view-icon #top-1, #projects-body-bar-view-icon #top-2, #projects-body-bar-view-icon #middle-1, #projects-body-bar-view-icon #middle-2",
+                translateY: ["-20px", 0],
+                opacity: [0, 1],
+              },
+              0
+            )
+            .add(
+              {
+                targets: "#projects-body-bar-view-icon #bottom-1",
+                d: [`M25 12C25 9 27 7 30 7H34C37 7 39 9 39 12 39 12 39 16 39 16 39 19 37 21 34 21H30C27 21 25 19 25 16Z`, `M25 19C25 18.448 25.448 18 26 18H40.998C41.552 18 42 18.448 42 19 42 19 42 19 42 19 42 19.552 41.552 20 41 20H26C25.448 20.001 25.001 19.554 25 19Z`],
+                fill: ["rgba(0,0,0,0)", textColor],
+                stroke: [textColor, "rgba(0,0,0,0)"],
+                strokeWidth: [2, 0.5],
+              },
+              0
+            )
+            .add(
+              {
+                targets: "#projects-body-bar-view-icon #bottom-2",
+                d: [`M39 32C39 29 37 27 34 27H30C27 27 25 29 25 32V36C25 39 27 41 30 41H34c3 0 5-2 5-5Z`, `M42 39C42 38.448 41.552 38 41 38H26C25.448 38 25 38.448 25 39V39C25 39.552 25.448 40 26 40H41c.552 0 1-.448 1-1Z`],
+                fill: ["rgba(0,0,0,0)", textColor],
+                stroke: [textColor, "rgba(0,0,0,0)"],
+                strokeWidth: [2, 0.5],
+              },
+              0
+            )
+
+            .add(
+              {
+                targets: ".grid-project-l .grid-project-text", // COMPETE THE ANIMATION 22/06/2022
+                opacity: [0, 1],
+                delay: anime.stagger(300),
+              },
+              0
+            )
+            .add(
+              {
+                targets: ".grid-project-r .grid-project-text",
+                opacity: [0, 1],
+                delay: anime.stagger(300),
+              },
+              150
+            )
+            .add(
+              {
+                targets: ".grid-project-l",
+                width: ["50%", "100%"],
+                delay: anime.stagger(300),
+              },
+              0
+            )
+            .add(
+              {
+                targets: ".grid-project-r",
+                width: ["50%", "100%"],
+                delay: anime.stagger(300),
+              },
+              150
+            )
+            .add(
+              {
+                targets: ".grid-project-img",
+                width: ["40vw", "30vw"],
+                height: ["35vh", "30vh"],
+              },
+              0
+            );
+        }
+      }, 200);
+    }
+  }, [viewButton]);
 
   useEffect(() => {
     if (filterButton && filterAnimationVariables.current.filterPlayedOnce) {
@@ -826,11 +1425,11 @@ function ProjectsOptions() {
           easing: "easeInOutQuad",
           autoplay: true,
           direction: "reverse",
-          complete:(anim)=>{
-            if(document.querySelector("#projects-body-filter-search-bar").style.clipPath==="inset(0px)"){
-              document.querySelector("#projects-body-filter-search-bar").style.clipPath=null;
+          complete: (anim) => {
+            if (document.querySelector("#projects-body-filter-search-bar").style.clipPath === "inset(0px)") {
+              document.querySelector("#projects-body-filter-search-bar").style.clipPath = null;
             }
-          }
+          },
         })
         .add(
           {
@@ -858,173 +1457,112 @@ function ProjectsOptions() {
       //   document.querySelector("#projects-body-filter-search-bar").style.display = "none";
       // }, 2000);
     } else {
-      console.log("ELSE", filterButton, filterAnimationVariables.current.filterPlayedOnce, filterAnimationVariables.current.mounted);
       filterAnimationVariables.current.mounted = true;
+      filterAnimationVariables.current.filterPlayedOnce = false;
     }
   }, [filterButton]);
 
+  useEffect(() => {
+    setFilterSelectedTags(selectedTags);
+    if (selectedTags.length > 0) {
+      setFilterButton(!filterButton);
+      tagButtonVariables.current.PreExistSelectedTags = true;
+    } else {
+      tagButtonVariables.current.PreExistSelectedTags = false;
+    }
+    let existProject = false;
+    let allTags = {};
+
+    for (let i = 1; existProject === false; i++) {
+      let tempTag = "p".concat(i, "Tags");
+      if (typeof Content[tempTag] === "undefined" || Content[tempTag] === null) {
+        for (const [key, value] of Object.entries(allTags)) {
+          if (!Object.keys(fullTagsList).find((key) => fullTagsList[key] === value)) {
+            fullTagsList[key] = value;
+          }
+        }
+        existProject = true;
+      } else {
+        Content[tempTag].forEach((elem, ind) => {
+          allTags[elem.name] = elem.name.toLowerCase().replace(/\s|\W/g, "");
+        });
+      }
+    }
+
+    if (localStorage.getItem("viewType") === '"list"') {
+      document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+        elem.style.setProperty("fill", "none");
+        elem.style.setProperty("stroke", "inherit");
+      });
+    } else if (localStorage.getItem("viewType") === '"grid"') {
+      document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+        elem.style.setProperty("fill", "inherit");
+        elem.style.setProperty("stroke", "none");
+      });
+    }
+    // window.addEventListener(
+    //   "storageupdated",
+    //   (e) => {
+    //     if (e.detail[0] === "dark") {
+    //       // viewAnimation.current.listAnimation = ChangeViewAnimation(e.detail, "list");
+    //       // viewAnimation.current.gridAnimation = ChangeViewAnimation(e.detial, "grid");
+    //     }
+    //   },
+    //   false
+    // );
+
+    document.querySelector("#projects-body-filter-search-bar").style.clipPath = "inset(0 0 0 100%)";
+
+    document.body.querySelector(".search-wrapper").addEventListener("click", updateMultiselectUI);
+    document.body.querySelector(".search-wrapper").addEventListener("keydown", updateMultiselectUI);
+
+    // return()=>{
+    //   setFilterButton(false);
+    // }
+    return () => {
+      selectedTags = [];
+    };
+  }, []);
+
+  useEffect(() => {}, [filterSelectedTags]);
+
   return (
     // more or less done, just add the animations and view changing shit PLEASE
-    <div id="projects-body-bar">
-      <h2>test one</h2>
-      <Multiselect avoidHighlightFirstOption id="projects-body-filter-search-bar" isObject={false} options={fullTagsList} customCloseIcon={<VectorGraphics.ChipClose id="chip-close-icon" />} hidePlaceholder={true} />
-      <button
-        id="projects-body-bar-filter-button"
-        onClick={() => {
-          setFilterButton(!filterButton);
-        }}
-      >
-        <VectorGraphics.Filter id="projects-body-bar-filter-icon" />
-      </button>
-      <button
-        id="projects-body-bar-view-button"
-        onClick={() => {
-          viewButton === "list" ? setViewButton("grid") : setViewButton("list");
-        }}
-      >
-        {/* {viewButton?<VectorGraphics.GridView id="projects-body-bar-grid-icon"/>:<VectorGraphics.ListView id="projects-body-bar-list-icon" />} */}
-        <VectorGraphics.ViewIcon id="projects-body-bar-view-icon" />
-      </button>
-    </div>
+    // ADD PROJECTS AND FINISH VIEW CHANGING
+    <React.Fragment>
+      <div id="projects-body-bar">
+        <div id="projects-body-bar-options">
+          <Multiselect avoidHighlightFirstOption id="projects-body-filter-search-bar" ref={filterSelectRef} isObject={false} options={Object.keys(fullTagsList)} customCloseIcon={<VectorGraphics.ChipClose id="chip-close-icon" />} placeholder="Search" hidePlaceholder={true} selectedValues={filterSelectedTags} onSelect={filterSelect} onRemove={filterRemove} />
+          <button
+            id="projects-body-bar-filter-button"
+            onClick={() => {
+              setFilterButton(!filterButton);
+            }}
+          >
+            <VectorGraphics.Filter id="projects-body-bar-filter-icon" />
+          </button>
+          <button
+            id="projects-body-bar-view-button"
+            disabled={viewButtonDisabled}
+            onClick={() => {
+              setViewButtonDisabled(true);
+              setTimeout(() => {
+                setViewButtonDisabled(false);
+              }, 1000);
+              viewButton === "list" ? setViewButton("grid") : setViewButton("list");
+            }}
+          >
+            <VectorGraphics.ViewIcon id="projects-body-bar-view-icon" />
+          </button>
+        </div>
+      </div>
+      <div id="projects-body-projects">
+        <h1 id="projects-body-projects-title">Projects</h1>
+        <DesktopProjects filterProjects={filterList} headingPresent={false} divId="projects-body-projects-list" projectCount={projectListCount} />
+      </div>
+    </React.Fragment>
   );
 }
-function ChangeSortAnimation(storageArr, sortAnim) {
-  if (storageArr[0] === "dark") {
-    return anime
-      .timeline({
-        easing: "easeInOutQuad",
-        loop: false,
-        autoplay: false,
-        direction: "normal",
-        duration: 500,
-        update: (anim) => {
-          sortAnimProgress = Math.round(anim.progress);
-          if (sortAnimProgress > 0 && sortAnimProgress < 100) {
-            document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
-              elem.style.fill = null;
-              elem.style.stroke = null;
-            });
-          }
-        },
-        complete: (anim) => {
-          if (localStorage.getItem("viewType") === '"list"') {
-            document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
-              elem.style.setProperty("fill", "none");
-              elem.style.setProperty("stroke", "inherit");
-            });
-          } else if (localStorage.getItem("viewType") === '"grid"') {
-            document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
-              elem.style.setProperty("fill", "inherit");
-              elem.style.setProperty("stroke", "none");
-            });
-          }
-        },
-      })
-      .add(
-        {
-          targets: "#projects-body-bar-view-icon #top-1, #projects-body-bar-view-icon #top-2, #projects-body-bar-view-icon #middle-1, #projects-body-bar-view-icon #middle-2",
-          translateY: () => {
-            if (localStorage.getItem("viewType") === '"grid"') {
-              return [0, "-20px"];
-            } else {
-              return ["-20px", 0];
-            }
-          },
-          opacity: () => {
-            if (localStorage.getItem("viewType") === '"grid"') {
-              return [1, 0];
-            } else {
-              return [0, 1];
-            }
-          },
-        },
-        0
-      )
-      .add(
-        {
-          targets: "#projects-body-bar-view-icon #bottom-1",
-          d: () => {
-            if (localStorage.getItem("viewType") === '"grid"') {
-              return [`M25 19C25 18.448 25.448 18 26 18H40.998C41.552 18 42 18.448 42 19 42 19 42 19 42 19 42 19.552 41.552 20 41 20H26C25.448 20.001 25.001 19.554 25 19Z`, `M25 12C25 9 27 7 30 7H34C37 7 39 9 39 12 39 12 39 16 39 16 39 19 37 21 34 21H30C27 21 25 19 25 16Z`];
-            } else {
-              return [`M25 12C25 9 27 7 30 7H34C37 7 39 9 39 12 39 12 39 16 39 16 39 19 37 21 34 21H30C27 21 25 19 25 16Z`, `M25 19C25 18.448 25.448 18 26 18H40.998C41.552 18 42 18.448 42 19 42 19 42 19 42 19 42 19.552 41.552 20 41 20H26C25.448 20.001 25.001 19.554 25 19Z`];
-            }
-          },
-          fill: () => {
-            if (localStorage.getItem("viewType") === '"grid"') {
-              return [textColor, "rgba(0,0,0,0)"];
-            } else {
-              return ["rgba(0,0,0,0)", textColor];
-            }
-          },
-          stroke: () => {
-            if (localStorage.getItem("viewType") === '"grid"') {
-              return ["rgba(0,0,0,0)", textColor];
-            } else {
-              return [textColor, "rgba(0,0,0,0)"];
-            }
-          },
-          strokeWidth: () => {
-            if (localStorage.getItem("viewType") === '"grid"') {
-              return [0.5, 2];
-            } else {
-              return [2, 0.5];
-            }
-          },
-        },
-        0
-      )
-      .add(
-        {
-          targets: "#projects-body-bar-view-icon #bottom-2",
-          d: () => {
-            if (localStorage.getItem("viewType") === '"grid"') {
-              return [`M42 39C42 38.448 41.552 38 41 38H26C25.448 38 25 38.448 25 39V39C25 39.552 25.448 40 26 40H41c.552 0 1-.448 1-1Z`, `M39 32C39 29 37 27 34 27H30C27 27 25 29 25 32V36C25 39 27 41 30 41H34c3 0 5-2 5-5Z`];
-            } else {
-              return [`M39 32C39 29 37 27 34 27H30C27 27 25 29 25 32V36C25 39 27 41 30 41H34c3 0 5-2 5-5Z`, `M42 39C42 38.448 41.552 38 41 38H26C25.448 38 25 38.448 25 39V39C25 39.552 25.448 40 26 40H41c.552 0 1-.448 1-1Z`];
-            }
-          },
-          fill: () => {
-            if (localStorage.getItem("viewType") === '"grid"') {
-              return [textColor, "rgba(0,0,0,0)"];
-            } else {
-              return ["rgba(0,0,0,0)", textColor];
-            }
-          },
-          stroke: () => {
-            if (localStorage.getItem("viewType") === '"grid"') {
-              return ["rgba(0,0,0,0)", textColor];
-            } else {
-              return [textColor, "rgba(0,0,0,0)"];
-            }
-          },
-          strokeWidth: () => {
-            if (localStorage.getItem("viewType") === '"grid"') {
-              return [0.5, 2];
-            } else {
-              return [2, 0.5];
-            }
-          },
-        },
-        0
-      );
-  }
-}
-function ProjectsList() {
-  return (
-    <div id="projects-body-projects">
-      <h2>list of projects here</h2>
-    </div>
-  );
-}
-// function OpenFilterBar(filter, setFilter) {
-//   // MAKE THE ANIMATION AND STUFF FOR THE FILTER BAR
-//   if (!filter) {
-//     setFilter(!filter);
-//   } else {
-//     setFilter(!filter);
-//   }
-// }
 
 export function DesktopProjectsBody() {
   useEffect(() => {
@@ -1069,16 +1607,12 @@ export function DesktopProjectsBody() {
           searchElements[i].style.setProperty("--text-color", Content.textWhite);
         }
       }
-      document.body.querySelector(".search-wrapper").addEventListener("click", updateMultiselectUI);
-      document.body.querySelector(".search-wrapper").addEventListener("keydown", updateMultiselectUI);
     }, 200);
   }, []);
 
   return (
     <div id="projects-body">
-      <ProjectsOptions />
-      <h1>Projects here</h1>
-      <ProjectsList />
+      <DesktopProjectsList />
     </div>
   );
 }
@@ -1124,6 +1658,13 @@ export function MobileNavBar() {
     }
   };
   useEffect(() => {
+    if (darkMode) {
+      textColor = Content.textWhite;
+      bgColor = Content.textBlack;
+    } else {
+      textColor = Content.textBlack;
+      bgColor = Content.textWhite;
+    }
     hamburgerAnimation.current = anime
       .timeline({
         easing: "easeOutSine",
@@ -1440,15 +1981,93 @@ function MobileHomeBodyIntro() {
   );
 }
 
-function MobileHomeBodyProjects() {
+function MobileProjects(props) {
+  const [projectList, setProjectList] = useState({});
+  const [changedProjectList, setChangedProjectList] = useState(0);
+  const tempVariables = useRef({});
+
+  useEffect(() => {
+    tempVariables.current.startedOnce = true;
+    let existProject = true;
+    for (let i = 1; existProject === true && i <= props.projectCount; i++) {
+      let tempTitle = "p".concat(i, "Title");
+      let tempSummary = "p".concat(i, "Summary");
+      let tempImg = "p".concat(i, "ImgLoc");
+      let tempImgAlt = "p".concat(i, "ImgAlt");
+      let tempTags = "p".concat(i, "Tags");
+      if (typeof Content[tempTitle] !== "undefined" && Content[tempTitle] !== null && typeof Content[tempSummary] !== "undefined" && Content[tempSummary] !== null && typeof Content[tempImg] !== "undefined" && Content[tempImg] !== null && typeof Content[tempImgAlt] !== "undefined" && Content[tempImgAlt] !== null && typeof Content[tempTags] !== "undefined" && Content[tempTags] !== null) {
+        let tempId = "m";
+        if (props.filterProjects === 0) {
+          if (routeLocation.pathname === "/projects" && localStorage.getItem("viewType") === '"grid"') {
+            setProjectList((current) => {
+              return { ...current, [i]: <GridProject tagToProject={false} key={i} pNumber={i} pClass={tempId} imageLocation={Content[tempImg]} imageAlt={Content[tempImgAlt]} title={Content[tempTitle]} summary={Content[tempSummary]} tags={Content[tempTags]} /> };
+            });
+          } else if (routeLocation.pathname === "/projects" && localStorage.getItem("viewType") === '"list"') {
+            setProjectList((current) => {
+              return { ...current, [i]: <ListProject tagToProject={false} key={i} pNumber={i} pClass={tempId} imageLocation={Content[tempImg]} imageAlt={Content[tempImgAlt]} title={Content[tempTitle]} summary={Content[tempSummary]} tags={Content[tempTags]} /> };
+            });
+          }
+        } else if (props.filterProjects > 0) {
+          let filterPTags = Content[tempTags].map((elem) => {
+            return elem.name;
+          });
+          let fTagsPresent = selectedTags.every((v) => filterPTags.includes(v));
+          if (!fTagsPresent && Object.keys(projectList).includes(i.toString())) {
+            const newPList = { ...projectList };
+            delete newPList[i];
+            setProjectList(newPList);
+          } else if (fTagsPresent && !Object.keys(projectList).includes(i.toString())) {
+            if (routeLocation.pathname === "/projects" && localStorage.getItem("viewType") === '"grid"') {
+              setProjectList((current) => {
+                return { ...current, [i]: <GridProject tagToProject={false} key={i} pNumber={i} pClass={tempId} imageLocation={Content[tempImg]} imageAlt={Content[tempImgAlt]} title={Content[tempTitle]} summary={Content[tempSummary]} tags={Content[tempTags]} /> };
+              });
+            } else if (routeLocation.pathname === "/projects" && localStorage.getItem("viewType") === '"list"') {
+              setProjectList((current) => {
+                return { ...current, [i]: <ListProject tagToProject={false} key={i} pNumber={i} pClass={tempId} imageLocation={Content[tempImg]} imageAlt={Content[tempImgAlt]} title={Content[tempTitle]} summary={Content[tempSummary]} tags={Content[tempTags]} /> };
+              });
+            }
+          }
+        } else {
+          setProjectList((current) => {
+            return { ...current, [i]: <ListProject tagToProject={true} key={i} pNumber={i} pClass={tempId} imageLocation={Content[tempImg]} imageAlt={Content[tempImgAlt]} title={Content[tempTitle]} summary={Content[tempSummary]} tags={Content[tempTags]} /> };
+          });
+        }
+      } else if ((typeof Content[tempTitle] !== "undefined" && Content[tempTitle] !== null) || (typeof Content[tempSummary] !== "undefined" && Content[tempSummary] !== null) || (typeof Content[tempImg] !== "undefined" && Content[tempImg] !== null) || (typeof Content[tempImgAlt] !== "undefined" && Content[tempImgAlt] !== null) || (typeof Content[tempTags] !== "undefined" && Content[tempTags] !== null)) {
+      } else {
+        existProject = false;
+      }
+    }
+  }, [props.filterProjects, changedProjectList]);
+
+  useEffect(() => {
+    if (Object.keys(projectList).length !== changedProjectList) {
+      setChangedProjectList(Object.keys(projectList).length);
+    }
+    setTimeout(() => {
+      if (!localStorage.getItem("dark") === "false") {
+        let tags = document.body.querySelectorAll(".tag");
+        for (let i = 0; i < tags.length; i++) {
+          tags[i].style.setProperty("--tag-bg", tagBgL);
+          tags[i].style.setProperty("--tag-color", tagColorL);
+        }
+      } else {
+        let tags = document.body.querySelectorAll(".tag");
+        for (let i = 0; i < tags.length; i++) {
+          tags[i].style.setProperty("--tag-bg", tagBgD);
+          tags[i].style.setProperty("--tag-color", tagColorD);
+        }
+      }
+    }, 10);
+  }, [projectList]);
   return (
-    <div id="home-body-projects">
-      <h1>Projects</h1>
-      <LargeProject pClass="m" imageLocation={Content.p1ImgLoc} imageAlt={Content.p1ImgAlt} title={Content.p1Title} summary={Content.p1Summary} tags={Content.p1Tags} />
+    <div id={props.divId}>
+      {props.headingPresent && <h1 id={props.headingId}>Projects</h1>}
+      {Object.keys(projectList).map((key, ind) => {
+        return projectList[key];
+      })}
     </div>
   );
 }
-
 export function MobileHomeBody() {
   useEffect(() => {
     lastScroll = 0;
@@ -1496,7 +2115,7 @@ export function MobileHomeBody() {
   return (
     <div id="home-body">
       <MobileHomeBodyIntro />
-      <MobileHomeBodyProjects />
+      <MobileProjects headingPresent={true} divId="home-body-projects" projectCount={homeProjectCount} />
     </div>
   );
 }
@@ -1511,6 +2130,688 @@ export function MobileAboutBody() {
     <div id="about-body">
       <h1>About Mobile text here</h1>
     </div>
+  );
+}
+
+function MobileProjectsList() {
+  const [filterButton, setFilterButton] = useState(false);
+  const filterAnimation = useRef(null);
+  const filterAnimationVariables = useRef({});
+  const [viewButton, setViewButton] = useStickyState("list", "viewType");
+  const viewAnimation = useRef({});
+  const viewAnimationVariables = useRef({});
+  const [viewButtonDisabled, setViewButtonDisabled] = useState(false);
+  const [filterSelectedTags, setFilterSelectedTags] = useState([]);
+  const filterSelectRef = useRef();
+  const tagClickFunc = useRef((e) => {
+    filterSelect([], e.currentTarget.innerText, true);
+  });
+  const tagButtonVariables = useRef({});
+  const [filterList, setFilterList] = useState(0);
+
+  function filterSelect(array, item, tagClick = false) {
+    if (!selectedTags.includes(item)) {
+      selectedTags.push(item);
+      if ((selectedTags.length === 1 || (selectedTags.length === 2 && tagButtonVariables.current.PreExistSelectedTags)) && tagClick) {
+        setFilterSelectedTags([...selectedTags, null]);
+        setFilterButton(!filterButton);
+        if (tagButtonVariables.current.PreExistSelectedTags) {
+          tagButtonVariables.current.PreExistSelectedTags = false;
+        }
+      }
+    }
+
+    setTimeout(() => {
+      setFilterSelectedTags([...selectedTags]);
+    }, 1);
+  }
+  function filterRemove(array, item) {
+    if (typeof item !== "number") {
+      var index = selectedTags.indexOf(item);
+      if (index !== -1) {
+        selectedTags.splice(index, 1);
+      }
+    } else {
+      selectedTags.pop();
+    }
+    setFilterSelectedTags([...selectedTags]);
+  }
+  useEffect(() => {
+    if (selectedTags.length > 0) {
+      setFilterList((numb) => numb + 1);
+    } else {
+      setFilterList(0);
+    }
+    setTimeout(() => {
+      document.querySelectorAll(".tag").forEach((elem) => {
+        elem.addEventListener("click", tagClickFunc.current, false);
+      });
+    }, 10);
+  }, [filterSelectedTags]);
+
+  useEffect(() => {
+    if (localStorage.getItem("dark") === "true") {
+      textColor = Content.textWhite;
+    } else {
+      textColor = Content.textBlack;
+    }
+    viewAnimationVariables.current.viewButton = viewButton;
+    if (viewAnimationVariables.current.mounted) {
+      if (localStorage.getItem("viewType") === `"grid"`) {
+        viewAnimation.current.gridAnimation = anime
+          .timeline({
+            easing: "easeInOutQuad",
+            loop: false,
+            autoplay: false,
+            direction: "normal",
+            duration: 500,
+            begin: (anim) => {
+              document.querySelectorAll(".list-project-m .list-project-text").forEach((elem) => {
+                // elem.style.flexShrink = "1000";
+                elem.style.marginTop = "-15rem"; // HERE MAKE THE TRANSITION TO GRID AND LIST TEXT PERFECT 02/07/2022
+                // if (localStorage.getItem("viewType") === '"grid"') {
+                //   elem.style.overflow = "hidden";
+                //   elem.style.whiteSpace = "nowrap";
+                //   elem.querySelector(".list-project-tags").style.flexWrap = "nowrap";
+                // } else {
+                //   elem.style.overflow = "visible";
+                //   elem.style.whiteSpace = "normal";
+                //   elem.querySelector(".list-project-tags").style.flexWrap = "wrap";
+                // }
+              });
+              viewAnimationVariables.current.progressFull = false;
+            },
+            update: (anim) => {
+              viewAnimProgress = Math.round(anim.progress);
+              if (viewAnimProgress > 0 && viewAnimProgress < 100) {
+                document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+                  elem.style.fill = null;
+                  elem.style.stroke = null;
+                });
+              }
+              if (viewAnimProgress === 100 && !viewAnimationVariables.current.progressFull) {
+                setTimeout(() => {
+                  document.querySelectorAll(".list-project-m").forEach((elem) => {
+                    elem.removeAttribute("style");
+                    elem.querySelectorAll(".list-project-img,.list-project-text,.list-project-tags").forEach((child) => {
+                      child.removeAttribute("style");
+                    });
+                    elem.classList.add("grid-project-m");
+                    elem.querySelector(".list-project-img").classList.add("grid-project-img");
+                    elem.querySelector(".list-project-text").classList.add("grid-project-text");
+                    elem.querySelector(".list-project-tags").classList.add("grid-project-tags");
+                    elem.classList.remove("list-project-m");
+                    elem.querySelector(".list-project-img").classList.remove("list-project-img");
+                    elem.querySelector(".list-project-text").classList.remove("list-project-text");
+                    elem.querySelector(".list-project-tags").classList.remove("list-project-tags");
+                    let gText = elem.querySelector(".grid-project-text");
+                    elem.querySelector(".grid-project-img").appendChild(gText);
+                  });
+                }, 100);
+                viewAnimationVariables.current.progressFull = true;
+              }
+            },
+            complete: (anim) => {
+              document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+                elem.style.setProperty("fill", "inherit");
+                elem.style.setProperty("stroke", "none");
+              });
+              document.querySelectorAll(".list-project-m .list-project-text").forEach((elem) => {
+                elem.style.marginTop = "-15rem";
+                // elem.style.overflow = "hidden";
+                // elem.style.whiteSpace = "nowrap";
+                // elem.querySelector(".list-project-tags").style.flexWrap = "nowrap";
+                // elem.style.maxHeight = "0";
+              });
+            },
+          })
+          .add(
+            {
+              targets: "#projects-body-bar-view-icon #top-1, #projects-body-bar-view-icon #top-2, #projects-body-bar-view-icon #middle-1, #projects-body-bar-view-icon #middle-2",
+              translateY: ["-20px", 0],
+              opacity: [0, 1],
+            },
+            0
+          )
+          .add(
+            {
+              targets: "#projects-body-bar-view-icon #bottom-1",
+              d: [`M25 12C25 9 27 7 30 7H34C37 7 39 9 39 12 39 12 39 16 39 16 39 19 37 21 34 21H30C27 21 25 19 25 16Z`, `M25 19C25 18.448 25.448 18 26 18H40.998C41.552 18 42 18.448 42 19 42 19 42 19 42 19 42 19.552 41.552 20 41 20H26C25.448 20.001 25.001 19.554 25 19Z`],
+              fill: ["rgba(0,0,0,0)", textColor],
+              stroke: [textColor, "rgba(0,0,0,0)"],
+              strokeWidth: [2, 0.5],
+            },
+            0
+          )
+          .add(
+            {
+              targets: "#projects-body-bar-view-icon #bottom-2",
+              d: [`M39 32C39 29 37 27 34 27H30C27 27 25 29 25 32V36C25 39 27 41 30 41H34c3 0 5-2 5-5Z`, `M42 39C42 38.448 41.552 38 41 38H26C25.448 38 25 38.448 25 39V39C25 39.552 25.448 40 26 40H41c.552 0 1-.448 1-1Z`],
+              fill: ["rgba(0,0,0,0)", textColor],
+              stroke: [textColor, "rgba(0,0,0,0)"],
+              strokeWidth: [2, 0.5],
+            },
+            0
+          )
+          .add(
+            {
+              targets: ".list-project-m .list-project-text",
+              height: ["100%", "0%"],
+              opacity: [1, 0],
+              delay: anime.stagger(300),
+            },
+            0
+          )
+          .add(
+            {
+              targets: ".list-project-img",
+              width: ["80vw", "90vw"],
+              height: ["30vh", "35vh"],
+            },
+            0
+          );
+
+        viewAnimation.current.gridAnimation.play();
+      } else if (localStorage.getItem("viewType") === `"list"`) {
+        viewAnimation.current.listAnimation = anime
+          .timeline({
+            easing: "easeInOutQuad",
+            loop: false,
+            autoplay: false,
+            direction: "normal",
+            duration: 500,
+            begin: (anim) => {
+              document.querySelectorAll(".grid-project-m").forEach((elem) => {
+                elem.querySelector(".grid-project-img").classList.add("list-project-img");
+                elem.querySelector(".grid-project-text").classList.add("list-project-text");
+                elem.querySelector(".grid-project-tags").classList.add("list-project-tags");
+                elem.querySelector(".grid-project-img").classList.remove("grid-project-img");
+                elem.querySelector(".grid-project-text").classList.remove("grid-project-text");
+                elem.querySelector(".grid-project-tags").classList.remove("grid-project-tags");
+                let lText = elem.querySelector(".list-project-text");
+                elem.appendChild(lText);
+              });
+              document.querySelectorAll(".grid-project-m .list-project-text").forEach((elem) => {
+                elem.style.marginTop = "0";
+                // elem.style.maxHeight = "50vh";
+                // elem.style.flexShrink = "0";
+                // setTimeout(() => {
+                //   elem.style.whiteSpace = "normal";
+                // }, 300);
+              });
+              viewAnimationVariables.current.progressFull = false;
+            },
+            update: (anim) => {
+              viewAnimProgress = Math.round(anim.progress);
+              if (viewAnimProgress > 0 && viewAnimProgress < 100) {
+                document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+                  elem.style.fill = null;
+                  elem.style.stroke = null;
+                });
+              }
+              if (viewAnimProgress === 100 && !viewAnimationVariables.current.progressFull) {
+                setTimeout(() => {
+                  document.querySelectorAll(".grid-project-m").forEach((elem) => {
+                    elem.removeAttribute("style");
+                    elem.querySelectorAll(".list-project-img,.list-project-text,.list-project-tags").forEach((child) => {
+                      child.removeAttribute("style");
+                    });
+                    elem.classList.add("list-project-m");
+                    elem.classList.remove("grid-project-m");
+                  });
+                }, 100);
+                viewAnimationVariables.current.progressFull = true;
+              }
+            },
+            complete: (anim) => {
+              document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+                elem.style.setProperty("fill", "none");
+                elem.style.setProperty("stroke", "inherit");
+              });
+              document.querySelectorAll(".list-project-m .list-project-text").forEach((elem) => {
+                elem.style.marginTop = "0";
+                // elem.style.maxHeight = "50vh";
+                // elem.style.overflow = "visible";
+                // elem.style.whiteSpace = "normal";
+                // elem.querySelector(".list-project-tags").style.flexWrap = "wrap";
+              });
+              //ADD NEW CLASSES TO THE THING HERE AND SEE IF U HAVE TO REMOVE OLD ONES OR NOT. IF U HAVE TO REMOVE OLD ONES THEN IDK MAKE IT WORK 25/06/2022
+            },
+          })
+          .add(
+            {
+              targets: "#projects-body-bar-view-icon #top-1, #projects-body-bar-view-icon #top-2, #projects-body-bar-view-icon #middle-1, #projects-body-bar-view-icon #middle-2",
+              translateY: [0, "-20px"],
+              opacity: [1, 0],
+            },
+            0
+          )
+          .add(
+            {
+              targets: "#projects-body-bar-view-icon #bottom-1",
+              d: [`M25 19C25 18.448 25.448 18 26 18H40.998C41.552 18 42 18.448 42 19 42 19 42 19 42 19 42 19.552 41.552 20 41 20H26C25.448 20.001 25.001 19.554 25 19Z`, `M25 12C25 9 27 7 30 7H34C37 7 39 9 39 12 39 12 39 16 39 16 39 19 37 21 34 21H30C27 21 25 19 25 16Z`],
+              fill: [textColor, "rgba(0,0,0,0)"],
+              stroke: ["rgba(0,0,0,0)", textColor],
+              strokeWidth: [0.5, 2],
+            },
+            0
+          )
+          .add(
+            {
+              targets: "#projects-body-bar-view-icon #bottom-2",
+              d: [`M42 39C42 38.448 41.552 38 41 38H26C25.448 38 25 38.448 25 39V39C25 39.552 25.448 40 26 40H41c.552 0 1-.448 1-1Z`, `M39 32C39 29 37 27 34 27H30C27 27 25 29 25 32V36C25 39 27 41 30 41H34c3 0 5-2 5-5Z`],
+              fill: [textColor, "rgba(0,0,0,0)"],
+              stroke: ["rgba(0,0,0,0)", textColor],
+              strokeWidth: [0.5, 2],
+            },
+            0
+          )
+
+          .add(
+            {
+              targets: ".grid-project-m .grid-project-text",
+              height: ["0%", "100%"],
+              opacity: [0, 1],
+              delay: anime.stagger(300),
+            },
+            0
+          )
+          .add(
+            {
+              targets: ".grid-project-img",
+              width: ["90vw", "80vw"],
+              height: ["35vh", "30vh"],
+            },
+            0
+          );
+        viewAnimation.current.listAnimation.play();
+      }
+    } else {
+      viewAnimationVariables.current.mounted = true;
+      setTimeout(() => {
+        if (localStorage.getItem("viewType") === `"grid"`) {
+          viewAnimation.current.gridAnimation = anime
+            .timeline({
+              easing: "easeInOutQuad",
+              loop: false,
+              autoplay: false,
+              direction: "normal",
+              duration: 500,
+              begin: (anim) => {
+                document.querySelectorAll(".list-project-m .list-project-text").forEach((elem) => {
+                  elem.style.marginTop = "-15rem";
+                  // elem.style.maxHeight = "0";
+                  // elem.style.flexShrink = "1000";
+                  // if (localStorage.getItem("viewType") === '"grid"') {
+                  //   elem.style.overflow = "hidden";
+                  //   elem.style.whiteSpace = "nowrap";
+                  //   elem.querySelector(".list-project-tags").style.flexWrap = "nowrap";
+                  // } else {
+                  //   elem.style.overflow = "visible";
+                  //   elem.style.whiteSpace = "normal";
+                  //   elem.querySelector(".list-project-tags").style.flexWrap = "wrap";
+                  // }
+                });
+                viewAnimationVariables.current.progressFull = false;
+              },
+              update: (anim) => {
+                viewAnimProgress = Math.round(anim.progress);
+                if (viewAnimProgress > 0 && viewAnimProgress < 100) {
+                  document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+                    elem.style.fill = null;
+                    elem.style.stroke = null;
+                  });
+                }
+                if (viewAnimProgress === 100 && !viewAnimationVariables.current.progressFull) {
+                  setTimeout(() => {
+                    document.querySelectorAll(".list-project-m").forEach((elem) => {
+                      elem.removeAttribute("style");
+                      elem.querySelectorAll(".list-project-img,.list-project-text,.list-project-tags").forEach((child) => {
+                        child.removeAttribute("style");
+                      });
+                      elem.classList.add("grid-project-m");
+                      elem.querySelector(".list-project-img").classList.add("grid-project-img");
+                      elem.querySelector(".list-project-text").classList.add("grid-project-text");
+                      elem.querySelector(".list-project-tags").classList.add("grid-project-tags");
+                      elem.classList.remove("list-project-m");
+                      elem.querySelector(".list-project-img").classList.remove("list-project-img");
+                      elem.querySelector(".list-project-text").classList.remove("list-project-text");
+                      elem.querySelector(".list-project-tags").classList.remove("list-project-tags");
+                      let gText = elem.querySelector(".grid-project-text");
+                      elem.querySelector(".grid-project-img").appendChild(gText);
+                    });
+                  }, 100);
+                  viewAnimationVariables.current.progressFull = true;
+                }
+              },
+              complete: (anim) => {
+                document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+                  elem.style.setProperty("fill", "inherit");
+                  elem.style.setProperty("stroke", "none");
+                });
+                document.querySelectorAll(".list-project-m .list-project-text").forEach((elem) => {
+                  elem.style.marginTop = "-15rem";
+                  // elem.style.maxHeight = "0";
+                  // elem.style.overflow = "hidden";
+                  // elem.style.whiteSpace = "nowrap";
+                  // elem.querySelector(".list-project-tags").style.flexWrap = "nowrap";
+                });
+              },
+            })
+            .add(
+              {
+                targets: "#projects-body-bar-view-icon #top-1, #projects-body-bar-view-icon #top-2, #projects-body-bar-view-icon #middle-1, #projects-body-bar-view-icon #middle-2",
+                translateY: [0, "-20px"],
+                opacity: [1, 0],
+              },
+              0
+            )
+            .add(
+              {
+                targets: "#projects-body-bar-view-icon #bottom-1",
+                d: [`M25 19C25 18.448 25.448 18 26 18H40.998C41.552 18 42 18.448 42 19 42 19 42 19 42 19 42 19.552 41.552 20 41 20H26C25.448 20.001 25.001 19.554 25 19Z`, `M25 12C25 9 27 7 30 7H34C37 7 39 9 39 12 39 12 39 16 39 16 39 19 37 21 34 21H30C27 21 25 19 25 16Z`],
+                fill: [textColor, "rgba(0,0,0,0)"],
+                stroke: ["rgba(0,0,0,0)", textColor],
+                strokeWidth: [0.5, 2],
+              },
+              0
+            )
+            .add(
+              {
+                targets: "#projects-body-bar-view-icon #bottom-2",
+                d: [`M42 39C42 38.448 41.552 38 41 38H26C25.448 38 25 38.448 25 39V39C25 39.552 25.448 40 26 40H41c.552 0 1-.448 1-1Z`, `M39 32C39 29 37 27 34 27H30C27 27 25 29 25 32V36C25 39 27 41 30 41H34c3 0 5-2 5-5Z`],
+                fill: [textColor, "rgba(0,0,0,0)"],
+                stroke: ["rgba(0,0,0,0)", textColor],
+                strokeWidth: [0.5, 2],
+              },
+              0
+            )
+
+            .add(
+              {
+                targets: ".list-project-, .list-project-text",
+                height: ["100%", "0%"],
+                opacity: [1, 0],
+                delay: anime.stagger(300),
+              },
+              0
+            )
+            .add(
+              {
+                targets: ".list-project-img",
+                width: ["80vw", "90vw"],
+                height: ["30vh", "35vh"],
+              },
+              0
+            );
+        } else if (localStorage.getItem("viewType") === `"list"`) {
+          viewAnimation.current.listAnimation = anime
+            .timeline({
+              easing: "easeInOutQuad",
+              loop: false,
+              autoplay: false,
+              direction: "normal",
+              duration: 500,
+              begin: (anim) => {
+                document.querySelectorAll(".grid-project-m").forEach((elem) => {
+                  elem.querySelector(".grid-project-img").classList.add("list-project-img");
+                  elem.querySelector(".grid-project-text").classList.add("list-project-text");
+                  elem.querySelector(".grid-project-tags").classList.add("list-project-tags");
+                  elem.querySelector(".grid-project-img").classList.remove("grid-project-img");
+                  elem.querySelector(".grid-project-text").classList.remove("grid-project-text");
+                  elem.querySelector(".grid-project-tags").classList.remove("grid-project-tags");
+                  let lText = elem.querySelector(".list-project-text");
+                  elem.appendChild(lText);
+                });
+                document.querySelectorAll(".grid-project-m .list-project-text").forEach((elem) => {
+                  elem.style.marginTop = "0";
+                  // elem.style.maxHeight = "50vh";
+                  // elem.style.flexShrink = "0";
+                  // setTimeout(() => {
+                  //   elem.style.whiteSpace = "normal";
+                  // }, 300);
+                });
+                viewAnimationVariables.current.progressFull = false;
+              },
+              update: (anim) => {
+                viewAnimProgress = Math.round(anim.progress);
+                if (viewAnimProgress > 0 && viewAnimProgress < 100) {
+                  document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+                    elem.style.fill = null;
+                    elem.style.stroke = null;
+                  });
+                }
+                if (viewAnimProgress === 100 && !viewAnimationVariables.current.progressFull) {
+                  setTimeout(() => {
+                    document.querySelectorAll(".grid-project-m").forEach((elem) => {
+                      elem.removeAttribute("style");
+                      elem.querySelectorAll(".list-project-img,.list-project-text,.list-project-tags").forEach((child) => {
+                        child.removeAttribute("style");
+                      });
+                      elem.classList.add("list-project-m");
+                      elem.classList.remove("grid-project-m");
+                    });
+                  }, 100);
+                  viewAnimationVariables.current.progressFull = true;
+                }
+              },
+              complete: (anim) => {
+                document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+                  elem.style.setProperty("fill", "none");
+                  elem.style.setProperty("stroke", "inherit");
+                });
+                document.querySelectorAll(".list-project-m .list-project-text").forEach((elem) => {
+                  elem.style.marginTop = "0";
+                  // elem.style.maxHeight = "50vh";
+                  // elem.style.overflow = "visible";
+                  // elem.style.whiteSpace = "normal";
+                  // elem.querySelector(".list-project-tags").style.flexWrap = "wrap";
+                });
+              },
+            })
+            .add(
+              {
+                targets: "#projects-body-bar-view-icon #top-1, #projects-body-bar-view-icon #top-2, #projects-body-bar-view-icon #middle-1, #projects-body-bar-view-icon #middle-2",
+                translateY: ["-20px", 0],
+                opacity: [0, 1],
+              },
+              0
+            )
+            .add(
+              {
+                targets: "#projects-body-bar-view-icon #bottom-1",
+                d: [`M25 12C25 9 27 7 30 7H34C37 7 39 9 39 12 39 12 39 16 39 16 39 19 37 21 34 21H30C27 21 25 19 25 16Z`, `M25 19C25 18.448 25.448 18 26 18H40.998C41.552 18 42 18.448 42 19 42 19 42 19 42 19 42 19.552 41.552 20 41 20H26C25.448 20.001 25.001 19.554 25 19Z`],
+                fill: ["rgba(0,0,0,0)", textColor],
+                stroke: [textColor, "rgba(0,0,0,0)"],
+                strokeWidth: [2, 0.5],
+              },
+              0
+            )
+            .add(
+              {
+                targets: "#projects-body-bar-view-icon #bottom-2",
+                d: [`M39 32C39 29 37 27 34 27H30C27 27 25 29 25 32V36C25 39 27 41 30 41H34c3 0 5-2 5-5Z`, `M42 39C42 38.448 41.552 38 41 38H26C25.448 38 25 38.448 25 39V39C25 39.552 25.448 40 26 40H41c.552 0 1-.448 1-1Z`],
+                fill: ["rgba(0,0,0,0)", textColor],
+                stroke: [textColor, "rgba(0,0,0,0)"],
+                strokeWidth: [2, 0.5],
+              },
+              0
+            )
+
+            .add(
+              {
+                targets: ".grid-project-m .grid-project-text",
+                height: ["0%", "100%"],
+                opacity: [0, 1],
+                delay: anime.stagger(300),
+              },
+              0
+            )
+            .add(
+              {
+                targets: ".grid-project-img",
+                width: ["90vw", "80vw"],
+                height: ["35vh", "30vh"],
+              },
+              0
+            );
+        }
+      }, 200);
+    }
+  }, [viewButton]);
+
+  useEffect(() => {
+    if (filterButton && filterAnimationVariables.current.filterPlayedOnce) {
+      filterAnimation.current.reverse();
+      filterAnimation.current.play();
+      document.querySelector("#projects-body-filter-search-bar").style.display = "block";
+    } else if (!filterButton && filterAnimationVariables.current.filterPlayedOnce) {
+      filterAnimation.current.reverse();
+      filterAnimation.current.play();
+    } else if (filterButton && !filterAnimationVariables.current.filterPlayedOnce && filterAnimationVariables.current.mounted) {
+      // filterAnimation.current.play();
+      filterAnimationVariables.current.filterPlayedOnce = true;
+      filterAnimation.current = anime
+        .timeline({
+          easing: "easeInOutQuad",
+          autoplay: true,
+          direction: "reverse",
+          complete: (anim) => {
+            if (document.querySelector("#projects-body-filter-search-bar").style.clipPath === "inset(0px)") {
+              document.querySelector("#projects-body-filter-search-bar").style.clipPath = null;
+            }
+          },
+        })
+        .add(
+          {
+            targets: "#projects-body-bar-filter-icon path",
+            duration: 1500,
+            rotate: [0, -36, 0],
+            autoplay: true,
+          },
+          0
+        )
+        .add(
+          {
+            targets: "#projects-body-filter-search-bar",
+            keyframes: [
+              { clipPath: "inset(0)" }, // start frame
+              { clipPath: "inset(0 0 0 100%)" }, // end frame
+            ],
+            opacity: [1, 0],
+            duration: 1500,
+            autoplay: true,
+          },
+          0
+        );
+      // setTimeout(() => {
+      //   document.querySelector("#projects-body-filter-search-bar").style.display = "none";
+      // }, 2000);
+    } else {
+      filterAnimationVariables.current.mounted = true;
+      filterAnimationVariables.current.filterPlayedOnce = false;
+    }
+  }, [filterButton]);
+
+  useEffect(() => {
+    setFilterSelectedTags(selectedTags);
+    if (selectedTags.length > 0) {
+      setFilterButton(!filterButton);
+      tagButtonVariables.current.PreExistSelectedTags = true;
+    } else {
+      tagButtonVariables.current.PreExistSelectedTags = false;
+    }
+    let existProject = false;
+    let allTags = {};
+
+    for (let i = 1; existProject === false; i++) {
+      let tempTag = "p".concat(i, "Tags");
+      if (typeof Content[tempTag] === "undefined" || Content[tempTag] === null) {
+        for (const [key, value] of Object.entries(allTags)) {
+          if (!Object.keys(fullTagsList).find((key) => fullTagsList[key] === value)) {
+            fullTagsList[key] = value;
+          }
+        }
+        existProject = true;
+      } else {
+        Content[tempTag].forEach((elem, ind) => {
+          allTags[elem.name] = elem.name.toLowerCase().replace(/\s|\W/g, "");
+        });
+      }
+    }
+
+    if (localStorage.getItem("viewType") === '"list"') {
+      document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+        elem.style.setProperty("fill", "none");
+        elem.style.setProperty("stroke", "inherit");
+      });
+    } else if (localStorage.getItem("viewType") === '"grid"') {
+      document.querySelectorAll("#projects-body-bar-view-icon #bottom-1,#projects-body-bar-view-icon #bottom-2").forEach((elem) => {
+        elem.style.setProperty("fill", "inherit");
+        elem.style.setProperty("stroke", "none");
+      });
+    }
+    // window.addEventListener(
+    //   "storageupdated",
+    //   (e) => {
+    //     if (e.detail[0] === "dark") {
+    //       // viewAnimation.current.listAnimation = ChangeViewAnimation(e.detail, "list");
+    //       // viewAnimation.current.gridAnimation = ChangeViewAnimation(e.detial, "grid");
+    //     }
+    //   },
+    //   false
+    // );
+
+    document.querySelector("#projects-body-filter-search-bar").style.clipPath = "inset(0 0 0 100%)";
+
+    document.body.querySelector(".search-wrapper").addEventListener("click", updateMultiselectUI);
+    document.body.querySelector(".search-wrapper").addEventListener("keydown", updateMultiselectUI);
+
+    // return()=>{
+    //   setFilterButton(false);
+    // }
+    return () => {
+      selectedTags = [];
+    };
+  }, []);
+
+  useEffect(() => {}, [filterSelectedTags]);
+
+  return (
+    // more or less done, just add the animations and view changing shit PLEASE
+    // ADD PROJECTS AND FINISH VIEW CHANGING
+    <React.Fragment>
+      <div id="projects-body-bar">
+        <div id="projects-body-bar-options">
+          <Multiselect avoidHighlightFirstOption id="projects-body-filter-search-bar" ref={filterSelectRef} isObject={false} options={Object.keys(fullTagsList)} customCloseIcon={<VectorGraphics.ChipClose id="chip-close-icon" />} placeholder="Search" hidePlaceholder={true} selectedValues={filterSelectedTags} onSelect={filterSelect} onRemove={filterRemove} />
+          <button
+            id="projects-body-bar-filter-button"
+            onClick={() => {
+              setFilterButton(!filterButton);
+            }}
+          >
+            <VectorGraphics.Filter id="projects-body-bar-filter-icon" />
+          </button>
+          <button
+            id="projects-body-bar-view-button"
+            disabled={viewButtonDisabled}
+            onClick={() => {
+              setViewButtonDisabled(true);
+              setTimeout(() => {
+                setViewButtonDisabled(false);
+              }, 1000);
+              viewButton === "list" ? setViewButton("grid") : setViewButton("list");
+            }}
+          >
+            <VectorGraphics.ViewIcon id="projects-body-bar-view-icon" />
+          </button>
+        </div>
+      </div>
+      <div id="projects-body-projects">
+        <h1 id="projects-body-projects-title">Projects</h1>
+        <MobileProjects filterProjects={filterList} headingPresent={false} divId="projects-body-projects-list" projectCount={projectListCount} />
+      </div>
+    </React.Fragment>
   );
 }
 export function MobileProjectsBody() {
@@ -1561,9 +2862,7 @@ export function MobileProjectsBody() {
 
   return (
     <div id="projects-body">
-      <ProjectsOptions />
-      <h1>Projects here</h1>
-      <ProjectsList />
+      <MobileProjectsList />
     </div>
   );
 }
