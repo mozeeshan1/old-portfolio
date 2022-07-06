@@ -352,6 +352,7 @@ div.ripple {
   margin: 2em 0 2.6em 0;
   font-weight: 450;
 }
+
 .list-project-l {
   width: 100%;
   display: flex;
@@ -403,14 +404,16 @@ div.ripple {
   height: 100%;
   transition: flex-shrink 1000ms, max-height 1000ms;
 }
-.list-project-text h2,.grid-project-text h2 {
+.list-project-text h2,
+.grid-project-text h2 {
   text-align: center;
   margin-top: 0;
   margin-bottom: 0;
   font-size: 2.4rem;
   font-weight: 350;
 }
-.list-project-text p,.grid-project-text p {
+.list-project-text p,
+.grid-project-text p {
   text-align: center;
   width: 75%;
   margin: auto;
@@ -419,7 +422,8 @@ div.ripple {
   margin-top: 1em;
   margin-bottom: 1.4em;
 }
-.list-project-tags,.grid-project-tags {
+.list-project-tags,
+.grid-project-tags {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -502,14 +506,13 @@ div.ripple {
   opacity: 0;
   width: 90%;
   height: 100%;
-  display:flex;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   color: white !important;
   transition: flex-shrink 1000ms, opacity 1000ms, max-height 1000ms;
 }
-
 
 .grid-project-l .list-project-text,
 .grid-project-r .list-project-text {
@@ -541,16 +544,28 @@ button.tag {
   color: var(--tag-color);
 }
 
-.grid-project-tags .tag{
-  border-color: #CAC6FF !important;
-  color: #CAC6FF  !important;
+.grid-project-tags .tag {
+  border-color: #cac6ff !important;
+  color: #cac6ff !important;
 }
-.grid-project-tags .tag:hover{
-  background-color: #CAC6FF !important;
-  border-color: #CAC6FF !important;
+.grid-project-tags .tag:hover {
+  background-color: #cac6ff !important;
+  border-color: #cac6ff !important;
   color: #121212 !important;
 }
 
+.project-link {
+  width: 100%;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+  display: inherit;
+  justify-content: inherit;
+  align-items: inherit;
+  flex-direction: inherit;
+  gap: inherit;
+  margin-bottom: inherit;
+}
 #about-body {
   height: 500vh;
   width: 100%;
@@ -708,6 +723,75 @@ button.tag {
   /* transition: transform 1000ms; */
 }
 
+#project-body {
+  width: 100%;
+  position: relative;
+}
+
+#project-body{
+  margin-top: 8vh;
+}
+#project-body-intro #project-title{
+  margin-top:1rem;
+font-weight: 600;
+text-align: center;
+}
+#project-body-intro #project-main-img{
+  width:100%;
+  height:50vh;
+  opacity: 1;
+  object-fit: cover;
+}
+#project-body-intro #project-summary{
+  margin-top: 4rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  font-weight: 450;
+  text-align: center;
+}
+#project-summary p{
+  margin-top: 0;
+  max-width: 35vw;
+}
+#project-body-intro #project-tags{
+  max-width: 35vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap:0.4rem;
+  flex-wrap: wrap;
+}
+
+#project-body-content p{
+  max-width:70%;
+  text-align: center;
+  margin: auto;
+  margin-top: 4em;
+}
+.project-content-images,.project-content-videos{
+  width:70%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap:4rem;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+margin-top: 4rem;
+margin-bottom: 4rem;
+}
+.project-content-images img{
+  max-width: 60vw;
+  object-fit: cover;
+}
+.project-content-videos video{
+  max-width: 60vw;
+
+}
+
 #footer {
   width: 100%;
   height: 10vh;
@@ -778,7 +862,7 @@ button.tag {
     margin: 0.6em 0 2em 0;
     font-weight: 450;
   }
-  #projects-body-projects-list{
+  #projects-body-projects-list {
     transition: flex 1000ms;
   }
   .list-project-m {
@@ -788,76 +872,90 @@ button.tag {
     flex-direction: column;
     gap: 5%;
     margin-bottom: 5rem;
-  transition: margin 1000ms;
+    transition: margin 1000ms;
   }
   .list-project-img {
     width: 80vw;
     height: 30vh;
     margin: 0;
     margin-bottom: 2rem;
-  transition: margin 1000ms;
-
+    transition: margin 1000ms;
   }
   .list-project-text {
     width: 100%;
     margin: 0;
-  transition: margin 1000ms;
+    transition: margin 1000ms;
   }
-  .list-project-text h2,  .grid-project-text h2{
+  .list-project-text h2,
+  .grid-project-text h2 {
     font-size: 2rem;
   }
-  .list-project-text p,  .grid-project-text p{
-    font-size:1.2rem;
+  .list-project-text p,
+  .grid-project-text p {
+    font-size: 1.2rem;
     width: 90%;
   }
   .list-project-tags {
     width: 95%;
   }
   .grid-project-m {
-  width: 100%;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 5%;
-  margin-bottom: 3rem;
-  transition: margin 1000ms;
-}
-.grid-project-m .grid-project-img,.grid-project-m .list-project-img{
-  width:90vw;
-  height: 35vh;
-  transition: margin 1000ms;
-}
-.grid-project-text {
-  position: absolute;
-  flex-shrink: 1000000;
-  opacity: 0;
-  width: 90%;
-  height: 90%;
-  display:flex;
-  flex-direction: column;
-  justify-content:flex-start;
-  align-items: center;
-  overflow: scroll;
-  transition: margin 1000ms;
-  color: white !important;
-}
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 5%;
+    margin-bottom: 3rem;
+    transition: margin 1000ms;
+  }
+  .grid-project-m .grid-project-img,
+  .grid-project-m .list-project-img {
+    width: 90vw;
+    height: 35vh;
+    transition: margin 1000ms;
+  }
+  .grid-project-text {
+    position: absolute;
+    flex-shrink: 1000000;
+    opacity: 0;
+    width: 90%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: scroll;
+    transition: margin 1000ms;
+    color: white !important;
+  }
 
-.grid-project-tags{
-  width:95%;
-}
+  .grid-project-tags {
+    width: 95%;
+  }
 
-.grid-project-tags .tag{
-  border-color: #CAC6FF !important;
-  color: #CAC6FF !important;
-}
-.grid-project-tags .tag:hover{
-  background-color: #CAC6FF !important;
-  border-color: #CAC6FF !important;
-  color: #121212 !important;
-}
+  .grid-project-tags .tag {
+    border-color: #cac6ff !important;
+    color: #cac6ff !important;
+  }
+  .grid-project-tags .tag:hover {
+    background-color: #cac6ff !important;
+    border-color: #cac6ff !important;
+    color: #121212 !important;
+  }
 
+  .project-link {
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+    display: inherit;
+    justify-content: inherit;
+    align-items: inherit;
+    flex-direction: inherit;
+    gap: inherit;
+    margin-bottom: inherit;
+  }
 
   #about-body {
     height: 500vh;

@@ -7,7 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 export class DesktopApp extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { preloader: false};
+    this.state = { preloader: false };
   }
 
   componentDidMount() {
@@ -22,20 +22,22 @@ export class DesktopApp extends React.Component {
       window.onbeforeunload = function () {
         window.scrollTo(0, 0);
       };
-    }
+    }  
   }
 
   render() {
     return (
       <BrowserRouter>
-        {!this.state.preloader && <Segments.Preloader id="preloader"/>}
+        {!this.state.preloader && <Segments.Preloader id="preloader" />}
         <Segments.DesktopNavBar />
         <Routes>
           <Route path="/" element={<Segments.DesktopHomeBody />} />
           <Route path="/about" element={<Segments.DesktopAboutBody />} />
-          <Route path="/projects" element={<Segments.DesktopProjectsBody/>}/>
+          <Route path="/projects" element={<Segments.DesktopProjectsBody />} />
+          <Route path="/projects/:projectURLName" element={<Segments.DesktopDynamicProject />} />
+          <Route path="/error" element={<Segments.ErrorPage/>}/>
         </Routes>
-        <Segments.Footer/>
+        <Segments.Footer />
       </BrowserRouter>
     );
   }
@@ -77,7 +79,7 @@ export class MobileApp extends React.Component {
           <Route path="/about" element={<Segments.MobileAboutBody />} />
           <Route path="/projects" element={<Segments.MobileProjectsBody />} />
         </Routes>
-        <Segments.Footer/>
+        <Segments.Footer />
       </BrowserRouter>
     );
   }

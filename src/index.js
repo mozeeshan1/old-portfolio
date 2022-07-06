@@ -5,6 +5,8 @@ import { DesktopApp, MobileApp } from "./App";
 import * as Segments from "./segments";
 import * as Content from "./content";
 
+export let fullProjectList = {};
+
 class Index extends React.Component {
   constructor(props) {
     super(props);
@@ -53,7 +55,32 @@ class Index extends React.Component {
             blackholesBGW[i].style.setProperty("display", "block");
           }
         }
-      }, 100);
+        
+      }, 100);      
+    }
+
+
+    let existProject = true;
+    for (let i = 1; existProject === true && i <= 1000; i++) {
+      let tempTitle = "p".concat(i, "Title");
+      let tempSummary = "p".concat(i, "Summary");
+      let tempImg = "p".concat(i, "ImgLoc");
+      let tempImgAlt = "p".concat(i, "ImgAlt");
+      let tempTags = "p".concat(i, "Tags");
+      if (typeof Content[tempTitle] !== "undefined" && Content[tempTitle] !== null && typeof Content[tempSummary] !== "undefined" && Content[tempSummary] !== null && typeof Content[tempImg] !== "undefined" && Content[tempImg] !== null && typeof Content[tempImgAlt] !== "undefined" && Content[tempImgAlt] !== null && typeof Content[tempTags] !== "undefined" && Content[tempTags] !== null) {
+        console.log(i, "completely exists");
+
+        let projectURLName = Content[tempTitle]
+          .toLowerCase()
+          .replace(/[^A-Za-z 0-9]/g, "")
+          .replace(/\s/g, "-")
+          .replace(/--/g, "-")
+          .replace(/--+/g, "");
+        fullProjectList[i] = projectURLName;
+      } else if ((typeof Content[tempTitle] !== "undefined" && Content[tempTitle] !== null) || (typeof Content[tempSummary] !== "undefined" && Content[tempSummary] !== null) || (typeof Content[tempImg] !== "undefined" && Content[tempImg] !== null) || (typeof Content[tempImgAlt] !== "undefined" && Content[tempImgAlt] !== null) || (typeof Content[tempTags] !== "undefined" && Content[tempTags] !== null)) {
+      } else {
+        existProject = false;
+      }
     }
   }
   render() {

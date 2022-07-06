@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import * as VectorGraphics from "./svgs";
 import "./segments.css";
 import anime from "animejs/lib/anime.es.js";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams, Navigate, useNavigate } from "react-router-dom";
 import * as Content from "./content";
 import Multiselect from "multiselect-react-dropdown";
+import * as Index from "./index.js";
 
 export let darkMode = false;
 export let routeLocation = {};
@@ -35,6 +36,7 @@ export let bgColor = "";
 export let viewAnimProgress = 0;
 export let homeProjectCount = 3;
 export let projectListCount = 10;
+export let singlePTH = 0;
 
 export function UpdateRoute(dark) {
   let location = useLocation();
@@ -503,6 +505,11 @@ function DesktopHomeBodyIntro() {
 }
 
 export function GridProject(props) {
+  const handelBtn = (e) => {
+    e.stopPropagation();
+    // OR
+    e.preventDefault();
+  };
   const pTags = props.tags.map((elem, ind) => {
     if (props.tagToProject === true) {
       return (
@@ -520,21 +527,34 @@ export function GridProject(props) {
       );
     } else {
       return (
-        <button className={"tag ".concat(elem.name.toLowerCase().replace(/\s|\W/g, ""))} key={ind}>
+        <button onClick={handelBtn} className={"tag ".concat(elem.name.toLowerCase().replace(/\s|\W/g, ""))} key={ind}>
           {elem.name}
         </button>
       );
     }
   });
 
+  let projectURLName = props.title
+    .toLowerCase()
+    .replace(/[^A-Za-z 0-9]/g, "")
+    .replace(/\s/g, "-")
+    .replace(/--/g, "-")
+    .replace(/--+/g, "");
+    projectURLName = "/projects/".concat(projectURLName);
+
+
   return (
     <div className={"grid-project-".concat(props.pClass)} data-key={props.pNumber}>
       <div className="grid-project-img">
-        <img src={props.imageLocation} alt={props.imageAlt} />
+        <Link className="project-link" to={projectURLName}>
+          <img src={props.imageLocation} alt={props.imageAlt} />
+        </Link>
         <div className="grid-project-text">
-          <h2>{props.title}</h2>
-          <p>{props.summary}</p>
-          <div className="grid-project-tags">{pTags}</div>
+          <Link className="project-link" to={projectURLName}>
+            <h2>{props.title}</h2>
+            <p>{props.summary}</p>
+            <div className="grid-project-tags">{pTags}</div>
+          </Link>
         </div>
       </div>
     </div>
@@ -542,6 +562,11 @@ export function GridProject(props) {
 }
 
 export function ListProject(props) {
+  const handelBtn = (e) => {
+    e.stopPropagation();
+    // OR
+    e.preventDefault();
+  };
   const pTags = props.tags.map((elem, ind) => {
     if (props.tagToProject === true) {
       return (
@@ -559,22 +584,34 @@ export function ListProject(props) {
       );
     } else {
       return (
-        <button className={"tag ".concat(elem.name.toLowerCase().replace(/\s|\W/g, ""))} key={ind}>
+        <button onClick={handelBtn} className={"tag ".concat(elem.name.toLowerCase().replace(/\s|\W/g, ""))} key={ind}>
           {elem.name}
         </button>
       );
     }
   });
 
+  let projectURLName = props.title
+    .toLowerCase()
+    .replace(/[^A-Za-z 0-9]/g, "")
+    .replace(/\s/g, "-")
+    .replace(/--/g, "-")
+    .replace(/--+/g, "");
+    projectURLName="/projects/".concat(projectURLName)
+
   return (
     <div className={"list-project-".concat(props.pClass)} data-key={props.pNumber}>
       <div className="list-project-img">
-        <img src={props.imageLocation} alt={props.imageAlt} />
+        <Link className="project-link" to={projectURLName}>
+          <img src={props.imageLocation} alt={props.imageAlt} />
+        </Link>
       </div>
       <div className="list-project-text">
-        <h2>{props.title}</h2>
-        <p>{props.summary}</p>
-        <div className="list-project-tags">{pTags}</div>
+        <Link className="project-link" to={projectURLName}>
+          <h2>{props.title}</h2>
+          <p>{props.summary}</p>
+          <div className="list-project-tags">{pTags}</div>
+        </Link>
       </div>
     </div>
   );
@@ -770,6 +807,15 @@ function DesktopProjectsList() {
     setFilterSelectedTags([...selectedTags]);
   }
   useEffect(() => {
+    // setTimeout(() => {
+    //   document.querySelectorAll(".project-link").forEach((elem) => {
+    //     if (localStorage.getItem("viewType") === '"list"') {
+    //       elem.style.width = "100%";
+    //     } else if (localStorage.getItem("viewType") === '"grid"') {
+    //       elem.style.width = "50%";
+    //     }
+    //   });
+    // }, 200);
     if (selectedTags.length > 0) {
       setFilterList((numb) => numb + 1);
     } else {
@@ -914,6 +960,14 @@ function DesktopProjectsList() {
             },
             150
           )
+          // .add(
+          //   {
+          //     targets: ".project-link",
+          //     width: ["100%", "50%"],
+          //     delay: anime.stagger(300),
+          //   },
+          //   0
+          // )
           .add(
             {
               targets: ".list-project-l",
@@ -1069,6 +1123,14 @@ function DesktopProjectsList() {
             },
             150
           )
+          // .add(
+          //   {
+          //     targets: ".project-link",
+          //     width: ["50%", "100%"],
+          //     delay: anime.stagger(300),
+          //   },
+          //   0
+          // )
           .add(
             {
               targets: ".grid-project-l",
@@ -1227,6 +1289,14 @@ function DesktopProjectsList() {
               },
               150
             )
+            // .add(
+            //   {
+            //     targets: ".project-link",
+            //     width: ["100%", "50%"],
+            //     delay: anime.stagger(300),
+            //   },
+            //   0
+            // )
             .add(
               {
                 targets: ".list-project-l",
@@ -1380,6 +1450,14 @@ function DesktopProjectsList() {
               },
               150
             )
+            // .add(
+            //   {
+            //     targets: ".project-link",
+            //     width: ["50%", "100%"],
+            //     delay: anime.stagger(300),
+            //   },
+            //   0
+            // )
             .add(
               {
                 targets: ".grid-project-l",
@@ -1569,7 +1647,7 @@ export function DesktopProjectsBody() {
     lastScroll = 0;
     window.scrollTo(0, 0);
     setTimeout(() => {
-      const homeBodyResize = new ResizeObserver((entries) => {
+      const projectsBodyResize = new ResizeObserver((entries) => {
         for (let i of entries) {
           switch (i.target.id) {
             case "projects-body-bar":
@@ -1586,7 +1664,7 @@ export function DesktopProjectsBody() {
         document.querySelector("#bg-blur").style.setProperty("--body-height", (PBBarH + PBProjectsH + 100 + document.querySelector("#footer").clientHeight).toString().concat("px"));
       });
       document.querySelectorAll("#projects-body>*").forEach((elem) => {
-        homeBodyResize.observe(elem);
+        projectsBodyResize.observe(elem);
       });
       if (!darkMode) {
         let searchElements = document.body.querySelectorAll("#projects-body-bar,.search-wrapper,.option,.optionListContainer li, .highlightOption, .search-wrapper .chip");
@@ -1617,6 +1695,194 @@ export function DesktopProjectsBody() {
   );
 }
 
+export function DesktopDynamicProject({ match, location }) {
+  const { projectURLName } = useParams();
+  let navigate = useNavigate();
+  const [pNumb, setPNumb] = useState(null);
+  const [pIntro, setPIntro] = useState({});
+  const [pBody, setPBody] = useState({});
+
+  useEffect(() => {
+    lastScroll = 0;
+    window.scrollTo(0, 0);
+    setTimeout(() => {
+      const projectBodyResize = new ResizeObserver((entries) => {
+        for (let i of entries) {
+          switch (i.target.id) {
+            case "project-body":
+              singlePTH = i.target.clientHeight;
+              break;
+            // case "projects-body-projects":
+            //   PBProjectsH = i.target.clientHeight;
+            //   break;
+            default:
+              break;
+          }
+        }
+        // document.querySelector("#project-body").style.setProperty("--body-height", (singlePTH + 100).toString().concat("px"));
+        document.querySelector("#bg-blur").style.setProperty("--body-height", (singlePTH + 100 + document.querySelector("#footer").clientHeight).toString().concat("px"));
+      });
+      document.querySelectorAll("#project-body").forEach((elem) => {
+        projectBodyResize.observe(elem);
+      });
+    }, 200);
+
+    console.log(Index.fullProjectList);
+    let pPresent = Object.values(Index.fullProjectList).includes(projectURLName);
+    console.log("project present or not", pPresent);
+    if (!pPresent) {
+      navigate("/error");
+    } else {
+      setPNumb(() => {
+        return Number(Object.keys(Index.fullProjectList).find((key) => Index.fullProjectList[key] === projectURLName));
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log(pNumb);
+    let tempTitle = "p".concat(pNumb, "Title");
+    let tempSummary = "p".concat(pNumb, "Summary");
+    let tempImg = "p".concat(pNumb, "ImgLoc");
+    let tempImgAlt = "p".concat(pNumb, "ImgAlt");
+    let tempTags = "p".concat(pNumb, "Tags");
+    let tempTagList = Content[tempTags];
+    if (tempTagList !== null && typeof tempTagList !== "undefined") {
+      let pTags = tempTagList.map((elem, ind) => {
+        return (
+          <Link
+            to="/projects"
+            onClick={() => {
+              selectedTags.push(elem.name);
+              console.log("Selected tags", selectedTags);
+            }}
+            className={"tag ".concat(elem.name.toLowerCase().replace(/\s|\W/g, ""))}
+            key={ind}
+          >
+            {elem.name}
+          </Link>
+        );
+      });
+      console.log(tempTitle, Content[tempTitle]);
+      setPIntro((current) => {
+        return { ...current, title: Content[tempTitle], summary: Content[tempSummary], img: Content[tempImg], imgAlt: Content[tempImgAlt], tags: pTags };
+      });
+      let existContent = true;
+      for (let i = 1; existContent === true && i <= 1000; i++) {
+        let tempPara = "p".concat(pNumb, "Para", i);
+        let tempMedia = "p".concat(pNumb, "Media", i);
+        if (typeof Content[tempPara] !== "undefined" && Content[tempPara] !== null && typeof Content[tempMedia] !== "undefined" && Content[tempMedia] !== null) {
+          let paraName = "para".concat(i);
+          let mediaName = "media".concat(i);
+          setPBody((current) => {
+            return { ...current, [paraName]: Content[tempPara], [mediaName]: Content[tempMedia] };
+          });
+          console.log("PBODY BOTH PARA AND MEDIA");
+        } else if ((typeof Content[tempPara] !== "undefined" && Content[tempPara] !== null) || (typeof Content[tempMedia] !== "undefined" && Content[tempMedia] !== null)) {
+          if (typeof Content[tempPara] !== "undefined" && Content[tempPara] !== null) {
+            let paraName = "para".concat(i);
+            setPBody((current) => {
+              return { ...current, [paraName]: Content[tempPara] };
+            });
+            console.log("PBODY ONLY ONE PARA");
+          } else {
+            let mediaName = "media".concat(i);
+            setPBody((current) => {
+              return { ...current, [mediaName]: Content[tempMedia] };
+            });
+            console.log("PBODY ONLY ONE MEDIA");
+          }
+        } else {
+          console.log("PBODY NONE");
+          existContent = false;
+        }
+      }
+    }
+  }, [pNumb]);
+
+  useEffect(() => {
+    console.log(pIntro);
+    if (localStorage.getItem("dark") === "false") {
+      let tags = document.body.querySelectorAll(".tag");
+      for (let i = 0; i < tags.length; i++) {
+        tags[i].style.setProperty("--tag-bg", tagBgL);
+        tags[i].style.setProperty("--tag-color", tagColorL);
+      }
+    } else {
+      let tags = document.body.querySelectorAll(".tag");
+      for (let i = 0; i < tags.length; i++) {
+        tags[i].style.setProperty("--tag-bg", tagBgD);
+        tags[i].style.setProperty("--tag-color", tagColorD);
+      }
+    }
+  }, [pIntro]);
+
+  useEffect(() => {
+    console.log("PBODY", pBody);
+  }, [pBody]);
+  return (
+    <React.Fragment>
+      <div id="project-body">
+        <div id="project-body-intro">
+          <img id="project-main-img" src={pIntro.img} alt={pIntro.imgAlt} />
+          <h1 id="project-title">{pIntro.title}</h1>
+          <div id="project-summary">
+            <p>{pIntro.summary}</p>
+            <div id="project-tags">{pIntro.tags}</div>
+          </div>
+        </div>
+        <div id="project-body-content">
+        {Object.keys(pBody).map((elem,ind) => {
+          if(/^para/.test(elem)){
+            return <p key={ind}>{pBody[elem]}</p>;
+          }
+          else if(/^media/.test(elem)){
+            console.log("IN MEDIA IMAGES",pBody[elem])
+            return (<div key={ind} className="project-content-media">
+              <div className="project-content-images"> 
+            {
+              pBody[elem].map((mElem,ind)=>{
+              if (/\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(mElem.src)){
+                console.log("IN SINGLE MEDIA", mElem.src);
+                return <img key={ind} src={mElem.src.toString()} alt={mElem.alt.toString()} />
+              }
+              })
+            }
+              </div>
+              <div className="project-content-videos"> 
+            {
+              pBody[elem].map((mElem,ind)=>{
+              if (/\.mp4$/.test(mElem.src)){
+                console.log("IN SINGLE MEDIA", mElem.src);
+                return (
+                  <video key={ind} controls>
+                    <source src={mElem.src.toString()} type="video/mp4" />
+                    Sorry, your browser doesn't support embedded videos.
+                  </video>
+                );
+              }
+              })
+            }
+              </div></div>)
+        }
+          })
+        }
+        </div>
+      </div>
+    </React.Fragment>
+  );// MAKE IT SO THAT POTRAIT IMAGES SHOW UP AS 2 AND LANDSCAPE AS 1. IDK WORK ON THE VISUAL ASPECT OF IT. IT MIGHT LOOK BAD WITH MULTIPLE IMAGES TOGETHER THO
+}
+
+export function ErrorPage(props) {
+  return (
+    <React.Fragment>
+      <div>
+        <h1> this is error code page</h1>
+      </div>
+    </React.Fragment>
+  );
+}
+
 export function Footer() {
   return (
     <div id="footer">
@@ -1624,6 +1890,21 @@ export function Footer() {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export function MobileNavBar() {
   const [menu, setMenu] = useState(false);
@@ -2818,7 +3099,7 @@ export function MobileProjectsBody() {
   useEffect(() => {
     lastScroll = 0;
     window.scrollTo(0, 0);
-    const homeBodyResize = new ResizeObserver((entries) => {
+    const projectsBodyResize = new ResizeObserver((entries) => {
       for (let i of entries) {
         switch (i.target.id) {
           case "projects-body-bar":
@@ -2835,7 +3116,7 @@ export function MobileProjectsBody() {
       document.querySelector("#bg-blur").style.setProperty("--body-height", (PBBarH + PBProjectsH + 100 + document.querySelector("#footer").clientHeight).toString().concat("px"));
     });
     document.querySelectorAll("#projects-body>*").forEach((elem) => {
-      homeBodyResize.observe(elem);
+      projectsBodyResize.observe(elem);
     });
     if (!darkMode) {
       let searchElements = document.body.querySelectorAll("#projects-body-bar,.search-wrapper,.option,.optionListContainer li, .highlightOption, .search-wrapper .chip");
