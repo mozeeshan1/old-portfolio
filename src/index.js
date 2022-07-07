@@ -7,6 +7,7 @@ import * as Content from "./content";
 
 export let fullProjectList = {};
 
+
 class Index extends React.Component {
   constructor(props) {
     super(props);
@@ -82,6 +83,29 @@ class Index extends React.Component {
         existProject = false;
       }
     }
+
+
+    // const PRESHARED_AUTH_HEADER_KEY = "X-Custom-PSK";
+    // const PRESHARED_AUTH_HEADER_VALUE = "mypresharedkey";
+
+    // async function handleRequest(request) {
+    //   const psk = request.headers.get(PRESHARED_AUTH_HEADER_KEY);
+
+    //   if (psk === PRESHARED_AUTH_HEADER_VALUE) {
+    //     // Correct preshared header key supplied. Fetch request from origin.
+    //     return fetch(request);
+    //   }
+
+    //   // Incorrect key supplied. Reject the request.
+    //   return new Response("Sorry, you have supplied an invalid key.", {
+    //     status: 403,
+    //   });
+    // }
+
+    // window.addEventListener("fetch", (event) => {
+    //   event.respondWith(handleRequest(event.request));
+    // });
+    
   }
   render() {
     return <React.Fragment>{this.state.desktop ? <DesktopApp /> : <MobileApp />}</React.Fragment>;
