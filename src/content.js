@@ -14,7 +14,7 @@ export const p1Media1 = [
   { src: "https://blog.wildix.com/wp-content/uploads/2020/06/react-logo.jpg", alt: "some rando react logo-1" },
   { src: "https://i.pinimg.com/474x/8b/4a/24/8b4a245cbb299e7ee28e1717387bb5d0.jpg", alt: "some rando logo -2" },
   { src: "https://thumbs.dreamstime.com/b/bright-clouds-blue-sky-morning-vertical-wallpaper-nature-backgrounds-old-wooden-bridge-water-reflections-187962976.jpg", alt: "logo number 3" },
-  { src: "https://github.com/rikoudou/portfolio/raw/master/src/data/videos/test-vid-4k.mp4" },
+  { src: "https://eb2ce2cb4fcb87a1fd52ef20427f98cd.r2.cloudflarestorage.com/portfolio-media/test-vid-1080.mp4" },
 ];
 export const p1Para2 = `Egestas tellus rutrum tellus pellentesque eu tincidunt. Purus gravida quis blandit turpis cursus in hac. Pellentesque dignissim enim sit amet venenatis urna cursus eget nunc. Tristique et egestas quis ipsum suspendisse ultrices gravida dictum fusce. Aliquet eget sit amet tellus cras adipiscing enim eu turpis. Tellus orci ac auctor augue mauris augue neque gravida in. Lobortis elementum nibh tellus molestie nunc non. Sagittis vitae et leo duis ut diam quam nulla. Laoreet suspendisse interdum consectetur libero id faucibus nisl tincidunt eget. Lacus viverra vitae congue eu consequat ac. Nibh praesent tristique magna sit. A scelerisque purus semper eget duis at tellus at urna. Sem viverra aliquet eget sit amet tellus. Semper auctor neque vitae tempus quam pellentesque nec nam. Purus semper eget duis at tellus at urna condimentum mattis. Tellus mauris a diam maecenas sed. Ornare lectus sit amet est.`;
 
