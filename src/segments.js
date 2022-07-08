@@ -540,7 +540,8 @@ export function GridProject(props) {
     .replace(/\s/g, "-")
     .replace(/--/g, "-")
     .replace(/--+/g, "");
-  projectURLName = "/projects/".concat(projectURLName);
+    projectURLName = "/projects/".concat(projectURLName);
+
 
   return (
     <div className={"grid-project-".concat(props.pClass)} data-key={props.pNumber}>
@@ -596,7 +597,7 @@ export function ListProject(props) {
     .replace(/\s/g, "-")
     .replace(/--/g, "-")
     .replace(/--+/g, "");
-  projectURLName = "/projects/".concat(projectURLName);
+    projectURLName="/projects/".concat(projectURLName)
 
   return (
     <div className={"list-project-".concat(props.pClass)} data-key={props.pNumber}>
@@ -1831,42 +1832,45 @@ export function DesktopDynamicProject({ match, location }) {
           </div>
         </div>
         <div id="project-body-content">
-          {Object.keys(pBody).map((elem, ind) => {
-            if (/^para/.test(elem)) {
-              return <p key={ind}>{pBody[elem]}</p>;
-            } else if (/^media/.test(elem)) {
-              console.log("IN MEDIA IMAGES", pBody[elem]);
-              return (
-                <div key={ind} className="project-content-media">
-                  <div className="project-content-images">
-                    {pBody[elem].map((mElem, ind) => {
-                      if (/\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(mElem.src)) {
-                        console.log("IN SINGLE MEDIA", mElem.src);
-                        return <img key={ind} src={mElem.src.toString()} alt={mElem.alt.toString()} />;
-                      }
-                    })}
-                  </div>
-                  <div className="project-content-videos">
-                    {pBody[elem].map((mElem, ind) => {
-                      if (/\.mp4$/.test(mElem.src)) {
-                        console.log("IN SINGLE MEDIA", mElem.src);
-                        return (
-                          <video key={ind} controls>
-                            <source src={mElem.src.toString()} type="video/mp4" />
-                            Sorry, your browser doesn't support embedded videos.
-                          </video>
-                        );
-                      }
-                    })}
-                  </div>
-                </div>
-              );
+        {Object.keys(pBody).map((elem,ind) => {
+          if(/^para/.test(elem)){
+            return <p key={ind}>{pBody[elem]}</p>;
+          }
+          else if(/^media/.test(elem)){
+            console.log("IN MEDIA IMAGES",pBody[elem])
+            return (<div key={ind} className="project-content-media">
+              <div className="project-content-images"> 
+            {
+              pBody[elem].map((mElem,ind)=>{
+              if (/\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(mElem.src)){
+                console.log("IN SINGLE MEDIA", mElem.src);
+                return <img key={ind} src={mElem.src.toString()} alt={mElem.alt.toString()} />
+              }
+              })
             }
-          })}
+              </div>
+              <div className="project-content-videos"> 
+            {
+              pBody[elem].map((mElem,ind)=>{
+              if (/\.mp4$/.test(mElem.src)){
+                console.log("IN SINGLE MEDIA", mElem.src);
+                return (
+                  <video key={ind} controls>
+                    <source src={mElem.src.toString()} type="video/mp4" />
+                    Sorry, your browser doesn't support embedded videos.
+                  </video>
+                );
+              }
+              })
+            }
+              </div></div>)
+        }
+          })
+        }
         </div>
       </div>
     </React.Fragment>
-  ); // MAKE IT SO THAT POTRAIT IMAGES SHOW UP AS 2 AND LANDSCAPE AS 1. IDK WORK ON THE VISUAL ASPECT OF IT. IT MIGHT LOOK BAD WITH MULTIPLE IMAGES TOGETHER THO
+  );// MAKE IT SO THAT POTRAIT IMAGES SHOW UP AS 2 AND LANDSCAPE AS 1. IDK WORK ON THE VISUAL ASPECT OF IT. IT MIGHT LOOK BAD WITH MULTIPLE IMAGES TOGETHER THO
 }
 
 export function ErrorPage(props) {
@@ -1886,6 +1890,21 @@ export function Footer() {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export function MobileNavBar() {
   const [menu, setMenu] = useState(false);
