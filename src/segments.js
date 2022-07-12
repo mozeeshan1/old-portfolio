@@ -1695,7 +1695,7 @@ export function DesktopProjectsBody() {
   );
 }
 
-export function DesktopDynamicProject({ match, location }) {
+export function DynamicProject({ match, location }) {
   const { projectURLName } = useParams();
   let navigate = useNavigate();
   const [pNumb, setPNumb] = useState(null);
@@ -1910,6 +1910,8 @@ export function MobileNavBar() {
   const [menu, setMenu] = useState(false);
   const [menuButton, setMenuButton] = useState(false);
   const hamburgerAnimation = useRef(null);
+  const navAnimation = useRef(null);
+
 
   const hamburgerClick = () => {
     if (darkMode) {
@@ -1983,6 +1985,41 @@ export function MobileNavBar() {
         easing: "easeInOutSine",
         duration: 250,
       });
+
+
+      navAnimation.current = anime
+        .timeline({
+          easing: "easeOutCirc",
+          autoplay: false,
+          loop: false,
+          direction: "normal",
+          update:(anim)=>{
+             viewAnimProgress = Math.round(anim.progress);
+             if (viewAnimProgress > 0 && viewAnimProgress < 100) {
+               document.querySelector("#hamburger-button").style.pointerEvents = "none";
+             }
+             else{
+               document.querySelector("#hamburger-button").style.pointerEvents="auto";
+
+             }
+          },
+        })
+        .add(
+          {
+            targets: "#mobile-nav-bar>*",
+            translateY: [-100, 0],
+            opacity:[0,1],
+            delay: (el, i) => 500 * (i + 1),
+            duration:1000,
+          },
+          0
+        );
+      setTimeout(() => {
+        navAnimation.current.play();
+        setTimeout(() => {
+          getScrollDirecion(100, navAnimation.current);
+        }, 4000);
+      }, 4000);
   }, []);
 
   return (

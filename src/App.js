@@ -34,7 +34,7 @@ export class DesktopApp extends React.Component {
           <Route path="/" element={<Segments.DesktopHomeBody />} />
           <Route path="/about" element={<Segments.DesktopAboutBody />} />
           <Route path="/projects" element={<Segments.DesktopProjectsBody />} />
-          <Route path="/projects/:projectURLName" element={<Segments.DesktopDynamicProject />} />
+          <Route path="/projects/:projectURLName" element={<Segments.DynamicProject />} />
           <Route path="/error" element={<Segments.ErrorPage/>}/>
         </Routes>
         <Segments.Footer />
@@ -78,6 +78,8 @@ export class MobileApp extends React.Component {
           <Route path="/" element={<Segments.MobileHomeBody />} />
           <Route path="/about" element={<Segments.MobileAboutBody />} />
           <Route path="/projects" element={<Segments.MobileProjectsBody />} />
+          <Route path="/projects/:projectURLName" element={<Segments.DynamicProject />} />
+          <Route path="/error" element={<Segments.ErrorPage />} />
         </Routes>
         <Segments.Footer />
       </BrowserRouter>
