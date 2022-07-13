@@ -1769,23 +1769,32 @@ export function DynamicProject({ match, location }) {
       });
       let existContent = true;
       for (let i = 1; existContent === true && i <= 1000; i++) {
+        let tempParaTitle="p".concat(pNumb,"ParaTitle",i);
         let tempPara = "p".concat(pNumb, "Para", i);
         let tempMedia = "p".concat(pNumb, "Media", i);
-        if (typeof Content[tempPara] !== "undefined" && Content[tempPara] !== null && typeof Content[tempMedia] !== "undefined" && Content[tempMedia] !== null) {
+        if (typeof Content[tempParaTitle] !== "undefined" && Content[tempParaTitle] !== null && typeof Content[tempPara] !== "undefined" && Content[tempPara] !== null && typeof Content[tempMedia] !== "undefined" && Content[tempMedia] !== null) {
+          let paraTitleName="pTitle".concat(i);
           let paraName = "para".concat(i);
           let mediaName = "media".concat(i);
           setPBody((current) => {
-            return { ...current, [paraName]: Content[tempPara], [mediaName]: Content[tempMedia] };
+            return { ...current, [paraTitleName]:Content[tempParaTitle], [paraName]: Content[tempPara], [mediaName]: Content[tempMedia] };
           });
           console.log("PBODY BOTH PARA AND MEDIA");
-        } else if ((typeof Content[tempPara] !== "undefined" && Content[tempPara] !== null) || (typeof Content[tempMedia] !== "undefined" && Content[tempMedia] !== null)) {
+        } else if ((typeof Content[tempParaTitle] !== "undefined" && Content[tempParaTitle] !== null)||(typeof Content[tempPara] !== "undefined" && Content[tempPara] !== null) || (typeof Content[tempMedia] !== "undefined" && Content[tempMedia] !== null)) {
+          if (typeof Content[tempParaTitle] !== "undefined" && Content[tempParaTitle] !== null){
+          let paraTitleName = "pTitle".concat(i);
+          setPBody((current) => {
+            return { ...current, [paraTitleName]: Content[tempParaTitle] };
+          });
+          console.log("PBODY ONLY ONE PARA TITLE");
+          }
           if (typeof Content[tempPara] !== "undefined" && Content[tempPara] !== null) {
             let paraName = "para".concat(i);
             setPBody((current) => {
               return { ...current, [paraName]: Content[tempPara] };
             });
             console.log("PBODY ONLY ONE PARA");
-          } else {
+          } if (typeof Content[tempMedia] !== "undefined" && Content[tempMedia] !== null) {
             let mediaName = "media".concat(i);
             setPBody((current) => {
               return { ...current, [mediaName]: Content[tempMedia] };
@@ -1801,7 +1810,7 @@ export function DynamicProject({ match, location }) {
   }, [pNumb]);
 
   useEffect(() => {
-    console.log(pIntro);
+    console.log("PINTRO",pIntro);
     if (localStorage.getItem("dark") === "false") {
       let tags = document.body.querySelectorAll(".tag");
       for (let i = 0; i < tags.length; i++) {
@@ -1833,7 +1842,10 @@ export function DynamicProject({ match, location }) {
         </div>
         <div id="project-body-content">
         {Object.keys(pBody).map((elem,ind) => {
-          if(/^para/.test(elem)){
+          if(/^pTitle/.test(elem)){
+            return <h3 key={ind}>{pBody[elem]}</h3>
+          }
+          else if(/^para/.test(elem)){
             return <p key={ind}>{pBody[elem]}</p>;
           }
           else if(/^media/.test(elem)){

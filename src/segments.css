@@ -732,6 +732,7 @@ button.tag {
 #project-body-intro #project-title{
   margin-top:1rem;
 font-weight: 600;
+font-size: 3.4rem;
 text-align: center;
 }
 #project-body-intro #project-main-img{
@@ -749,6 +750,8 @@ text-align: center;
   font-weight: 450;
   text-align: center;
 }
+
+
 #project-summary p{
   margin-top: 0;
   max-width: 35vw;
@@ -763,11 +766,19 @@ text-align: center;
   flex-wrap: wrap;
 }
 
+#project-body-content h3{
+  margin-top:4rem;
+  margin-bottom:0;
+font-weight: 450;
+font-size: 2.4rem;
+text-align: center;
+}
 #project-body-content p{
-  max-width:70%;
-  text-align: center;
+  font-size: 1.2rem;
+  max-width:75%;
+  text-align: left;
   margin: auto;
-  margin-top: 4em;
+  margin-top: 2em;
 }
 .project-content-images,.project-content-videos{
   width:70%;
@@ -1006,11 +1017,18 @@ font-size: 2.4rem;
   flex-wrap: wrap;
 }
 
+#project-body-content h3{
+  margin-top:4rem;
+  margin-bottom:0;
+font-weight: 400;
+font-size: 2rem;
+text-align: center;
+}
 #project-body-content p{
   max-width:90%;
-  text-align: center;
+  text-align: left;
   margin: auto;
-  margin-top: 4em;
+  margin-top: 2em;
 }
 .project-content-images,.project-content-videos{
   width:90%;
@@ -1022,7 +1040,7 @@ font-size: 2.4rem;
   align-items: center;
   margin: auto;
 margin-top: 4rem;
-margin-bottom: 4rem;
+margin-bottom: 2rem;
 }
 .project-content-images img{
   max-width: 90vw;
