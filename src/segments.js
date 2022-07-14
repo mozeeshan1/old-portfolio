@@ -26,12 +26,14 @@ export let tagColorL = "#FFFFFF";
 export let tagColorD = "#121212";
 export let inputBgD = "#3d3d3d";
 export let inputBgL = "#F7F7F7";
-export let optionHighlightBgD = "#9448bc";
-export let optionHighlightBgL = "#0096FB";
-export let optionBgD = "#282828";
+export let optionHighlightBgL = "#3B28CC";
+export let optionHighlightBgD = "#CAC6FF";
+export let optionHighlightColorL="#FFFFFF"
+export let optionHighlightColorD="#121212";
 export let optionBgL = "#F7F7F7";
+export let optionBgD = "#282828";
 export let chipTextL = "#FFFFFF";
-export let chipTextD = "#FFFFFF";
+export let chipTextD = "#121212";
 export let fullTagsList = {};
 export let textColor = "";
 export let bgColor = "";
@@ -1678,6 +1680,7 @@ export function DesktopProjectsBody() {
           searchElements[i].style.setProperty("--input-bg", inputBgL);
           searchElements[i].style.setProperty("--option-bg", optionBgL);
           searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgL);
+          searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorL);
           searchElements[i].style.setProperty("--chip-text-color", chipTextL);
           searchElements[i].style.setProperty("--text-color", Content.textBlack);
         }
@@ -1687,6 +1690,7 @@ export function DesktopProjectsBody() {
           searchElements[i].style.setProperty("--input-bg", inputBgD);
           searchElements[i].style.setProperty("--option-bg", optionBgD);
           searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgD);
+          searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorD);
           searchElements[i].style.setProperty("--chip-text-color", chipTextD);
           searchElements[i].style.setProperty("--text-color", Content.textWhite);
         }
@@ -2373,7 +2377,7 @@ function MobileProjects(props) {
       setChangedProjectList(Object.keys(projectList).length);
     }
     setTimeout(() => {
-      if (!localStorage.getItem("dark") === "false") {
+      if (localStorage.getItem("dark") === "false") {
         let tags = document.body.querySelectorAll(".tag");
         for (let i = 0; i < tags.length; i++) {
           tags[i].style.setProperty("--tag-bg", tagBgL);
@@ -2421,8 +2425,7 @@ export function MobileHomeBody() {
       document.querySelectorAll("#home-body-intro,#home-body-projects").forEach((elem) => {
         homeBodyResize.observe(elem);
       });
-    }, 200);
-    if (!darkMode) {
+      if (!darkMode) {
       let tags = document.body.querySelectorAll(".tag");
       for (let i = 0; i < tags.length; i++) {
         tags[i].style.setProperty("--tag-bg", tagBgL);
@@ -2435,6 +2438,8 @@ export function MobileHomeBody() {
         tags[i].style.setProperty("--tag-color", tagColorD);
       }
     }
+    }, 200);
+    
     return () => {
       removeBBG = true;
       changeHome = true;
@@ -3173,6 +3178,7 @@ export function MobileProjectsBody() {
         searchElements[i].style.setProperty("--input-bg", inputBgL);
         searchElements[i].style.setProperty("--option-bg", optionBgL);
         searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgL);
+          searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorL);
         searchElements[i].style.setProperty("--chip-text-color", chipTextL);
         searchElements[i].style.setProperty("--text-color", Content.textBlack);
       }
@@ -3182,6 +3188,7 @@ export function MobileProjectsBody() {
         searchElements[i].style.setProperty("--input-bg", inputBgD);
         searchElements[i].style.setProperty("--option-bg", optionBgD);
         searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgD);
+          searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorD);
         searchElements[i].style.setProperty("--chip-text-color", chipTextD);
         searchElements[i].style.setProperty("--text-color", Content.textWhite);
       }
@@ -3220,6 +3227,7 @@ function updateMultiselectUI(e) {
         searchElements[i].style.setProperty("--input-bg", inputBgL);
         searchElements[i].style.setProperty("--option-bg", optionBgL);
         searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgL);
+          searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorL);
         searchElements[i].style.setProperty("--chip-text-color", chipTextL);
       }
     } else {
@@ -3228,6 +3236,7 @@ function updateMultiselectUI(e) {
         searchElements[i].style.setProperty("--input-bg", inputBgD);
         searchElements[i].style.setProperty("--option-bg", optionBgD);
         searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgD);
+          searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorD);
         searchElements[i].style.setProperty("--chip-text-color", chipTextD);
       }
     }
@@ -3291,6 +3300,7 @@ function changeBackground(event, dark, desktop) {
               searchElements[i].style.setProperty("--input-bg", inputBgL);
               searchElements[i].style.setProperty("--option-bg", optionBgL);
               searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgL);
+          searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorL);
               searchElements[i].style.setProperty("--chip-text-color", chipTextL);
               searchElements[i].style.setProperty("--text-color", Content.textBlack);
               searchElements[i].style.background = null;
@@ -3361,6 +3371,7 @@ function changeBackground(event, dark, desktop) {
               searchElements[i].style.setProperty("--input-bg", inputBgD);
               searchElements[i].style.setProperty("--option-bg", optionBgD);
               searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgD);
+          searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorD);
               searchElements[i].style.setProperty("--chip-text-color", chipTextD);
               searchElements[i].style.setProperty("--text-color", Content.textWhite);
               searchElements[i].style.background = null;
