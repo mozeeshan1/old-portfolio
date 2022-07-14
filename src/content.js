@@ -4,6 +4,18 @@
 export const textBlack = "#121212";
 export const textWhite = "#FFFFFF";
 export const homeIntroText = ["This is a long line of text to test the limits of this animation.", "two", "3", "4.5", "true"];
+
+
+
+export const aboutPara = `this is a test string <a href="https://drive.google.com/file/d/11-tJhrih98kfkDh51SLC68yXDi84yJTj/view?usp=sharing" target="_blank">with a link</a> and there is more text here so that this comes over multiple lines and i can test the width of the element on different screens and again <br/><br/>
+
+this is a test string <a href="https://drive.google.com/file/d/11-tJhrih98kfkDh51SLC68yXDi84yJTj/view?usp=sharing" target="_blank">with a link</a> and there is more text here so that this comes over multiple lines and i can test the width of the element on different screensthis is a test string <a href="https://drive.google.com/file/d/11-tJhrih98kfkDh51SLC68yXDi84yJTj/view?usp=sharing" target="_blank">with a link</a> and there is more text here so that this comes over multiple lines and i can test the width of the element on different screensthis is a test string <a href="https://drive.google.com/file/d/11-tJhrih98kfkDh51SLC68yXDi84yJTj/view?usp=sharing" target="_blank">with a link</a> and there is more text here so that this comes over multiple lines and i can test the width of the element on different screensthis is a test string <a href="https://drive.google.com/file/d/11-tJhrih98kfkDh51SLC68yXDi84yJTj/view?usp=sharing" target="_blank">with a link</a> and there is more text here so that this comes over multiple lines and i can test the width of the element on different screens`;
+export const aboutImg = "https://cdn.dribbble.com/users/1264215/screenshots/9331085/media/be24009d124ecebe4f68ba7cf9f4ccb9.png";
+export const aboutImgAlt="Picture of me"
+
+
+
+
 export const p1ImgLoc = "https://frontendmasters.com/static-assets/learn/og-learning-path-react.jpg";
 export const p1ImgAlt = "some react image here";
 export const p1Title = "React application test";

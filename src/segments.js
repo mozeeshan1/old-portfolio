@@ -6,6 +6,8 @@ import { Link, useLocation, useParams, Navigate, useNavigate } from "react-route
 import * as Content from "./content";
 import Multiselect from "multiselect-react-dropdown";
 import * as Index from "./index.js";
+import DOMPurify from "dompurify";
+
 
 export let darkMode = false;
 export let routeLocation = {};
@@ -754,11 +756,15 @@ export function DesktopAboutBody() {
   useEffect(() => {
     lastScroll = 0;
     window.scrollTo(0, 0);
+    // setTimeout(()=>{
+    //   console.log(DOMPurify.removed);
+    // },3000)
   }, []);
 
   return (
     <div id="about-body">
-      <h1>About Desktop text here</h1>
+      <p id="about-body-para" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(Content.aboutPara, { ADD_ATTR:["target"] }) }}></p>
+      <img src={Content.aboutImg} alt={Content.aboutImgAlt}/>
     </div>
   );
 }
@@ -1509,15 +1515,15 @@ function DesktopProjectsList() {
             }
           },
         })
-        .add(
-          {
-            targets: "#projects-body-bar-filter-icon path",
-            duration: 1500,
-            rotate: [0, -36, 0],
-            autoplay: true,
-          },
-          0
-        )
+        // .add(
+        //   {
+        //     targets: "#projects-body-bar-filter-icon path",
+        //     duration: 1500,
+        //     rotate: [0, -36, 0],
+        //     autoplay: true,
+        //   },
+        //   0
+        // )
         .add(
           {
             targets: "#projects-body-filter-search-bar",
@@ -1779,30 +1785,25 @@ export function DynamicProject({ match, location }) {
           setPBody((current) => {
             return { ...current, [paraTitleName]:Content[tempParaTitle], [paraName]: Content[tempPara], [mediaName]: Content[tempMedia] };
           });
-          console.log("PBODY BOTH PARA AND MEDIA");
         } else if ((typeof Content[tempParaTitle] !== "undefined" && Content[tempParaTitle] !== null)||(typeof Content[tempPara] !== "undefined" && Content[tempPara] !== null) || (typeof Content[tempMedia] !== "undefined" && Content[tempMedia] !== null)) {
           if (typeof Content[tempParaTitle] !== "undefined" && Content[tempParaTitle] !== null){
           let paraTitleName = "pTitle".concat(i);
           setPBody((current) => {
             return { ...current, [paraTitleName]: Content[tempParaTitle] };
           });
-          console.log("PBODY ONLY ONE PARA TITLE");
           }
           if (typeof Content[tempPara] !== "undefined" && Content[tempPara] !== null) {
             let paraName = "para".concat(i);
             setPBody((current) => {
               return { ...current, [paraName]: Content[tempPara] };
             });
-            console.log("PBODY ONLY ONE PARA");
           } if (typeof Content[tempMedia] !== "undefined" && Content[tempMedia] !== null) {
             let mediaName = "media".concat(i);
             setPBody((current) => {
               return { ...current, [mediaName]: Content[tempMedia] };
             });
-            console.log("PBODY ONLY ONE MEDIA");
           }
         } else {
-          console.log("PBODY NONE");
           existContent = false;
         }
       }
@@ -1810,7 +1811,6 @@ export function DynamicProject({ match, location }) {
   }, [pNumb]);
 
   useEffect(() => {
-    console.log("PINTRO",pIntro);
     if (localStorage.getItem("dark") === "false") {
       let tags = document.body.querySelectorAll(".tag");
       for (let i = 0; i < tags.length; i++) {
@@ -1827,7 +1827,6 @@ export function DynamicProject({ match, location }) {
   }, [pIntro]);
 
   useEffect(() => {
-    console.log("PBODY", pBody);
   }, [pBody]);
   return (
     <React.Fragment>
@@ -2458,7 +2457,8 @@ export function MobileAboutBody() {
 
   return (
     <div id="about-body">
-      <h1>About Mobile text here</h1>
+      <p id="about-body-para" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(Content.aboutPara, { ADD_ATTR: ["target"] }) }}></p>
+      <img src={Content.aboutImg} alt={Content.aboutImgAlt} />
     </div>
   );
 }
@@ -3012,15 +3012,15 @@ function MobileProjectsList() {
             }
           },
         })
-        .add(
-          {
-            targets: "#projects-body-bar-filter-icon path",
-            duration: 1500,
-            rotate: [0, -36, 0],
-            autoplay: true,
-          },
-          0
-        )
+        // .add(
+        //   {
+        //     targets: "#projects-body-bar-filter-icon path",
+        //     duration: 1500,
+        //     rotate: [0, -36, 0],
+        //     autoplay: true,
+        //   },
+        //   0
+        // )
         .add(
           {
             targets: "#projects-body-filter-search-bar",
