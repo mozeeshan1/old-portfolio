@@ -294,12 +294,14 @@ export function DesktopNavBar() {
   return (
     <div id="desktop-nav-bar">
       <Link id="desktop-logo" to="/">
-        <h1>Big Name Here</h1>
+        <h1>Mohammed Zeeshan</h1>
       </Link>
       <div id="desktop-menu">
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
         <Link to="/projects">Projects</Link>
+        <Link to="https://www.linkedin.com/in/mozeeshan/">Linkedin &#8599;</Link>
+        <Link to="https://github.com/rikoudou">Linkedin &#8599;</Link>
       </div>
       <button
         id="desktop-dark-mode"
