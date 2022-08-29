@@ -8,7 +8,6 @@ import Multiselect from "multiselect-react-dropdown";
 import * as Index from "./index.js";
 import DOMPurify from "dompurify";
 
-
 export let darkMode = false;
 export let routeLocation = {};
 export let playedBBG = false;
@@ -20,6 +19,7 @@ export let HBIntroH = 0;
 export let HBProjectsH = 0;
 export let PBBarH = 0;
 export let PBProjectsH = 0;
+export let ABodyH=0;
 export let tagBgL = "#3B28CC";
 export let tagBgD = "#CAC6FF";
 export let tagColorL = "#FFFFFF";
@@ -28,8 +28,8 @@ export let inputBgD = "#3d3d3d";
 export let inputBgL = "#F7F7F7";
 export let optionHighlightBgL = "#3B28CC";
 export let optionHighlightBgD = "#CAC6FF";
-export let optionHighlightColorL="#FFFFFF"
-export let optionHighlightColorD="#121212";
+export let optionHighlightColorL = "#FFFFFF";
+export let optionHighlightColorD = "#121212";
 export let optionBgL = "#F7F7F7";
 export let optionBgD = "#282828";
 export let chipTextL = "#FFFFFF";
@@ -300,8 +300,12 @@ export function DesktopNavBar() {
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
         <Link to="/projects">Projects</Link>
-        <Link to="https://www.linkedin.com/in/mozeeshan/">Linkedin &#8599;</Link>
-        <Link to="https://github.com/rikoudou">Linkedin &#8599;</Link>
+        <a target="_blank" href="https://www.linkedin.com/in/mozeeshan/">
+          Linkedin &#8599;
+        </a>
+        <a target="_blank" href="https://github.com/mozeeshan1">
+          Github &#8599;
+        </a>
       </div>
       <button
         id="desktop-dark-mode"
@@ -546,8 +550,7 @@ export function GridProject(props) {
     .replace(/\s/g, "-")
     .replace(/--/g, "-")
     .replace(/--+/g, "");
-    projectURLName = "/projects/".concat(projectURLName);
-
+  projectURLName = "/projects/".concat(projectURLName);
 
   return (
     <div className={"grid-project-".concat(props.pClass)} data-key={props.pNumber}>
@@ -603,7 +606,7 @@ export function ListProject(props) {
     .replace(/\s/g, "-")
     .replace(/--/g, "-")
     .replace(/--+/g, "");
-    projectURLName="/projects/".concat(projectURLName)
+  projectURLName = "/projects/".concat(projectURLName);
 
   return (
     <div className={"list-project-".concat(props.pClass)} data-key={props.pNumber}>
@@ -760,15 +763,29 @@ export function DesktopAboutBody() {
   useEffect(() => {
     lastScroll = 0;
     window.scrollTo(0, 0);
-    // setTimeout(()=>{
-    //   console.log(DOMPurify.removed);
-    // },3000)
+    setTimeout(() => {
+      const aboutBodyResize = new ResizeObserver((entries) => {
+        for (let i of entries) {
+          switch (i.target.id) {
+            case "about-body":
+              ABodyH = i.target.clientHeight;
+              break;
+            default:
+              break;
+          }
+        }
+        document.querySelector("#bg-blur").style.setProperty("--body-height", (ABodyH + 100 + document.querySelector("#footer").clientHeight).toString().concat("px"));
+      });
+      aboutBodyResize.observe(document.querySelector("#about-body"));
+
+    }, 200);
   }, []);
 
   return (
     <div id="about-body">
-      <p id="about-body-para" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(Content.aboutPara, { ADD_ATTR:["target"] }) }}></p>
-      <img src={Content.aboutImg} alt={Content.aboutImgAlt}/>
+      <img src={Content.aboutImg} alt={Content.aboutImgAlt} />
+      <h1>{Content.aboutTitle}</h1>
+      <p id="about-body-para" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(Content.aboutPara, { ADD_ATTR: ["target"] }) }}></p>
     </div>
   );
 }
@@ -1707,6 +1724,58 @@ export function DesktopProjectsBody() {
   );
 }
 
+function gcd(a, b) {
+  if (b > a) {
+    let temp = a;
+    a = b;
+    b = temp;
+  }
+  while (b != 0) {
+    let m = a % b;
+    a = b;
+    b = m;
+  }
+  return a;
+}
+
+function ratio(x, y) {
+  let c = gcd(x, y);
+  return "" + x / c + ":" + y / c;
+}
+
+function AspectUpdates() {
+  let aspectImages = document.querySelectorAll(".measure-image");
+  let aspectVideos = document.querySelectorAll(".measure-video");
+  // console.log("ASPECT UPDATE HERE",aspectImages.length,aspectVideos.length);
+  for (let i = 0; i < aspectImages.length; i++) {
+    let iHeight = aspectImages[i].naturalHeight;
+    let iWidth = aspectImages[i].naturalWidth;
+    let iAspectRatio = ratio(iWidth, iHeight);
+    let iAspectWidth = Number(iAspectRatio.match(/^[0-9]*(?=:)/gi)[0]);
+    let iAspectHeight = Number(iAspectRatio.match(/:[0-9]*$/gi)[0].slice(1));
+    if (iAspectWidth > iAspectHeight) {
+      aspectImages[i].classList.add("horizontal-image");
+    } else {
+      aspectImages[i].classList.add("vertical-image");
+    }
+    // console.log("ASPECT IMAGE", iAspectWidth,iAspectHeight);
+    aspectImages[i].classList.remove("measure-image");
+  }
+  for (let i = 0; i < aspectVideos.length; i++) {
+    let vHeight = aspectVideos[i].videoHeight;
+    let vWidth = aspectVideos[i].videoWidth;
+    let vAspectRatio = ratio(vWidth, vHeight);
+    let vAspectWidth = Number(vAspectRatio.match(/^[0-9]*(?=:)/gi)[0]);
+    let vAspectHeight = Number(vAspectRatio.match(/:[0-9]*$/gi)[0].slice(1));
+    if (vAspectWidth > vAspectHeight) {
+      aspectVideos[i].classList.add("horizontal-video");
+    } else {
+      aspectVideos[i].classList.add("vertical-video");
+    }
+    // console.log("ASPECT VIDEO", vAspectWidth, vAspectHeight);
+    aspectVideos[i].classList.remove("measure-video");
+  }
+}
 export function DynamicProject({ match, location }) {
   const { projectURLName } = useParams();
   let navigate = useNavigate();
@@ -1718,6 +1787,7 @@ export function DynamicProject({ match, location }) {
     lastScroll = 0;
     window.scrollTo(0, 0);
     setTimeout(() => {
+      AspectUpdates();
       const projectBodyResize = new ResizeObserver((entries) => {
         for (let i of entries) {
           switch (i.target.id) {
@@ -1752,9 +1822,11 @@ export function DynamicProject({ match, location }) {
   }, []);
 
   useEffect(() => {
-    console.log(pNumb);
+    // console.log(pNumb);
+    AspectUpdates();
     let tempTitle = "p".concat(pNumb, "Title");
     let tempSummary = "p".concat(pNumb, "Summary");
+    let tempDetails = "p".concat(pNumb, "Details");
     let tempImg = "p".concat(pNumb, "ImgLoc");
     let tempImgAlt = "p".concat(pNumb, "ImgAlt");
     let tempTags = "p".concat(pNumb, "Tags");
@@ -1777,33 +1849,34 @@ export function DynamicProject({ match, location }) {
       });
       console.log(tempTitle, Content[tempTitle]);
       setPIntro((current) => {
-        return { ...current, title: Content[tempTitle], summary: Content[tempSummary], img: Content[tempImg], imgAlt: Content[tempImgAlt], tags: pTags };
+        return { ...current, title: Content[tempTitle], summary: Content[tempSummary], details: Content[tempDetails], img: Content[tempImg], imgAlt: Content[tempImgAlt], tags: pTags };
       });
       let existContent = true;
       for (let i = 1; existContent === true && i <= 1000; i++) {
-        let tempParaTitle="p".concat(pNumb,"ParaTitle",i);
+        let tempParaTitle = "p".concat(pNumb, "ParaTitle", i);
         let tempPara = "p".concat(pNumb, "Para", i);
         let tempMedia = "p".concat(pNumb, "Media", i);
         if (typeof Content[tempParaTitle] !== "undefined" && Content[tempParaTitle] !== null && typeof Content[tempPara] !== "undefined" && Content[tempPara] !== null && typeof Content[tempMedia] !== "undefined" && Content[tempMedia] !== null) {
-          let paraTitleName="pTitle".concat(i);
+          let paraTitleName = "pTitle".concat(i);
           let paraName = "para".concat(i);
           let mediaName = "media".concat(i);
           setPBody((current) => {
-            return { ...current, [paraTitleName]:Content[tempParaTitle], [paraName]: Content[tempPara], [mediaName]: Content[tempMedia] };
+            return { ...current, [paraTitleName]: Content[tempParaTitle], [paraName]: Content[tempPara], [mediaName]: Content[tempMedia] };
           });
-        } else if ((typeof Content[tempParaTitle] !== "undefined" && Content[tempParaTitle] !== null)||(typeof Content[tempPara] !== "undefined" && Content[tempPara] !== null) || (typeof Content[tempMedia] !== "undefined" && Content[tempMedia] !== null)) {
-          if (typeof Content[tempParaTitle] !== "undefined" && Content[tempParaTitle] !== null){
-          let paraTitleName = "pTitle".concat(i);
-          setPBody((current) => {
-            return { ...current, [paraTitleName]: Content[tempParaTitle] };
-          });
+        } else if ((typeof Content[tempParaTitle] !== "undefined" && Content[tempParaTitle] !== null) || (typeof Content[tempPara] !== "undefined" && Content[tempPara] !== null) || (typeof Content[tempMedia] !== "undefined" && Content[tempMedia] !== null)) {
+          if (typeof Content[tempParaTitle] !== "undefined" && Content[tempParaTitle] !== null) {
+            let paraTitleName = "pTitle".concat(i);
+            setPBody((current) => {
+              return { ...current, [paraTitleName]: Content[tempParaTitle] };
+            });
           }
           if (typeof Content[tempPara] !== "undefined" && Content[tempPara] !== null) {
             let paraName = "para".concat(i);
             setPBody((current) => {
               return { ...current, [paraName]: Content[tempPara] };
             });
-          } if (typeof Content[tempMedia] !== "undefined" && Content[tempMedia] !== null) {
+          }
+          if (typeof Content[tempMedia] !== "undefined" && Content[tempMedia] !== null) {
             let mediaName = "media".concat(i);
             setPBody((current) => {
               return { ...current, [mediaName]: Content[tempMedia] };
@@ -1832,8 +1905,8 @@ export function DynamicProject({ match, location }) {
     }
   }, [pIntro]);
 
-  useEffect(() => {
-  }, [pBody]);
+  useEffect(() => {}, [pBody]);
+
   return (
     <React.Fragment>
       <div id="project-body">
@@ -1841,60 +1914,69 @@ export function DynamicProject({ match, location }) {
           <img id="project-main-img" src={pIntro.img} alt={pIntro.imgAlt} />
           <h1 id="project-title">{pIntro.title}</h1>
           <div id="project-summary">
-            <p>{pIntro.summary}</p>
+            <div id="project-details">
+            {(pIntro.details!==null&&typeof pIntro.details!== "undefined")&& Object.keys(pIntro.details).map((elem,ind)=>{
+              return (
+                <div className="details-item">
+                <h5>{elem[0].toUpperCase() + elem.slice(1)}</h5>
+                <p>{pIntro.details[elem]}</p>
+                </div>
+              )
+            })}
+              <div className="details-item">
+                <h5>Summary</h5>
+                <p>{pIntro.summary}</p>
+              </div>
+            </div>
             <div id="project-tags">{pIntro.tags}</div>
           </div>
         </div>
         <div id="project-body-content">
-        {Object.keys(pBody).map((elem,ind) => {
-          if(/^pTitle/.test(elem)){
-            return <h3 key={ind}>{pBody[elem]}</h3>
-          }
-          else if(/^para/.test(elem)){
-            return <p key={ind}>{pBody[elem]}</p>;
-          }
-          else if(/^media/.test(elem)){
-            console.log("IN MEDIA IMAGES",pBody[elem])
-            return (<div key={ind} className="project-content-media">
-              <div className="project-content-images"> 
-            {
-              pBody[elem].map((mElem,ind)=>{
-              if (/\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(mElem.src)){
-                console.log("IN SINGLE MEDIA", mElem.src);
-                return <img key={ind} src={mElem.src.toString()} alt={mElem.alt.toString()} />
-              }
-              })
+          {Object.keys(pBody).map((elem, ind) => {
+            if (/^pTitle/.test(elem)) {
+              return <h3 key={ind}>{pBody[elem]}</h3>;
+            } else if (/^para/.test(elem)) {
+              return <p key={ind} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(pBody[elem], { ADD_ATTR: ["target"] }) }}></p>;
+            } else if (/^media/.test(elem)) {
+              console.log("IN MEDIA", pBody[elem]);
+              return (
+                <div key={ind} className="project-content-media">
+                  <div className="project-content-images">
+                    {pBody[elem].map((mElem, ind) => {
+                      if (/\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(mElem.src)) {
+                        AspectUpdates();
+                        return <img key={ind} className="measure-image" src={mElem.src.toString()} alt={mElem.alt.toString()} />;
+                      }
+                    })}
+                  </div>
+                  <div className="project-content-videos">
+                    {pBody[elem].map((mElem, ind) => {
+                      if (/\.mp4$/.test(mElem.src)) {
+                        AspectUpdates();
+                        return (
+                          <video key={ind} className="measure-video" controls>
+                            <source src={mElem.src.toString()} type="video/mp4" />
+                            Sorry, your browser doesn't support embedded videos.
+                          </video>
+                        );
+                      }
+                    })}
+                  </div>
+                </div>
+              );
             }
-              </div>
-              <div className="project-content-videos"> 
-            {
-              pBody[elem].map((mElem,ind)=>{
-              if (/\.mp4$/.test(mElem.src)){
-                console.log("IN SINGLE MEDIA", mElem.src);
-                return (
-                  <video key={ind} controls>
-                    <source src={mElem.src.toString()} type="video/mp4" />
-                    Sorry, your browser doesn't support embedded videos.
-                  </video>
-                );
-              }
-              })
-            }
-              </div></div>)
-        }
-          })
-        }
+          })}
         </div>
       </div>
     </React.Fragment>
-  );// MAKE IT SO THAT POTRAIT IMAGES SHOW UP AS 2 AND LANDSCAPE AS 1. IDK WORK ON THE VISUAL ASPECT OF IT. IT MIGHT LOOK BAD WITH MULTIPLE IMAGES TOGETHER THO
+  );
 }
 
 export function ErrorPage(props) {
   return (
     <React.Fragment>
       <div>
-        <h1> this is error code page</h1>
+        <h1> Error 404</h1>
       </div>
     </React.Fragment>
   );
@@ -1923,12 +2005,20 @@ export function Footer() {
 
 
 
+
+
+
+
+
+
+
+
+
 export function MobileNavBar() {
   const [menu, setMenu] = useState(false);
   const [menuButton, setMenuButton] = useState(false);
   const hamburgerAnimation = useRef(null);
   const navAnimation = useRef(null);
-
 
   const hamburgerClick = () => {
     if (darkMode) {
@@ -2003,46 +2093,43 @@ export function MobileNavBar() {
         duration: 250,
       });
 
-
-      navAnimation.current = anime
-        .timeline({
-          easing: "easeOutCirc",
-          autoplay: false,
-          loop: false,
-          direction: "normal",
-          update:(anim)=>{
-             viewAnimProgress = Math.round(anim.progress);
-             if (viewAnimProgress > 0 && viewAnimProgress < 100) {
-               document.querySelector("#hamburger-button").style.pointerEvents = "none";
-             }
-             else{
-               document.querySelector("#hamburger-button").style.pointerEvents="auto";
-
-             }
-          },
-        })
-        .add(
-          {
-            targets: "#mobile-nav-bar>*",
-            translateY: [-100, 0],
-            opacity:[0,1],
-            delay: (el, i) => 500 * (i + 1),
-            duration:1000,
-          },
-          0
-        );
+    navAnimation.current = anime
+      .timeline({
+        easing: "easeOutCirc",
+        autoplay: false,
+        loop: false,
+        direction: "normal",
+        update: (anim) => {
+          viewAnimProgress = Math.round(anim.progress);
+          if (viewAnimProgress > 0 && viewAnimProgress < 100) {
+            document.querySelector("#hamburger-button").style.pointerEvents = "none";
+          } else {
+            document.querySelector("#hamburger-button").style.pointerEvents = "auto";
+          }
+        },
+      })
+      .add(
+        {
+          targets: "#mobile-nav-bar>*",
+          translateY: [-100, 0],
+          opacity: [0, 1],
+          delay: (el, i) => 500 * (i + 1),
+          duration: 1000,
+        },
+        0
+      );
+    setTimeout(() => {
+      navAnimation.current.play();
       setTimeout(() => {
-        navAnimation.current.play();
-        setTimeout(() => {
-          getScrollDirecion(100, navAnimation.current);
-        }, 4000);
+        getScrollDirecion(100, navAnimation.current);
       }, 4000);
+    }, 4000);
   }, []);
 
   return (
     <div id="mobile-nav-bar">
       <Link id="mobile-logo" to="/">
-        <h1>Small Name</h1>
+        <h1>MZ</h1>
       </Link>
       <button
         id="hamburger-button"
@@ -2109,6 +2196,12 @@ function MobileMenu({ setMenuBut, linkClick }) {
         >
           Projects
         </Link>
+        <a target="_blank" href="https://www.linkedin.com/in/mozeeshan/">
+          Linkedin &#8599;
+        </a>
+        <a target="_blank" href="https://github.com/mozeeshan1">
+          Github &#8599;
+        </a>
       </div>
       <div id="mobile-dark-div">
         <button
@@ -2428,20 +2521,20 @@ export function MobileHomeBody() {
         homeBodyResize.observe(elem);
       });
       if (!darkMode) {
-      let tags = document.body.querySelectorAll(".tag");
-      for (let i = 0; i < tags.length; i++) {
-        tags[i].style.setProperty("--tag-bg", tagBgL);
-        tags[i].style.setProperty("--tag-color", tagColorL);
+        let tags = document.body.querySelectorAll(".tag");
+        for (let i = 0; i < tags.length; i++) {
+          tags[i].style.setProperty("--tag-bg", tagBgL);
+          tags[i].style.setProperty("--tag-color", tagColorL);
+        }
+      } else {
+        let tags = document.body.querySelectorAll(".tag");
+        for (let i = 0; i < tags.length; i++) {
+          tags[i].style.setProperty("--tag-bg", tagBgD);
+          tags[i].style.setProperty("--tag-color", tagColorD);
+        }
       }
-    } else {
-      let tags = document.body.querySelectorAll(".tag");
-      for (let i = 0; i < tags.length; i++) {
-        tags[i].style.setProperty("--tag-bg", tagBgD);
-        tags[i].style.setProperty("--tag-color", tagColorD);
-      }
-    }
     }, 200);
-    
+
     return () => {
       removeBBG = true;
       changeHome = true;
@@ -2464,8 +2557,9 @@ export function MobileAboutBody() {
 
   return (
     <div id="about-body">
-      <p id="about-body-para" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(Content.aboutPara, { ADD_ATTR: ["target"] }) }}></p>
       <img src={Content.aboutImg} alt={Content.aboutImgAlt} />
+      <h1>{Content.aboutTitle}</h1>
+      <p id="about-body-para" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(Content.aboutPara, { ADD_ATTR: ["target"] }) }}></p>
     </div>
   );
 }
@@ -3180,7 +3274,7 @@ export function MobileProjectsBody() {
         searchElements[i].style.setProperty("--input-bg", inputBgL);
         searchElements[i].style.setProperty("--option-bg", optionBgL);
         searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgL);
-          searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorL);
+        searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorL);
         searchElements[i].style.setProperty("--chip-text-color", chipTextL);
         searchElements[i].style.setProperty("--text-color", Content.textBlack);
       }
@@ -3190,7 +3284,7 @@ export function MobileProjectsBody() {
         searchElements[i].style.setProperty("--input-bg", inputBgD);
         searchElements[i].style.setProperty("--option-bg", optionBgD);
         searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgD);
-          searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorD);
+        searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorD);
         searchElements[i].style.setProperty("--chip-text-color", chipTextD);
         searchElements[i].style.setProperty("--text-color", Content.textWhite);
       }
@@ -3229,7 +3323,7 @@ function updateMultiselectUI(e) {
         searchElements[i].style.setProperty("--input-bg", inputBgL);
         searchElements[i].style.setProperty("--option-bg", optionBgL);
         searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgL);
-          searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorL);
+        searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorL);
         searchElements[i].style.setProperty("--chip-text-color", chipTextL);
       }
     } else {
@@ -3238,7 +3332,7 @@ function updateMultiselectUI(e) {
         searchElements[i].style.setProperty("--input-bg", inputBgD);
         searchElements[i].style.setProperty("--option-bg", optionBgD);
         searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgD);
-          searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorD);
+        searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorD);
         searchElements[i].style.setProperty("--chip-text-color", chipTextD);
       }
     }
@@ -3302,7 +3396,7 @@ function changeBackground(event, dark, desktop) {
               searchElements[i].style.setProperty("--input-bg", inputBgL);
               searchElements[i].style.setProperty("--option-bg", optionBgL);
               searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgL);
-          searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorL);
+              searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorL);
               searchElements[i].style.setProperty("--chip-text-color", chipTextL);
               searchElements[i].style.setProperty("--text-color", Content.textBlack);
               searchElements[i].style.background = null;
@@ -3373,7 +3467,7 @@ function changeBackground(event, dark, desktop) {
               searchElements[i].style.setProperty("--input-bg", inputBgD);
               searchElements[i].style.setProperty("--option-bg", optionBgD);
               searchElements[i].style.setProperty("--option-highlight-bg", optionHighlightBgD);
-          searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorD);
+              searchElements[i].style.setProperty("--option-highlight-color", optionHighlightColorD);
               searchElements[i].style.setProperty("--chip-text-color", chipTextD);
               searchElements[i].style.setProperty("--text-color", Content.textWhite);
               searchElements[i].style.background = null;

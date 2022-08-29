@@ -96,7 +96,7 @@ html {
   position: relative;
 }
 #mobile-logo {
-  margin-left: 1vw;
+  margin-left: 5vw;
   text-decoration: none;
   grid-column: 1/5;
   color: inherit;
@@ -108,17 +108,18 @@ html {
   width: fit-content;
 }
 #desktop-menu {
-  grid-column: 6/8;
+  grid-column: 5/8;
   display: flex;
   align-items: center;
   gap: 10%;
   color: inherit;
   text-align: center;
+  flex-wrap: wrap;
 }
 #desktop-menu a {
   text-decoration: none;
   color: inherit;
-  width: fit-content;
+  width: max-content;
 }
 #desktop-dark-mode {
   width: fit-content;
@@ -195,15 +196,15 @@ div.ripple {
   justify-content: center;
   align-items: center;
   row-gap: 2rem;
-  width: 50vw;
-  font-size: 3rem;
+  width: 90vw;
+  font-size: 2.4rem;
 }
 #mobile-dark-div {
   display: flex;
   justify-content: center;
 }
 #mobile-menu #mobile-dark-mode {
-  margin-bottom: 70%;
+  margin-bottom: 30%;
   top: 0;
 }
 #mobile-dark-mode {
@@ -406,13 +407,13 @@ div.ripple {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  border-radius: 6px;
 }
 
 .list-project-img img {
   min-width: 100%;
   min-height: 100%;
   object-fit: cover;
-  border-radius: 6px;
 }
 
 .list-project-l .list-project-img {
@@ -445,10 +446,13 @@ div.ripple {
   text-align: center;
   width: 75%;
   margin: auto;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 300;
   margin-top: 1em;
   margin-bottom: 1.4em;
+}
+.list-project-text p{
+  font-size: 1.2rem;
 }
 .list-project-tags,
 .grid-project-tags {
@@ -500,12 +504,12 @@ div.ripple {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+    border-radius: 6px;
 }
 .grid-project-img img {
   min-width: 100%;
   min-height: 100%;
   object-fit: cover;
-  border-radius: 6px;
 }
 
 .grid-project-img:before {
@@ -517,7 +521,7 @@ div.ripple {
   width: 100%;
   height: 100%;
   border-radius: 6px;
-  background: rgba(1, 1, 1, 0.6);
+  background: rgba(1, 1, 1, 0.9);
   transition: 0.5s;
   opacity: 0;
 }
@@ -761,22 +765,55 @@ button.tag {
   width: 100%;
   height: 50vh;
   opacity: 1;
-  object-fit: cover;
+  object-fit: contain;
 }
 #project-body-intro #project-summary {
   margin-top: 4rem;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  align-items: center;
+  align-items: flex-start;
   font-weight: 450;
   text-align: center;
 }
 
-#project-summary p {
+/* #project-summary p {
   margin-top: 0;
   max-width: 35vw;
+} */
+
+#project-details{
+  max-width: 35vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap:4rem;
+  row-gap:1rem;
 }
+
+.details-item{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+}
+
+.details-item>*{
+  width:100%;
+}
+
+.details-item h5{
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin: 0;
+}
+.details-item p{
+  font-weight: 350;
+}
+
 #project-body-intro #project-tags {
   max-width: 35vw;
   display: flex;
@@ -801,6 +838,9 @@ button.tag {
   margin: auto;
   margin-top: 2em;
 }
+#project-body-content a, #project-body-content a:visited{
+  color:#059eff
+}
 .project-content-images,
 .project-content-videos {
   width: 70%;
@@ -819,7 +859,14 @@ button.tag {
   object-fit: cover;
 }
 .project-content-videos video {
+  /* width: 40%; */
   max-width: 60vw;
+}
+.vertical-video{
+  width:40%;
+}
+.vertical-image{
+  width:40%
 }
 
 #about-body {
@@ -831,12 +878,18 @@ button.tag {
   flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
-  gap:4rem;
+  gap:1rem;
 }
 
 #about-body-para{
   text-align: left;
   width: 60%;
+}
+#about-body h1{
+  text-align: center;
+  font-size: 2.6rem;
+  font-weight: 350;
+  max-width: 65vw;
 }
 #about-body-para a, #about-body-para a:visited{
   color:#059eff
@@ -844,6 +897,12 @@ button.tag {
 
 #about-body img{
   max-width: 60vw;
+  object-fit: cover;
+  border-radius: 50%;
+  height: 20vw;
+  width: 20vw;
+  min-width: 256px;
+  min-height: 256px;
 }
 
 #footer {
@@ -946,7 +1005,7 @@ button.tag {
   }
   .list-project-text p,
   .grid-project-text p {
-    font-size: 1.2rem;
+    font-size: 1rem;
     width: 90%;
   }
   .list-project-tags {
@@ -969,6 +1028,9 @@ button.tag {
     height: 35vh;
     transition: margin 1000ms;
   }
+  .grid-project-img img,.list-project-img img{
+    object-fit: cover;
+  }
   .grid-project-text {
     position: absolute;
     flex-shrink: 1000000;
@@ -982,6 +1044,7 @@ button.tag {
     overflow: scroll;
     transition: margin 1000ms;
     color: white !important;
+    overflow-x: hidden;
   }
 
   .grid-project-tags {
@@ -1022,9 +1085,14 @@ button.tag {
   flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
-  gap:4rem;
+  gap:1rem;
 }
-
+#about-body h1{
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 350;
+  max-width: 95vw;
+}
 #about-body-para{
   text-align: left;
   width: 90%;
@@ -1035,6 +1103,12 @@ button.tag {
 
 #about-body img{
   max-width: 90vw;
+  object-fit: cover;
+  border-radius: 50%;
+  height: 60vw;
+  width: 60vw;
+  min-width: 128px;
+  min-height: 128px;
 }
 
 
@@ -1066,12 +1140,45 @@ button.tag {
   #project-body-intro #project-summary {
     margin-top: 3rem;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 2rem;
   }
-  #project-summary p {
+  /* #project-summary p {
     margin-top: 0;
     max-width: 95vw;
-  }
+  } */
+
+  #project-details{
+  max-width: 95vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.details-item{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+}
+
+.details-item>*{
+  width:100%;
+}
+
+.details-item h5{
+  font-size: 1.6rem;
+  font-weight: 450;
+  margin: 0;
+}
+.details-item p{
+  font-weight: 300;
+}
+
   #project-body-intro #project-tags {
     max-width: 95vw;
     display: flex;
@@ -1095,6 +1202,9 @@ button.tag {
     margin: auto;
     margin-top: 2em;
   }
+  #project-body-content a, #project-body-content a:visited{
+  color:#059eff
+}
   .project-content-images,
   .project-content-videos {
     width: 90%;
