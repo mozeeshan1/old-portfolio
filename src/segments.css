@@ -56,7 +56,7 @@ html {
   position: absolute;
   margin: auto;
   min-height: 100vh;
-  /* z-index: -2; */
+  z-index: -2;
 }
 
 #desktop-nav-bar {
@@ -918,6 +918,17 @@ button.tag {
   margin: 0 8% 0 8%;
   font-size: 1rem;
   font-weight: 350;
+}
+
+#error-page{
+  margin-top: 20vh;
+  font-size: 2rem;
+  text-align: center;
+  /* color: red; */
+  /* z-index: 100; */
+}
+#error-page>*{
+  margin-top: 0;
 }
 
 @media (max-width: 768px) {

@@ -36,6 +36,7 @@ export class DesktopApp extends React.Component {
           <Route path="/projects" element={<Segments.DesktopProjectsBody />} />
           <Route path="/projects/:projectURLName" element={<Segments.DynamicProject />} />
           <Route path="/error" element={<Segments.ErrorPage/>}/>
+          <Route path="/:random" element={<Segments.ErrorPage/>}/>
         </Routes>
         <Segments.Footer />
       </BrowserRouter>
