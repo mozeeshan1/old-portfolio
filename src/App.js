@@ -81,6 +81,7 @@ export class MobileApp extends React.Component {
           <Route path="/projects" element={<Segments.MobileProjectsBody />} />
           <Route path="/projects/:projectURLName" element={<Segments.DynamicProject />} />
           <Route path="/error" element={<Segments.ErrorPage />} />
+          <Route path="/:random" element={<Segments.ErrorPage />} />
         </Routes>
         <Segments.Footer />
       </BrowserRouter>
