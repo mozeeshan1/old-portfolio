@@ -243,7 +243,7 @@ export function DesktopNavBar() {
     window.addEventListener(
       "storageupdated",
       (e) => {
-        console.log("ITEM INSERTED IN STORAGE", e.detail);
+        // console.log("ITEM INSERTED IN STORAGE", e.detail);
       },
       false
     );
@@ -309,6 +309,7 @@ export function DesktopNavBar() {
       </div>
       <button
         id="desktop-dark-mode"
+        aria-label="change website theme to light or dark"
         disabled={darkButton}
         onClick={(e) => {
           setDark(!dark);
@@ -527,7 +528,7 @@ export function GridProject(props) {
           to="/projects"
           onClick={() => {
             selectedTags.push(elem.name);
-            console.log("Selected tags", selectedTags);
+            // console.log("Selected tags", selectedTags);
           }}
           className={"tag ".concat(elem.name.toLowerCase().replace(/\s|\W/g, ""))}
           key={ind}
@@ -583,7 +584,7 @@ export function ListProject(props) {
           to="/projects"
           onClick={() => {
             selectedTags.push(elem.name);
-            console.log("Selected tags", selectedTags);
+            // console.log("Selected tags", selectedTags);
           }}
           className={"tag ".concat(elem.name.toLowerCase().replace(/\s|\W/g, ""))}
           key={ind}
@@ -1809,9 +1810,9 @@ export function DynamicProject({ match, location }) {
       });
     }, 200);
 
-    console.log(Index.fullProjectList);
+    // console.log(Index.fullProjectList);
     let pPresent = Object.values(Index.fullProjectList).includes(projectURLName);
-    console.log("project present or not", pPresent);
+    // console.log("project present or not", pPresent);
     if (!pPresent) {
       navigate("/error");
     } else {
@@ -1838,7 +1839,7 @@ export function DynamicProject({ match, location }) {
             to="/projects"
             onClick={() => {
               selectedTags.push(elem.name);
-              console.log("Selected tags", selectedTags);
+              // console.log("Selected tags", selectedTags);
             }}
             className={"tag ".concat(elem.name.toLowerCase().replace(/\s|\W/g, ""))}
             key={ind}
@@ -1847,7 +1848,7 @@ export function DynamicProject({ match, location }) {
           </Link>
         );
       });
-      console.log(tempTitle, Content[tempTitle]);
+      // console.log(tempTitle, Content[tempTitle]);
       setPIntro((current) => {
         return { ...current, title: Content[tempTitle], summary: Content[tempSummary], details: Content[tempDetails], img: Content[tempImg], imgAlt: Content[tempImgAlt], tags: pTags };
       });
@@ -1938,7 +1939,7 @@ export function DynamicProject({ match, location }) {
             } else if (/^para/.test(elem)) {
               return <p key={ind} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(pBody[elem], { ADD_ATTR: ["target"] }) }}></p>;
             } else if (/^media/.test(elem)) {
-              console.log("IN MEDIA", pBody[elem]);
+              {/* console.log("IN MEDIA", pBody[elem]); */}
               return (
                 <div key={ind} className="project-content-media">
                   <div className="project-content-images">
@@ -2208,6 +2209,7 @@ function MobileMenu({ setMenuBut, linkClick }) {
       <div id="mobile-dark-div">
         <button
           id="mobile-dark-mode"
+          aria-label="change website theme to light or dark"
           disabled={darkButton}
           onClick={(e) => {
             setDark(!dark);

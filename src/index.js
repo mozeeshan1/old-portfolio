@@ -68,7 +68,7 @@ class Index extends React.Component {
       let tempImgAlt = "p".concat(i, "ImgAlt");
       let tempTags = "p".concat(i, "Tags");
       if (typeof Content[tempTitle] !== "undefined" && Content[tempTitle] !== null && typeof Content[tempSummary] !== "undefined" && Content[tempSummary] !== null && typeof Content[tempImg] !== "undefined" && Content[tempImg] !== null && typeof Content[tempImgAlt] !== "undefined" && Content[tempImgAlt] !== null && typeof Content[tempTags] !== "undefined" && Content[tempTags] !== null) {
-        console.log(i, "completely exists");
+        // console.log(i, "completely exists");
 
         let projectURLName = Content[tempTitle]
           .toLowerCase()
