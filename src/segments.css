@@ -1127,9 +1127,9 @@ button.tag {
     width: 100%;
     position: relative;
   }
-  #projects-body h1 {
+  /* #projects-body h1 {
     margin-top: 10vh;
-  }
+  } */
   .search-wrapper {
     flex-wrap: nowrap;
     overflow-x: scroll;
