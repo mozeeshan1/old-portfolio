@@ -65,6 +65,7 @@ html {
   display: grid;
   grid: auto/ repeat(8, 1fr);
   justify-content: center;
+  align-items: center;
   position: fixed;
   color: inherit;
   overflow: hidden;
@@ -90,6 +91,12 @@ html {
   color: inherit;
   height: 8vh;
   width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#desktop-logo h1{
+  font-size: 3.6vh;
 }
 #desktop-logo .letter {
   opacity: 0;
@@ -111,12 +118,13 @@ html {
   grid-column: 5/8;
   display: flex;
   align-items: center;
-  gap: 10%;
+  gap: 5%;
   color: inherit;
   text-align: center;
   flex-wrap: wrap;
 }
 #desktop-menu a {
+  font-size: 2vh;
   text-decoration: none;
   color: inherit;
   width: max-content;
@@ -345,7 +353,7 @@ div.ripple {
   opacity: 1;
 }
 #blackhole-bg-blur {
-  backdrop-filter: blur(75px);
+  /* backdrop-filter: blur(75px); */
   height: 200%;
   width: 100%;
   position: absolute;
@@ -968,7 +976,7 @@ button.tag {
     height: 45vw !important;
   }
   #blackhole-bg-blur {
-    backdrop-filter: blur(50px);
+    /* backdrop-filter: blur(50px); */
   }
   #home-arrow {
     width: 20vw;
