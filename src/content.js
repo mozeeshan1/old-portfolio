@@ -14,7 +14,7 @@ I am a passionate and ambitious person that has developed a logical and mature a
 ​​<br/>​<br/>
 Don't hesitate to contact me if you'd like to talk or work together!
 ​<br/>​<br/>
-If you'd like to check out my CV click <a href="https://drive.google.com/file/d/11-tJhrih98kfkDh51SLC68yXDi84yJTj/view?usp=sharing" target="_blank">here</a> or if you'd like to hit me up, click <a href="mailto:secourk@gmail.com" target="_blank">here</a>.`;
+If you'd like to check out my CV click <a href="https://drive.google.com/file/d/11-tJhrih98kfkDh51SLC68yXDi84yJTj/view?usp=sharing" target="_blank">here</a> or if you'd like to hit me up, click <a href="mailto:info@mozeeshan.com" target="_blank">here</a>.`;
 export const aboutImg = "https://mozeeshan.s3.eu-west-2.amazonaws.com/About-Picture.jpg";
 export const aboutImgAlt="Picture of Mohammed Zeeshan."
 
